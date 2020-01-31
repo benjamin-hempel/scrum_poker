@@ -9,6 +9,13 @@ namespace scrum_poker
     {
         public string Id { get; set; }
         public string Name { get; set; }
-        public string SelectedCard { get; set; }
+        public int SelectedCard { get; set; }
+
+        public User(string username)
+        {
+            Id = Guid.NewGuid().ToString();
+            Name = username;
+            SelectedCard = -1;
+        }
     }
 }
