@@ -27,7 +27,7 @@ namespace scrum_poker.Hubs
             Room room = Rooms.Find(x => x.Id == roomId);
             string userId = room.AddUser(username);
 
-            string connectionId = Clients.Caller.ToString();
+            string connectionId = Context.ConnectionId;
             Connections.Add(connectionId, userId);
 
             return userId;
@@ -38,7 +38,7 @@ namespace scrum_poker.Hubs
             Room room = Rooms.Find(x => x.Id == roomId);
             room.RemoveUser(userId);
 
-            string connectionId = Clients.Caller.ToString();
+            string connectionId = Context.ConnectionId;
             Connections.Remove(connectionId);
 
             if (room.Users.Count == 0) Rooms.Remove(room);
