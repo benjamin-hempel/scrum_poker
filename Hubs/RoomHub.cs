@@ -30,6 +30,14 @@ namespace scrum_poker.Hubs
             string connectionId = Context.ConnectionId;
             Connections.Add(connectionId, userId);
 
+            List<string> roomUsers = new List<string>();
+            foreach(var user in room.Users)
+            {
+                string roomUserId = user.Id;
+                roomUsers.Add(roomUserId);
+            }
+            Clients.Clients(roomUsers).SendAsync("UserJoined", userId, username);
+
             return userId;
         }
 
@@ -42,6 +50,14 @@ namespace scrum_poker.Hubs
             Connections.Remove(connectionId);
 
             if (room.Users.Count == 0) Rooms.Remove(room);
+
+            List<string> roomUsers = new List<string>();
+            foreach(var user in room.Users)
+            {
+                string roomUserId = user.Id;
+                roomUsers.Add(roomUserId);
+            }
+            Clients.Clients(roomUsers).SendAsync("UserLeft", userId);
         }
     }
 }
