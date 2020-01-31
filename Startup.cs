@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using scrum_poker.Hubs;
 
 namespace scrum_poker
 {
@@ -57,6 +58,7 @@ namespace scrum_poker
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller}/{action=Index}/{id?}");
+                endpoints.MapHub<RoomHub>("/roomHub");
             });
 
             app.UseSpa(spa =>
