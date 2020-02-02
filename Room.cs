@@ -29,5 +29,10 @@ namespace scrum_poker
             User userToRemove = Users.Find(x => x.Id == userId);
             Users.Remove(userToRemove);
         }
+
+        public User GetUser(string userId)
+        {
+            return Users.Find(x => x.Id == userId);
+        }
     }
 }

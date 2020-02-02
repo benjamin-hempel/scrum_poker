@@ -72,5 +72,26 @@ namespace scrum_poker.Hubs
             }
             Clients.Clients(roomUsers).SendAsync("UserLeft", userId);
         }
+
+        public void SelectCard(string roomId, string userId, int selectedCard)
+        {
+            Room room = Rooms.Find(x => x.Id == roomId);
+            User callingUser = room.GetUser(userId);
+
+            // Update selection and determine if a card is selected
+            callingUser.SelectCard(selectedCard);
+            bool cardSelected = false;
+            if (selectedCard >= 0) cardSelected = true;
+
+            // Notify other clients
+            List<string> roomUsers = new List<string>();
+            foreach (var user in room.Users)
+            {
+                string roomUserId = user.Id;
+                string roomUserConnectionId = Connections.First(x => x.Value == roomUserId).Key;
+                if (roomUserId != userId) roomUsers.Add(roomUserConnectionId);
+            }
+            Clients.Clients(roomUsers).SendAsync("CardSelected", userId, cardSelected);
+        }
     }
 }

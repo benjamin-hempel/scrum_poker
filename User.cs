@@ -17,5 +17,10 @@ namespace scrum_poker
             Name = username;
             SelectedCard = -1;
         }
+
+        public void SelectCard(int cardIndex)
+        {
+            SelectedCard = cardIndex;
+        }
     }
 }
