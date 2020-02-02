@@ -56,7 +56,11 @@ namespace scrum_poker.Hubs
             Connections.Remove(connectionId);
 
             // Remove room if it's empty
-            if (room.Users.Count == 0) Rooms.Remove(room);
+            if (room.Users.Count == 0)
+            {
+                Rooms.Remove(room);
+                return;
+            }
 
             // Notify other clients
             List<string> roomUsers = new List<string>();
