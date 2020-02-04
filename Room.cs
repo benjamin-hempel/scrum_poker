@@ -7,8 +7,8 @@ namespace scrum_poker
 {
     public class Room
     {
-        public string Id { get; set; }
-        public List<User> Users { get; set; }
+        public string Id { get; }
+        public List<User> Users { get; }
 
         public Room()
         {

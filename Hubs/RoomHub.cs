@@ -79,7 +79,7 @@ namespace scrum_poker.Hubs
             User callingUser = room.GetUser(userId);
 
             // Update selection and determine if a card is selected
-            callingUser.SelectCard(selectedCard);
+            callingUser.SelectedCard = selectedCard;
             bool cardSelected = false;
             if (selectedCard >= 0) cardSelected = true;
 
@@ -123,7 +123,7 @@ namespace scrum_poker.Hubs
             foreach (var user in room.Users)
             {
                 string roomUserId = user.Id;
-                user.SelectCard(-1);
+                user.SelectedCard = -1;
                 string roomUserConnectionId = Connections.First(x => x.Value == roomUserId).Key;
                 roomUsers.Add(roomUserConnectionId);
             }
