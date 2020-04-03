@@ -10,6 +10,8 @@ import { HomeComponent } from './home/home.component';
 import { RoomComponent } from './room/room.component';
 import { FetchDataComponent } from './fetch-data/fetch-data.component';
 
+import { RoomService } from './services/room.service';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -28,7 +30,7 @@ import { FetchDataComponent } from './fetch-data/fetch-data.component';
       { path: 'fetch-data', component: FetchDataComponent },
     ])
   ],
-  providers: [],
+  providers: [RoomService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

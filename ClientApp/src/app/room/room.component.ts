@@ -1,16 +1,13 @@
 import { Component } from '@angular/core';
 
 import { cards } from '../cards';
+import { RoomService } from '../services/room.service';
 
 @Component({
   selector: 'app-room-component',
   templateUrl: './room.component.html'
 })
 export class RoomComponent {
-  public currentCount = 0;
+  constructor(private roomService: RoomService) {}
   cards = cards;
-
-  public incrementCounter() {
-    this.currentCount++;
-  }
 }

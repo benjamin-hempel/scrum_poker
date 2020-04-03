@@ -1,27 +1,37 @@
-<h4>Details</h4>
-<div class="row">
-  <div class="col" id="divRoomID">
-    <h5>Raum-ID</h5>
-  </div>
-  <div class="col" id="divOwnUsername">
-    <h5>Dein Name</h5>
-  </div>
-  <div class="col" id="divRoomUsers">
-    <h5>Benutzer im Raum</h5>
-  </div>
-</div>
-<div id="selectableCardsContainer"></div>
+<div *ngIf="roomService.roomId">
+  <h4>Details</h4>
   <div class="row">
-    <div class="col-sm-3" style="margin-bottom: 1em" *ngFor="let card of cards">
-      <div class="card">
-        <div class="card-body">
-          <h3 class="card-title">{{ card.label }}</h3>
+    <div class="col" id="divRoomID">
+      <h5>Raum-ID</h5>
+      <p>{{ roomService.roomId }}</p>
+    </div>
+    <div class="col" id="divOwnUsername">
+      <h5>Dein Name</h5>
+      <p>{{ roomService.username }}</p>
+    </div>
+    <div class="col" id="divRoomUsers">
+      <h5>Benutzer im Raum</h5>
+    </div>
+  </div>
+  <br />
+  <div id="selectableCardsContainer"></div>
+    <div class="row">
+      <div class="col-sm-3" style="margin-bottom: 1em" *ngFor="let card of cards">
+        <div class="card">
+          <div class="card-body">
+            <h3 class="card-title">{{ card.label }}</h3>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-<div id="otherUsersContainer"></div>
-<button type="button" class="btn btn-primary mr-1" (click)="revealCards()">Karten aufdecken</button>
-<button type="button" class="btn btn-danger" (click)="resetCards()">Karten zurücksetzen</button>
+  <br />
+  <div id="otherUsersContainer"></div>
+  <button type="button" class="btn btn-primary mr-1" (click)="revealCards()">Karten aufdecken</button>
+  <button type="button" class="btn btn-danger" (click)="resetCards()">Karten zurücksetzen</button>
+</div>
 
+<div *ngIf="!(roomService.roomId)">
+  <h2>Du bist zur Zeit in keinem Raum!</h2>
+  <p>Kehre zur <a href="/">Startseite</a> zurück, um einen Raum zu erstellen oder einem beizutreten.</p>
+</div>
 

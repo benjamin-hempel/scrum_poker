@@ -1,9 +1,22 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
+
+import { RoomService } from '../services/room.service'
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
 })
 export class HomeComponent {
+  constructor(private roomService: RoomService, private router: Router) {}
 
+  async createRoom() {
+    let username: string;
+    username = (<HTMLInputElement> document.getElementById("username")).value;
+    if (username === "") return;
+
+    await this.roomService.createRoom();
+    await this.roomService.joinRoom(username);
+    this.router.navigateByUrl("/room");
+  }
 }

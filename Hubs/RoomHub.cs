@@ -23,13 +23,14 @@ namespace scrum_poker.Hubs
         {
             // Check if room exists
             bool roomExists = Rooms.Exists(x => x.Id == roomId);
-            if (roomExists == false) return null;
+            if (roomExists == false) return "ROOM_DOES_NOT_EXIST";
 
             Room room = Rooms.Find(x => x.Id == roomId);
             string userId = room.AddUser(username);
 
             // Add connection associated with user
             string connectionId = Context.ConnectionId;
+            if (Connections.ContainsKey(connectionId)) return "CONNECTION_ALREADY_EXISTS";
             Connections.Add(connectionId, userId);
 
             // Notify other clients
