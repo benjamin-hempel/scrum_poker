@@ -9,39 +9,27 @@ namespace scrum_poker.Hubs
     public class RoomHub : Hub
     {
         private static List<Room> Rooms = new List<Room>();
-        private static Dictionary<string, string> Connections = new Dictionary<string, string>();
+        
 
         public string CreateRoom()
         {
             Room newRoom = new Room();
             Rooms.Add(newRoom);
 
-            return newRoom.Id;
+            return newRoom.GetID();
         }
 
         public string JoinRoom(string roomId, string username)
         {
             // Check if room exists
-            bool roomExists = Rooms.Exists(x => x.Id == roomId);
+            bool roomExists = Rooms.Exists(x => x.GetID() == roomId);
             if (roomExists == false) return "ROOM_DOES_NOT_EXIST";
 
-            Room room = Rooms.Find(x => x.Id == roomId);
-            string userId = room.AddUser(username);
+            Room room = Rooms.Find(x => x.GetID() == roomId);
+            string userId = room.AddUser(username, Context.ConnectionId);
 
-            // Add connection associated with user
-            string connectionId = Context.ConnectionId;
-            if (Connections.ContainsKey(connectionId)) return "CONNECTION_ALREADY_EXISTS";
-            Connections.Add(connectionId, userId);
-
-            // Notify other clients
-            List<string> roomUsers = new List<string>();
-            foreach(var user in room.Users)
-            {
-                string roomUserId = user.Id;
-                string roomUserConnectionId = Connections.First(x => x.Value == roomUserId).Key;
-                if (roomUserId != userId) roomUsers.Add(roomUserConnectionId);
-            }
-            Clients.Clients(roomUsers).SendAsync("UserJoined", userId, username);
+            // Notify clients
+            Clients.Clients(room.GetConnections()).SendAsync("UserJoined", userId, username);
 
             return userId;
         }
@@ -49,86 +37,44 @@ namespace scrum_poker.Hubs
         public void LeaveRoom(string roomId, string userId)
         {
             // Remove user from room
-            Room room = Rooms.Find(x => x.Id == roomId);
-            room.RemoveUser(userId);
-
-            // Remove connection associated with user
-            string connectionId = Context.ConnectionId;
-            Connections.Remove(connectionId);
+            Room room = Rooms.Find(x => x.GetID() == roomId);
+            room.RemoveUser(userId, Context.ConnectionId);
 
             // Remove room if it's empty
-            if (room.Users.Count == 0)
+            if (room.GetUsers().Count == 0)
             {
                 Rooms.Remove(room);
                 return;
             }
 
-            // Notify other clients
-            List<string> roomUsers = new List<string>();
-            foreach (var user in room.Users)
-            {
-                string roomUserId = user.Id;
-                string roomUserConnectionId = Connections.First(x => x.Value == roomUserId).Key;
-                if (roomUserId != userId) roomUsers.Add(roomUserConnectionId);
-            }
-            Clients.Clients(roomUsers).SendAsync("UserLeft", userId);
+            // Notify clients
+            Clients.Clients(room.GetConnections()).SendAsync("UserLeft", userId);
         }
 
         public void SelectCard(string roomId, string userId, int selectedCard)
         {
-            Room room = Rooms.Find(x => x.Id == roomId);
+            Room room = Rooms.Find(x => x.GetID() == roomId);
+
+            // Update selection
             User callingUser = room.GetUser(userId);
-
-            // Update selection and determine if a card is selected
             callingUser.SelectedCard = selectedCard;
-            bool cardSelected = false;
-            if (selectedCard >= 0) cardSelected = true;
 
-            // Notify other clients
-            List<string> roomUsers = new List<string>();
-            foreach (var user in room.Users)
-            {
-                string roomUserId = user.Id;
-                string roomUserConnectionId = Connections.First(x => x.Value == roomUserId).Key;
-                if (roomUserId != userId) roomUsers.Add(roomUserConnectionId);
-            }
-            Clients.Clients(roomUsers).SendAsync("CardSelected", userId, cardSelected);
+            // Notify clients
+            Clients.Clients(room.GetConnections()).SendAsync("CardSelected", userId, selectedCard);
         }
 
         public void RevealCards(string roomId)
         {
-            Room room = Rooms.Find(x => x.Id == roomId);
+            Room room = Rooms.Find(x => x.GetID() == roomId);
 
-            // Send selected cards to all clients
-            List<string> roomUsers = new List<string>();
-            foreach (var user in room.Users)
-            {
-                string roomUserId = user.Id;
-                string roomUserConnectionId = Connections.First(x => x.Value == roomUserId).Key;
-                roomUsers.Add(roomUserConnectionId);                          
-            }
-            foreach (var user in room.Users)
-            {
-                string roomUserId = user.Id;
-                int selectedCard = user.SelectedCard;
-                Clients.Clients(roomUsers).SendAsync("CardRevealed", roomUserId, selectedCard);
-            }
+            Clients.Clients(room.GetConnections()).SendAsync("CardsRevealed");
         }
 
         public void ResetCards(string roomId)
         {
-            Room room = Rooms.Find(x => x.Id == roomId);
+            Room room = Rooms.Find(x => x.GetID() == roomId);
 
-            // Notify all clients
-            List<string> roomUsers = new List<string>();
-            foreach (var user in room.Users)
-            {
-                string roomUserId = user.Id;
-                user.SelectedCard = -1;
-                string roomUserConnectionId = Connections.First(x => x.Value == roomUserId).Key;
-                roomUsers.Add(roomUserConnectionId);
-            }
-            Clients.Clients(roomUsers).SendAsync("CardsReset");
+            Clients.Clients(room.GetConnections()).SendAsync("CardsReset");
         }
     }
 }
