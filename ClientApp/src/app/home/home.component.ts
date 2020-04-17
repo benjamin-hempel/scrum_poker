@@ -19,4 +19,18 @@ export class HomeComponent {
     await this.roomService.joinRoom(username);
     this.router.navigateByUrl("/room");
   }
+
+  async joinRoom() {
+    let username: string;
+    let roomId: string;
+
+    username = (<HTMLInputElement>document.getElementById("username")).value;
+    if (username === "") return;
+
+    roomId = (<HTMLInputElement>document.getElementById("roomID")).value;
+    if (roomId === "") return;
+
+    await this.roomService.joinRoom(username, roomId);
+    this.router.navigateByUrl("/room");
+  }
 }

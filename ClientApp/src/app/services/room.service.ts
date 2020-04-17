@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { User } from '../user';
 import * as signalR from "@aspnet/signalr";
 
 @Injectable({
@@ -10,10 +11,14 @@ export class RoomService {
   roomId: string;
   username: string;
   userId: string;
+  users: Array<User>;
 
   constructor() {
     this.createConnection();
+    this.registerCallbacks();
     this.startConnection();
+
+    this.users = new Array<User>();
   }
 
   private createConnection() {
@@ -24,7 +29,7 @@ export class RoomService {
 
   private registerCallbacks() {
     this._hubConnection.on("UserJoined", (userId, username) => {
-
+      this.addUserToList(userId, username);
     });
 
     this._hubConnection.on("UserLeft", (userId) => {
@@ -57,13 +62,16 @@ export class RoomService {
     });
   }
 
-  async joinRoom(username: string) {
+  async joinRoom(username: string, roomId: string = this.roomId) {
     this.username = username;
+    this.roomId = roomId;
     console.log("Your room ID is " + this.roomId);
-    await this._hubConnection.invoke("JoinRoom", this.roomId, username).then((newUserId) => {
+
+    await this._hubConnection.invoke("JoinRoom", roomId, username).then((newUserId) => {
       this.userId = newUserId;
       console.log("Your user ID is " + this.userId);
     });
+    this.addUserToList(this.userId, this.username);
   }
 
   leaveRoom(roomId: string, userId: string) {
@@ -80,5 +88,12 @@ export class RoomService {
 
   resetCards(roomId: string) {
     this._hubConnection.invoke("ResetCards", roomId);
+  }
+
+  private addUserToList(userId: string, username: string) {
+    let newUser = new User();
+    newUser.userId = userId;
+    newUser.username = username;
+    this.users.push(newUser);
   }
 }
