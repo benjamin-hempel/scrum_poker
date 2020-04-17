@@ -36,11 +36,11 @@ export class RoomService {
 
     });
 
-    this._hubConnection.on("CardSelected", (userId, cardSelected) => {
+    this._hubConnection.on("CardSelected", (userId, selectedCard) => {
 
     });
 
-    this._hubConnection.on("CardRevealed", (userId, selectedCard) => {
+    this._hubConnection.on("CardsRevealed", () => {
 
     });
 
@@ -71,7 +71,6 @@ export class RoomService {
       this.userId = newUserId;
       console.log("Your user ID is " + this.userId);
     });
-    this.addUserToList(this.userId, this.username);
   }
 
   leaveRoom(roomId: string, userId: string) {
