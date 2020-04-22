@@ -15,9 +15,17 @@ export class RoomComponent {
     await this.roomService.selectCard(index);
   }
 
+  async revealCards() {
+    await this.roomService.revealCards();
+  }
+
+  async resetCards() {
+    await this.roomService.resetCards();
+  }
+
   @HostListener('window:beforeunload')
-  leaveRoom() {
-    this.roomService.leaveRoom();
+  async leaveRoom() {
+    await this.roomService.leaveRoom();
   }
 
 }

@@ -12,6 +12,7 @@ export class RoomService {
   username: string;
   userId: string;
   selectedCard: number;
+  cardsRevealed: boolean = false;
   users: Array<User>;
 
   constructor() {
@@ -45,11 +46,14 @@ export class RoomService {
     });
 
     this._hubConnection.on("CardsRevealed", () => {
-
+      this.cardsRevealed = true;
     });
 
     this._hubConnection.on("CardsReset", () => {
-      
+      this.selectedCard = -1;
+      this.cardsRevealed = false;
+      for (let user of this.users)
+        user.selectedCard = -1;
     });
   }
 
@@ -100,12 +104,12 @@ export class RoomService {
     this._hubConnection.invoke("SelectCard", this.roomId, this.userId, this.selectedCard);
   }
 
-  revealCards(roomId: string) {
-    this._hubConnection.invoke("RevealCards", roomId);
+  revealCards() {
+    this._hubConnection.invoke("RevealCards", this.roomId);
   }
 
-  resetCards(roomId: string) {
-    this._hubConnection.invoke("ResetCards", roomId);
+  resetCards() {
+    this._hubConnection.invoke("ResetCards", this.roomId);
   }
 
   private addUserToList(userId: string, username: string, selectedCard: number = -1) {

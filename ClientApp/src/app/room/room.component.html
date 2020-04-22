@@ -23,7 +23,7 @@
   <h4 style="margin: 15px 0 20px 0">Deine Schätzung</h4>
   <div class="row">
     <div class="col-sm-3" style="margin-bottom: 1em" *ngFor="let card of cards">
-      <div class="card clickable" (click)="selectCard(card.id)">
+      <div class="card" [ngClass]="{'clickable': !roomService.cardsRevelaed}" (click)="!roomService.cardsRevealed ? selectCard(card.id) : false">
         <div class="card-body">
           <h3 class="card-title" [ngClass]="{'selected': card.id == roomService.selectedCard}" style="user-select: none;">{{ card.label }}</h3>
         </div>
@@ -36,9 +36,10 @@
     <h4 class="spacer-top-15 spacer-bottom-20">Benutzer im Raum</h4>
     <div class="row">
       <div class="col-sm-4" style="margin-bottom: 1em" *ngFor="let user of roomService.users">
-        <div class="card" [ngClass]="{'bg-success': user.selectedCard > -1}">
+        <div class="card" [ngClass]="{'bg-success': user.selectedCard > -1 && !roomService.cardsRevealed}">
           <div class="card-body">
             <h3 class="card-title">{{ user.username }}</h3>
+            <h4 class="card-text" *ngIf="roomService.cardsRevealed">{{ cards[user.selectedCard].label }}</h4>
           </div>
         </div>
       </div>
