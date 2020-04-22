@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 
 import { cards } from '../cards';
 import { RoomService } from '../services/room.service';
@@ -10,4 +10,14 @@ import { RoomService } from '../services/room.service';
 export class RoomComponent {
   constructor(private roomService: RoomService) {}
   cards = cards;
+
+  async selectCard(index: number) {
+    await this.roomService.selectCard(index);
+  }
+
+  @HostListener('window:beforeunload')
+  leaveRoom() {
+    this.roomService.leaveRoom();
+  }
+
 }

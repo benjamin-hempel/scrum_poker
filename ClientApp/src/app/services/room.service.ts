@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, HostListener } from '@angular/core';
 import { User } from '../user';
 import * as signalR from "@aspnet/signalr";
 
@@ -33,11 +33,14 @@ export class RoomService {
     });
 
     this._hubConnection.on("UserLeft", (userId) => {
-
+      console.log("User " + userId + " left");
+      let index = this.users.findIndex(user => user.userId == userId)
+      this.users.splice(index, 1);
     });
 
     this._hubConnection.on("CardSelected", (userId, selectedCard) => {
-
+      let index = this.users.findIndex(user => user.userId === userId);
+      this.users[index].selectedCard = selectedCard;
     });
 
     this._hubConnection.on("CardsRevealed", () => {
@@ -45,7 +48,7 @@ export class RoomService {
     });
 
     this._hubConnection.on("CardsReset", () => {
-
+      
     });
   }
 
@@ -73,12 +76,22 @@ export class RoomService {
     });
   }
 
-  leaveRoom(roomId: string, userId: string) {
-    this._hubConnection.invoke("LeaveRoom", roomId, userId);
+  async getUsers() {
+    await this._hubConnection.invoke("GetUsers", this.roomId).then((jsonUsers) => {
+      var users = JSON.parse(jsonUsers);
+      for (let user of users) {
+        if(user.Id != this.userId)
+          this.addUserToList(user.Id, user.Name, user.SelectedCard);
+      }
+    });
   }
 
-  selectCard(roomId: string, userId: string, selectedCard: number) {
-    this._hubConnection.invoke("SelectCard", roomId, userId, selectedCard);
+  leaveRoom() {
+    this._hubConnection.invoke("LeaveRoom", this.roomId, this.userId);
+  }
+
+  selectCard(selectedCard: number) {
+    this._hubConnection.invoke("SelectCard", this.roomId, this.userId, selectedCard);
   }
 
   revealCards(roomId: string) {
@@ -89,10 +102,11 @@ export class RoomService {
     this._hubConnection.invoke("ResetCards", roomId);
   }
 
-  private addUserToList(userId: string, username: string) {
+  private addUserToList(userId: string, username: string, selectedCard: number = -1) {
     let newUser = new User();
     newUser.userId = userId;
     newUser.username = username;
+    newUser.selectedCard = selectedCard;
     this.users.push(newUser);
   }
 }

@@ -31,6 +31,7 @@ export class HomeComponent {
     if (roomId === "") return;
 
     await this.roomService.joinRoom(username, roomId);
+    await this.roomService.getUsers();
     this.router.navigateByUrl("/room");
   }
 }

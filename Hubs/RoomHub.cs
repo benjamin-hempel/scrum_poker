@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.SignalR;
 
 namespace scrum_poker.Hubs
@@ -10,7 +12,6 @@ namespace scrum_poker.Hubs
     {
         private static List<Room> Rooms = new List<Room>();
         
-
         public string CreateRoom()
         {
             Room newRoom = new Room();
@@ -75,6 +76,15 @@ namespace scrum_poker.Hubs
             Room room = Rooms.Find(x => x.GetID() == roomId);
 
             Clients.Clients(room.GetConnections()).SendAsync("CardsReset");
+        }
+
+        public string GetUsers(string roomId)
+        {
+            Room room = Rooms.Find(x => x.GetID() == roomId);
+            List<User> users = room.GetUsers();
+
+            // Use JSON for transport
+            return JsonSerializer.Serialize(users);
         }
     }
 }

@@ -14,3 +14,15 @@ code {
   background-color: #1b6ec2;
   border-color: #1861ac;
 }
+
+.spacer-top-15 {
+    margin-top: 15px;
+}
+
+.spacer-bottom-20 {
+    margin-bottom: 20px;
+}
+
+.spacer-bottom-25 {
+    margin-bottom: 25px;
+}

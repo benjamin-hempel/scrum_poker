@@ -14,25 +14,41 @@
       <p>{{ roomService.users.length }}</p>
     </div>
   </div>
-  <br />
+  <div class="spacer-bottom-25">
+    <button type="button" class="btn btn-primary mr-1" (click)="revealCards()">Karten aufdecken</button>
+    <button type="button" class="btn btn-danger" (click)="resetCards()">Karten zurücksetzen</button>
+  </div>
+  <hr />
   <div id="selectableCardsContainer"></div>
+  <h4 style="margin: 15px 0 20px 0">Deine Schätzung</h4>
+  <div class="row">
+    <div class="col-sm-3" style="margin-bottom: 1em" *ngFor="let card of cards">
+      <div class="card" (click)="selectCard(card.id)">
+        <div class="card-body">
+          <h3 class="card-title">{{ card.label }}</h3>
+        </div>
+      </div>
+    </div>
+  </div>
+  <hr />
+  <h5></h5>
+  <div id="otherUsersContainer">
+    <h4 class="spacer-top-15 spacer-bottom-20">Benutzer im Raum</h4>
     <div class="row">
-      <div class="col-sm-3" style="margin-bottom: 1em" *ngFor="let card of cards">
-        <div class="card">
+      <div class="col-sm-4" style="margin-bottom: 1em" *ngFor="let user of roomService.users">
+        <div class="card" [ngClass]="{'bg-success': user.selectedCard > -1}">
           <div class="card-body">
-            <h3 class="card-title">{{ card.label }}</h3>
+            <h3 class="card-title">{{ user.username }}</h3>
           </div>
         </div>
       </div>
     </div>
-  <br />
-  <div id="otherUsersContainer"></div>
-  <button type="button" class="btn btn-primary mr-1" (click)="revealCards()">Karten aufdecken</button>
-  <button type="button" class="btn btn-danger" (click)="resetCards()">Karten zurücksetzen</button>
+  </div>
+
 </div>
 
 <div *ngIf="!(roomService.roomId)">
-  <h2>Du bist zur Zeit in keinem Raum!</h2>
+  <h2>Du bist zurzeit in keinem Raum!</h2>
   <p>Kehre zur <a href="/">Startseite</a> zurück, um einen Raum zu erstellen oder einem beizutreten.</p>
 </div>
 
