@@ -26,3 +26,11 @@ code {
 .spacer-bottom-25 {
     margin-bottom: 25px;
 }
+
+.clickable:hover {
+    cursor: pointer;
+}
+
+.selected {
+    font-weight: 900;
+}

@@ -11,6 +11,7 @@ export class RoomService {
   roomId: string;
   username: string;
   userId: string;
+  selectedCard: number;
   users: Array<User>;
 
   constructor() {
@@ -91,7 +92,12 @@ export class RoomService {
   }
 
   selectCard(selectedCard: number) {
-    this._hubConnection.invoke("SelectCard", this.roomId, this.userId, selectedCard);
+    if (selectedCard == this.selectedCard)
+      this.selectedCard = -1;
+    else
+      this.selectedCard = selectedCard;
+
+    this._hubConnection.invoke("SelectCard", this.roomId, this.userId, this.selectedCard);
   }
 
   revealCards(roomId: string) {

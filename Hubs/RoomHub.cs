@@ -75,6 +75,9 @@ namespace scrum_poker.Hubs
         {
             Room room = Rooms.Find(x => x.GetID() == roomId);
 
+            foreach (var user in room.GetUsers())
+                user.SelectedCard = -1;
+
             Clients.Clients(room.GetConnections()).SendAsync("CardsReset");
         }
 
