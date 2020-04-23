@@ -11,11 +11,36 @@ export class HomeComponent {
   constructor(private roomService: RoomService, private router: Router) {}
 
   roomExistsWarning: boolean = false;
+  noUsernameWarning: boolean = false;
+  noRoomIdWarning: boolean = false;
+
+  private getUsername(): string {
+    let username: string;
+    username = (<HTMLInputElement>document.getElementById("username")).value;
+    username = username.trim();
+
+    if (username === "") {
+      this.noUsernameWarning = true;
+      return "USERNAME_IS_EMPTY";
+    }
+    this.noUsernameWarning = false;
+  }
+
+  private getRoomId(): string {
+    let roomId: string;
+    roomId = (<HTMLInputElement>document.getElementById("roomID")).value;
+    roomId = roomId.trim();
+
+    if (roomId === "") {
+      this.noRoomIdWarning = true;
+      return "ROOMID_IS_EMPTY";
+    }
+    this.noRoomIdWarning = false;
+  }
 
   async createRoom() {
-    let username: string;
-    username = (<HTMLInputElement> document.getElementById("username")).value;
-    if (username === "") return;
+    let username = this.getUsername();
+    if (username == "USERNAME_IS_EMPTY") return;
 
     await this.roomService.createRoom();
     await this.roomService.joinRoom(username);
@@ -23,14 +48,11 @@ export class HomeComponent {
   }
 
   async joinRoom() {
-    let username: string;
-    let roomId: string;
+    let username = this.getUsername();
+    if (username == "USERNAME_IS_EMPTY") return;
 
-    username = (<HTMLInputElement>document.getElementById("username")).value;
-    if (username === "") return;
-
-    roomId = (<HTMLInputElement>document.getElementById("roomID")).value;
-    if (roomId === "") return;
+    let roomId = this.getRoomId();
+    if (roomId == "ROOMID_IS_EMPTY") return;
 
     let result = await this.roomService.joinRoom(username, roomId);
     if (result == true) {
