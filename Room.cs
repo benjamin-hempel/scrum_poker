@@ -39,7 +39,7 @@ namespace scrum_poker
             Connections.Remove(connectionId);
 
             User userToRemove = Users.Find(x => x.Id == userId);
-            Users.Remove(userToRemove);
+            if(userToRemove != null) Users.Remove(userToRemove);
         }
 
         public User GetUser(string userId)

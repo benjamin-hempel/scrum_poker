@@ -15,15 +15,15 @@
     </div>
   </div>
   <div class="spacer-bottom-25">
-    <button type="button" class="btn btn-primary mr-1" (click)="revealCards()">Karten aufdecken</button>
-    <button type="button" class="btn btn-danger" (click)="resetCards()">Karten zurücksetzen</button>
+    <button type="button" *ngIf="!roomService.cardsRevealed" class="btn btn-primary mr-1" (click)="revealCards()">Karten aufdecken</button>
+    <button type="button" *ngIf="roomService.cardsRevealed" class="btn btn-danger" (click)="resetCards()">Karten zurücksetzen</button>
   </div>
   <hr />
   <div id="selectableCardsContainer"></div>
   <h4 style="margin: 15px 0 20px 0">Deine Schätzung</h4>
   <div class="row">
     <div class="col-sm-3" style="margin-bottom: 1em" *ngFor="let card of cards">
-      <div class="card" [ngClass]="{'clickable': !roomService.cardsRevelaed}" (click)="!roomService.cardsRevealed ? selectCard(card.id) : false">
+      <div class="card" [ngClass]="{'clickable': !roomService.cardsRevealed}" (click)="!roomService.cardsRevealed ? selectCard(card.id) : false">
         <div class="card-body">
           <h3 class="card-title" [ngClass]="{'selected': card.id == roomService.selectedCard}" style="user-select: none;">{{ card.label }}</h3>
         </div>
@@ -39,7 +39,7 @@
         <div class="card" [ngClass]="{'bg-success': user.selectedCard > -1 && !roomService.cardsRevealed}">
           <div class="card-body">
             <h3 class="card-title">{{ user.username }}</h3>
-            <h4 class="card-text" *ngIf="roomService.cardsRevealed">{{ cards[user.selectedCard].label }}</h4>
+            <h4 class="card-text" *ngIf="roomService.cardsRevealed && user.selectedCard != -1">{{ cards[user.selectedCard].label }}</h4>
           </div>
         </div>
       </div>

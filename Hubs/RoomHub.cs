@@ -39,6 +39,7 @@ namespace scrum_poker.Hubs
         {
             // Remove user from room
             Room room = Rooms.Find(x => x.GetID() == roomId);
+            if (room == null) return; 
             room.RemoveUser(userId, Context.ConnectionId);
 
             // Remove room if it's empty
@@ -57,7 +58,9 @@ namespace scrum_poker.Hubs
             Room room = Rooms.Find(x => x.GetID() == roomId);
 
             // Update selection
+            if (room == null) return;
             User callingUser = room.GetUser(userId);
+            if (callingUser == null) return;
             callingUser.SelectedCard = selectedCard;
 
             // Notify clients
@@ -67,6 +70,7 @@ namespace scrum_poker.Hubs
         public void RevealCards(string roomId)
         {
             Room room = Rooms.Find(x => x.GetID() == roomId);
+            if (room == null) return;
 
             Clients.Clients(room.GetConnections()).SendAsync("CardsRevealed");
         }
@@ -74,6 +78,7 @@ namespace scrum_poker.Hubs
         public void ResetCards(string roomId)
         {
             Room room = Rooms.Find(x => x.GetID() == roomId);
+            if (room == null) return;
 
             foreach (var user in room.GetUsers())
                 user.SelectedCard = -1;
@@ -84,6 +89,7 @@ namespace scrum_poker.Hubs
         public string GetUsers(string roomId)
         {
             Room room = Rooms.Find(x => x.GetID() == roomId);
+            if (room == null) return "ROOM_DOES_NOT_EXIST";
             List<User> users = room.GetUsers();
 
             // Use JSON for transport

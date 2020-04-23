@@ -70,19 +70,28 @@ export class RoomService {
     });
   }
 
-  async joinRoom(username: string, roomId: string = this.roomId) {
+  async joinRoom(username: string, roomId: string = this.roomId): Promise<boolean> {
+    // Set data
     this.username = username;
     this.roomId = roomId;
     console.log("Your room ID is " + this.roomId);
 
+    // Invoke hub function
     await this._hubConnection.invoke("JoinRoom", roomId, username).then((newUserId) => {
       this.userId = newUserId;
       console.log("Your user ID is " + this.userId);
     });
+
+    // Check if the specified room exists
+    if (this.userId == "ROOM_DOES_NOT_EXIST") return false;
+    return true;
   }
 
   async getUsers() {
     await this._hubConnection.invoke("GetUsers", this.roomId).then((jsonUsers) => {
+      // Check if room exists
+      if (jsonUsers == "ROOM_DOES_NOT_EXIST") return;
+
       var users = JSON.parse(jsonUsers);
       for (let user of users) {
         if(user.Id != this.userId)

@@ -10,6 +10,8 @@ import { RoomService } from '../services/room.service'
 export class HomeComponent {
   constructor(private roomService: RoomService, private router: Router) {}
 
+  roomExistsWarning: boolean = false;
+
   async createRoom() {
     let username: string;
     username = (<HTMLInputElement> document.getElementById("username")).value;
@@ -30,8 +32,13 @@ export class HomeComponent {
     roomId = (<HTMLInputElement>document.getElementById("roomID")).value;
     if (roomId === "") return;
 
-    await this.roomService.joinRoom(username, roomId);
-    await this.roomService.getUsers();
-    this.router.navigateByUrl("/room");
+    let result = await this.roomService.joinRoom(username, roomId);
+    if (result == true) {
+      this.roomExistsWarning = false;
+      await this.roomService.getUsers();
+      this.router.navigateByUrl("/room");
+    } else {
+      this.roomExistsWarning = true;
+    }
   }
 }
