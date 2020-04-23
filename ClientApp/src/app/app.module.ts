@@ -8,7 +8,6 @@ import { AppComponent } from './app.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { HomeComponent } from './home/home.component';
 import { RoomComponent } from './room/room.component';
-import { FetchDataComponent } from './fetch-data/fetch-data.component';
 
 import { RoomService } from './services/room.service';
 
@@ -17,8 +16,7 @@ import { RoomService } from './services/room.service';
     AppComponent,
     NavMenuComponent,
     HomeComponent,
-    RoomComponent,
-    FetchDataComponent
+    RoomComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -27,7 +25,6 @@ import { RoomService } from './services/room.service';
     RouterModule.forRoot([
       { path: '', component: HomeComponent, pathMatch: 'full' },
       { path: 'room', component: RoomComponent },
-      { path: 'fetch-data', component: FetchDataComponent },
     ])
   ],
   providers: [RoomService],
