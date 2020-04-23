@@ -25,6 +25,7 @@ import { RoomService } from './services/room.service';
     RouterModule.forRoot([
       { path: '', component: HomeComponent, pathMatch: 'full' },
       { path: 'room', component: RoomComponent },
+      { path: ':rid', component: HomeComponent }
     ])
   ],
   providers: [RoomService],

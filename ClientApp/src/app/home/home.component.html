@@ -8,15 +8,17 @@
           <input type="text" class="form-control" id="username" placeholder="John Doe" />
         </div>
       </form>
-      <div class="spacer-bottom-25"></div>
-      <div *ngIf="noUsernameWarning" class="alert alert-warning" role="alert">
-        Du musst einen Benutzernamen angeben.
-      </div>
+      <div *ngIf="noUsernameWarning">
+        <div class="spacer-bottom-25"></div>
+        <div class="alert alert-warning" role="alert">
+          Du musst einen Benutzernamen angeben.
+        </div>
+      </div>     
       <div class="pt-3"></div>
     </div>
-  </div>
+    </div>
   <div class="row">
-    <div class="col">
+    <div class="col" *ngIf="!joinByLink">
       <h2>Raum erstellen</h2>
       <div class="pt-4"></div>
       <button class="btn btn-primary" id="createRoom" type="submit" (click)="createRoom()">Raum erstellen</button>
@@ -30,7 +32,7 @@
           <input class="form-control" id="roomID" placeholder="09285313-65b0-4283-b7ef-cb99a96dce25" />
         </div>
       </form>
-      <div class="spacer-bottom-25"></div>
+      <div *ngIf="noRoomIdWarning || roomExistsWarning" class="spacer-bottom-25"></div>
       <div *ngIf="noRoomIdWarning" class="alert alert-warning" role="alert">
         Du musst eine Raum-ID angeben.
       </div>
@@ -41,5 +43,5 @@
       <button class="btn btn-primary" id="joinRoom" type="submit" (click)="joinRoom()">Raum beitreten</button>
       <div class="spacer-bottom-25"></div>
     </div>
-  </div>
+    </div>
 </div>

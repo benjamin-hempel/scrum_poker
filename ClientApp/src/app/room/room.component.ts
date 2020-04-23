@@ -1,4 +1,5 @@
 import { Component, HostListener } from '@angular/core';
+import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 
 import { cards } from '../cards';
 import { RoomService } from '../services/room.service';
@@ -9,6 +10,8 @@ import { RoomService } from '../services/room.service';
 })
 export class RoomComponent {
   constructor(private roomService: RoomService) {}
+
+  joinUrl: string = window.location.protocol + "//" + window.location.host + "/" + this.roomService.roomId;
   cards = cards;
 
   async selectCard(index: number) {

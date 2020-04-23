@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 
 import { RoomService } from '../services/room.service'
 
@@ -8,11 +8,24 @@ import { RoomService } from '../services/room.service'
   templateUrl: './home.component.html',
 })
 export class HomeComponent {
-  constructor(private roomService: RoomService, private router: Router) {}
+  constructor(private roomService: RoomService, private router: Router, private route: ActivatedRoute) {}
 
   roomExistsWarning: boolean = false;
   noUsernameWarning: boolean = false;
   noRoomIdWarning: boolean = false;
+  joinByLink: boolean = false;
+
+  ngOnInit() {
+    let roomId = this.route.snapshot.paramMap.get("rid");
+    if (roomId != null) {
+      (<HTMLInputElement>document.getElementById("roomID")).value = roomId;
+      this.joinByLink = true;
+    }
+  }
+
+  // ----------
+  // UI getters
+  // ----------
 
   private getUsername(): string {
     let username: string;
@@ -24,6 +37,8 @@ export class HomeComponent {
       return "USERNAME_IS_EMPTY";
     }
     this.noUsernameWarning = false;
+
+    return username;
   }
 
   private getRoomId(): string {
@@ -36,7 +51,13 @@ export class HomeComponent {
       return "ROOMID_IS_EMPTY";
     }
     this.noRoomIdWarning = false;
+
+    return roomId;
   }
+
+  // ---------------
+  // On button click
+  // ---------------
 
   async createRoom() {
     let username = this.getUsername();
@@ -44,7 +65,8 @@ export class HomeComponent {
 
     await this.roomService.createRoom();
     await this.roomService.joinRoom(username);
-    this.router.navigateByUrl("/room");
+
+    this.router.navigate(["/room", { rid: this.roomService.roomId, uid: this.roomService.userId }]);
   }
 
   async joinRoom() {

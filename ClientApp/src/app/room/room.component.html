@@ -1,17 +1,21 @@
 <div *ngIf="roomService.roomId">
   <h4>Details</h4>
   <div class="row">
-    <div class="col" id="divRoomID">
+    <div class="col-sm-4" id="divRoomID">
       <h5>Raum-ID</h5>
       <p>{{ roomService.roomId }}</p>
     </div>
-    <div class="col" id="divOwnUsername">
+    <div class="col-sm-4" id="divOwnUsername">
       <h5>Dein Name</h5>
       <p>{{ roomService.username }}</p>
     </div>
-    <div class="col" id="divRoomUsers">
+    <div class="col-sm-4" id="divRoomUsers">
       <h5>Benutzer im Raum</h5>
       <p>{{ roomService.users.length }}</p>
+    </div>
+    <div class="col-sm-12" id="divShareLink">
+      <h5>Link zum Mitmachen</h5>
+      <p>{{ joinUrl }}</p>
     </div>
   </div>
   <div class="spacer-bottom-25">
