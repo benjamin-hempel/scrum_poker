@@ -25,7 +25,7 @@ export class RoomService {
 
   private createConnection() {
     this._hubConnection = new signalR.HubConnectionBuilder()
-      .withUrl("https://localhost:44317/roomHub")
+      .withUrl(window.location.protocol + "//" + window.location.host + "/roomHub")
       .build();
   }
 
