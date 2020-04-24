@@ -9,8 +9,8 @@ namespace scrum_poker
     {
         private string Id { get; }
         private List<User> Users { get; }
-
         private List<string> Connections = new List<string>();
+        private bool CardsRevealed = false;
 
         public Room()
         {
@@ -34,10 +34,8 @@ namespace scrum_poker
             return newUser.Id;
         }
 
-        public void RemoveUser(string userId, string connectionId)
+        public void RemoveUser(string userId)
         {
-            Connections.Remove(connectionId);
-
             User userToRemove = Users.Find(x => x.Id == userId);
             if(userToRemove != null) Users.Remove(userToRemove);
         }
@@ -49,12 +47,32 @@ namespace scrum_poker
 
         public List<User> GetUsers()
         {
-            return Users;
+            return Users.FindAll(x => !x.MissingInAction);
         }
 
         public List<string> GetConnections()
         {
             return Connections;
+        }
+
+        public void AddConnection(string connectionId)
+        {
+            Connections.Add(connectionId);
+        }
+
+        public void RemoveConnection(string connectionId)
+        {
+            Connections.Remove(connectionId);
+        }
+
+        public bool GetRevealed()
+        {
+            return this.CardsRevealed;
+        }
+
+        public void SetRevealed(bool revealed) 
+        {
+            this.CardsRevealed = revealed;
         }
     }
 }

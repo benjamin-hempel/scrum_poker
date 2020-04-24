@@ -9,9 +9,16 @@ import { RoomService } from '../services/room.service';
   templateUrl: './room.component.html'
 })
 export class RoomComponent {
-  constructor(private roomService: RoomService) {}
+  constructor(private roomService: RoomService, private route: ActivatedRoute) { }
 
-  joinUrl: string = window.location.protocol + "//" + window.location.host + "/" + this.roomService.roomId;
+  joinUrl: string; 
+
+  ngOnInit() {
+    this.roomService.roomId = this.route.snapshot.paramMap.get("rid");
+    this.roomService.userId = this.route.snapshot.paramMap.get("uid");
+    this.joinUrl = window.location.protocol + "//" + window.location.host + "/" + this.roomService.roomId;
+  }
+
   cards = cards;
 
   async selectCard(index: number) {

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Router, ActivatedRoute, ParamMap } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 
 import { RoomService } from '../services/room.service'
 
@@ -80,7 +80,7 @@ export class HomeComponent {
     if (result == true) {
       this.roomExistsWarning = false;
       await this.roomService.getUsers();
-      this.router.navigateByUrl("/room");
+      this.router.navigate(["/room", { rid: this.roomService.roomId, uid: this.roomService.userId }]);
     } else {
       this.roomExistsWarning = true;
     }

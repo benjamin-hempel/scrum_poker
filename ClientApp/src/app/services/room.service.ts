@@ -1,4 +1,5 @@
 import { Injectable, HostListener } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { User } from '../user';
 import * as signalR from "@aspnet/signalr";
 
@@ -15,7 +16,7 @@ export class RoomService {
   cardsRevealed: boolean = false;
   users: Array<User>;
 
-  constructor() {
+  constructor(private route: ActivatedRoute) {
     this.createConnection();
     this.registerCallbacks();
     this.startConnection();
@@ -60,7 +61,11 @@ export class RoomService {
   private startConnection() {
     this._hubConnection
       .start()
-      .then(() => console.log("Established connection to SignalR hub."))
+      .then(() => {
+        if (this.roomId == null || this.userId == null) return;
+        this.rejoinRoom().then(() => this.getUsers());
+        
+      })
       .catch(err => console.log("Failed to establish connection to SignalR hub: " + err));
   }
 
@@ -102,6 +107,20 @@ export class RoomService {
 
   leaveRoom() {
     this._hubConnection.invoke("LeaveRoom", this.roomId, this.userId);
+  }
+
+  async rejoinRoom() {
+    await this._hubConnection.invoke("Rejoin", this.roomId, this.userId).then((result) => {
+      if (result == "ROOM_DOES_NOT_EXIST" || result == "USER_DOES_NOT_EXIST") {
+        this.roomId = null;
+        this.userId = null;
+        return;
+      }
+      var data = JSON.parse(result);
+      this.username = data.Name;
+      this.selectedCard = data.SelectedCard;
+      this.cardsRevealed = data.CardsRevealed;
+    });
   }
 
   selectCard(selectedCard: number) {

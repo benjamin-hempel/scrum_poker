@@ -1,4 +1,4 @@
-<div *ngIf="roomService.roomId">
+<div *ngIf="roomService.roomId && roomService.username != null">
   <h4>Details</h4>
   <div class="row">
     <div class="col-sm-4" id="divRoomID">
@@ -15,7 +15,7 @@
     </div>
     <div class="col-sm-12" id="divShareLink">
       <h5>Link zum Mitmachen</h5>
-      <p>{{ joinUrl }}</p>
+      <p><a href="{{ joinUrl }}">{{ joinUrl }}</a></p>
     </div>
   </div>
   <div class="spacer-bottom-25">
@@ -52,7 +52,7 @@
 
 </div>
 
-<div *ngIf="!(roomService.roomId)">
+<div *ngIf="!roomService.roomId">
   <h2>Du bist zurzeit in keinem Raum!</h2>
   <p>Kehre zur <a href="/">Startseite</a> zurück, um einen Raum zu erstellen oder einem beizutreten.</p>
 </div>
