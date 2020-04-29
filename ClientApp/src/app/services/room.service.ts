@@ -1,6 +1,6 @@
 import { Injectable, HostListener } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { User } from '../user';
+import { User } from '../models/user';
 import * as signalR from "@aspnet/signalr";
 
 @Injectable({
@@ -10,10 +10,10 @@ export class RoomService {
   private _hubConnection: signalR.HubConnection;
 
   roomId: string;
-  username: string;
-  userId: string;
-  selectedCard: number;
   cardsRevealed: boolean = false;
+
+  you: User;
+  
   users: Array<User>;
 
   constructor(private route: ActivatedRoute) {
@@ -21,6 +21,7 @@ export class RoomService {
     this.registerCallbacks();
     this.startConnection();
 
+    this.you = new User();
     this.users = new Array<User>();
   }
 
@@ -31,8 +32,8 @@ export class RoomService {
   }
 
   private registerCallbacks() {
-    this._hubConnection.on("UserJoined", (userId, username) => {
-      this.addUserToList(userId, username);
+    this._hubConnection.on("UserJoined", (userId, username, isAdmin) => {
+      this.addUserToList(userId, username, isAdmin);
     });
 
     this._hubConnection.on("UserLeft", (userId) => {
@@ -51,7 +52,7 @@ export class RoomService {
     });
 
     this._hubConnection.on("CardsReset", () => {
-      this.selectedCard = -1;
+      this.you.selectedCard = -1;
       this.cardsRevealed = false;
       for (let user of this.users)
         user.selectedCard = -1;
@@ -62,9 +63,8 @@ export class RoomService {
     this._hubConnection
       .start()
       .then(() => {
-        if (this.roomId == null || this.userId == null) return;
-        this.rejoinRoom().then(() => this.getUsers());
-        
+        if (this.roomId == null || this.you.userId == null) return;
+        this.rejoinRoom().then(() => this.getUsers());  
       })
       .catch(err => console.log("Failed to establish connection to SignalR hub: " + err));
   }
@@ -75,21 +75,25 @@ export class RoomService {
     });
   }
 
-  async joinRoom(username: string, roomId: string = this.roomId): Promise<boolean> {
+  async joinRoom(username: string, roomId: string = this.roomId): Promise<string> {
     // Set data
-    this.username = username;
+    this.you.username = username;
     this.roomId = roomId;
     console.log("Your room ID is " + this.roomId);
 
-    // Invoke hub function
-    await this._hubConnection.invoke("JoinRoom", roomId, username).then((newUserId) => {
-      this.userId = newUserId;
-      console.log("Your user ID is " + this.userId);
+    // Invoke hub function#
+    let result = await this._hubConnection.invoke("JoinRoom", roomId, username).then((jsonData) => {
+      if (jsonData == "ROOM_DOES_NOT_EXIST" || jsonData == "CONNECTION_ALREADY_EXISTS")
+        return jsonData;
+
+      let data = JSON.parse(jsonData)
+      this.you.userId = data.Id;
+      this.you.isAdmin = data.IsAdmin;
+      console.log("Your user ID is " + this.you.userId);
+      return "JOIN_SUCCESSFUL";
     });
 
-    // Check if the specified room exists
-    if (this.userId == "ROOM_DOES_NOT_EXIST") return false;
-    return true;
+    return result;
   }
 
   async getUsers() {
@@ -99,37 +103,38 @@ export class RoomService {
 
       var users = JSON.parse(jsonUsers);
       for (let user of users) {
-        if(user.Id != this.userId)
-          this.addUserToList(user.Id, user.Name, user.SelectedCard);
+        if(user.Id != this.you.userId)
+          this.addUserToList(user.Id, user.Name, user.IsAdmin, user.SelectedCard);
       }
     });
   }
 
   leaveRoom() {
-    this._hubConnection.invoke("LeaveRoom", this.roomId, this.userId);
+    this._hubConnection.invoke("LeaveRoom", this.roomId, this.you.userId);
   }
 
   async rejoinRoom() {
-    await this._hubConnection.invoke("Rejoin", this.roomId, this.userId).then((result) => {
+    await this._hubConnection.invoke("Rejoin", this.roomId, this.you.userId).then((result) => {
       if (result == "ROOM_DOES_NOT_EXIST" || result == "USER_DOES_NOT_EXIST") {
         this.roomId = null;
-        this.userId = null;
+        this.you.userId = null;
         return;
       }
       var data = JSON.parse(result);
-      this.username = data.Name;
-      this.selectedCard = data.SelectedCard;
+      this.you.username = data.Name;
+      this.you.selectedCard = data.SelectedCard;
+      this.you.isAdmin = data.IsAdmin;
       this.cardsRevealed = data.CardsRevealed;
     });
   }
 
   selectCard(selectedCard: number) {
-    if (selectedCard == this.selectedCard)
-      this.selectedCard = -1;
+    if (selectedCard == this.you.selectedCard)
+      this.you.selectedCard = -1;
     else
-      this.selectedCard = selectedCard;
+      this.you.selectedCard = selectedCard;
 
-    this._hubConnection.invoke("SelectCard", this.roomId, this.userId, this.selectedCard);
+    this._hubConnection.invoke("SelectCard", this.roomId, this.you.userId, this.you.selectedCard);
   }
 
   revealCards() {
@@ -140,11 +145,12 @@ export class RoomService {
     this._hubConnection.invoke("ResetCards", this.roomId);
   }
 
-  private addUserToList(userId: string, username: string, selectedCard: number = -1) {
+  private addUserToList(userId: string, username: string, isAdmin: boolean, selectedCard: number = -1) {
     let newUser = new User();
     newUser.userId = userId;
     newUser.username = username;
     newUser.selectedCard = selectedCard;
+    newUser.isAdmin = isAdmin;
     this.users.push(newUser);
   }
 }

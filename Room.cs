@@ -7,31 +7,40 @@ namespace scrum_poker
 {
     public class Room
     {
-        private string Id { get; }
-        private List<User> Users { get; }
-        private List<string> Connections = new List<string>();
-        private bool CardsRevealed = false;
+        public string Id { get; private set; }
+        private List<User> Users { get; set; }
+        public List<string> Connections { get; private set; }
+        public bool CardsRevealed { get; set; }
+        public bool AllUsersAreAdmins { get; private set; }
 
-        public Room()
+        public Room(bool allUsersAreAdmins = false)
         {
             Id = Guid.NewGuid().ToString();
             Users = new List<User>();
+            Connections = new List<string>();
+            CardsRevealed = false;
+            AllUsersAreAdmins = allUsersAreAdmins;
         }
 
-        public string GetID()
+        public User AddUser(string username, string connectionId)
         {
-            return Id;
-        }
-
-        public string AddUser(string username, string connectionId)
-        {
-            if (Connections.Contains(connectionId)) return "CONNECTION_ALREADY_EXISTS";
+            if (Connections.Contains(connectionId)) return null;
             Connections.Add(connectionId);
 
-            User newUser = new User(username);
+            User newUser;
+
+            if(Users.Count == 0 || AllUsersAreAdmins == true)
+            {
+                newUser = new User(username, true);
+            }
+            else
+            {
+                newUser = new User(username);
+            }
+            
             Users.Add(newUser);
 
-            return newUser.Id;
+            return newUser;
         }
 
         public void RemoveUser(string userId)
@@ -48,31 +57,6 @@ namespace scrum_poker
         public List<User> GetUsers()
         {
             return Users.FindAll(x => !x.MissingInAction);
-        }
-
-        public List<string> GetConnections()
-        {
-            return Connections;
-        }
-
-        public void AddConnection(string connectionId)
-        {
-            Connections.Add(connectionId);
-        }
-
-        public void RemoveConnection(string connectionId)
-        {
-            Connections.Remove(connectionId);
-        }
-
-        public bool GetRevealed()
-        {
-            return this.CardsRevealed;
-        }
-
-        public void SetRevealed(bool revealed) 
-        {
-            this.CardsRevealed = revealed;
         }
     }
 }

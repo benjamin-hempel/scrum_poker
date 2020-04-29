@@ -39,6 +39,9 @@
       <div *ngIf="roomExistsWarning" class="alert alert-warning" role="alert">
         Der angegebene Raum existiert nicht.
       </div>
+      <div *ngIf="connectionExistsWarning" class="alert alert-warning" role="alert">
+        Du bist bereits mit diesem Raum verbunden.
+      </div>
       <div class="pt-3"></div>
       <button class="btn btn-primary" id="joinRoom" type="submit" (click)="joinRoom()">Raum beitreten</button>
       <div class="spacer-bottom-25"></div>

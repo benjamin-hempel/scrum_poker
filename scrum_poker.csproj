@@ -31,8 +31,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <TypeScriptCompile Include="ClientApp\src\app\cards.ts" />
-    <TypeScriptCompile Include="ClientApp\src\app\user.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\models\cards.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\models\user.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\services\room.service.ts" />
   </ItemGroup>
 

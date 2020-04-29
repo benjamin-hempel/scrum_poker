@@ -1,4 +1,4 @@
-<div *ngIf="roomService.roomId && roomService.username != null">
+<div *ngIf="roomService.roomId && roomService.you.username != null">
   <h4>Details</h4>
   <div class="row">
     <div class="col-sm-4" id="divRoomID">
@@ -7,7 +7,7 @@
     </div>
     <div class="col-sm-4" id="divOwnUsername">
       <h5>Dein Name</h5>
-      <p>{{ roomService.username }}</p>
+      <p>{{ roomService.you.username }}</p>
     </div>
     <div class="col-sm-4" id="divRoomUsers">
       <h5>Benutzer im Raum</h5>
@@ -19,8 +19,8 @@
     </div>
   </div>
   <div class="spacer-bottom-25">
-    <button type="button" *ngIf="!roomService.cardsRevealed" class="btn btn-primary mr-1" (click)="revealCards()">Karten aufdecken</button>
-    <button type="button" *ngIf="roomService.cardsRevealed" class="btn btn-danger" (click)="resetCards()">Karten zurücksetzen</button>
+    <button type="button" *ngIf="!roomService.cardsRevealed && roomService.you.isAdmin" class="btn btn-primary mr-1" (click)="revealCards()">Karten aufdecken</button>
+    <button type="button" *ngIf="roomService.cardsRevealed && roomService.you.isAdmin" class="btn btn-danger" (click)="resetCards()">Karten zurücksetzen</button>
   </div>
   <hr />
   <div id="selectableCardsContainer"></div>
@@ -29,7 +29,7 @@
     <div class="col-sm-3" style="margin-bottom: 1em" *ngFor="let card of cards">
       <div class="card" [ngClass]="{'clickable': !roomService.cardsRevealed}" (click)="!roomService.cardsRevealed ? selectCard(card.id) : false">
         <div class="card-body">
-          <h3 class="card-title" [ngClass]="{'selected': card.id == roomService.selectedCard}" style="user-select: none;">{{ card.label }}</h3>
+          <h3 class="card-title" [ngClass]="{'selected': card.id == roomService.you.selectedCard}" style="user-select: none;">{{ card.label }}</h3>
         </div>
       </div>
     </div>
@@ -42,7 +42,7 @@
       <div class="col-sm-4" style="margin-bottom: 1em" *ngFor="let user of roomService.users">
         <div class="card" [ngClass]="{'bg-success': user.selectedCard > -1 && !roomService.cardsRevealed}">
           <div class="card-body">
-            <h3 class="card-title">{{ user.username }}</h3>
+            <h3 class="card-title">{{ user.username }} <fa-icon [icon]="faShieldAlt" *ngIf="user.isAdmin"></fa-icon></h3>
             <h4 class="card-text" *ngIf="roomService.cardsRevealed && user.selectedCard != -1">{{ cards[user.selectedCard].label }}</h4>
           </div>
         </div>

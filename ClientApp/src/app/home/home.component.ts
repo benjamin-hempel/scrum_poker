@@ -11,6 +11,7 @@ export class HomeComponent {
   constructor(private roomService: RoomService, private router: Router, private route: ActivatedRoute) {}
 
   roomExistsWarning: boolean = false;
+  connectionExistsWarning: boolean = false;
   noUsernameWarning: boolean = false;
   noRoomIdWarning: boolean = false;
   joinByLink: boolean = false;
@@ -66,7 +67,7 @@ export class HomeComponent {
     await this.roomService.createRoom();
     await this.roomService.joinRoom(username);
 
-    this.router.navigate(["/room", { rid: this.roomService.roomId, uid: this.roomService.userId }]);
+    this.router.navigate(["/room", { rid: this.roomService.roomId, uid: this.roomService.you.userId }]);
   }
 
   async joinRoom() {
@@ -77,12 +78,21 @@ export class HomeComponent {
     if (roomId == "ROOMID_IS_EMPTY") return;
 
     let result = await this.roomService.joinRoom(username, roomId);
-    if (result == true) {
-      this.roomExistsWarning = false;
-      await this.roomService.getUsers();
-      this.router.navigate(["/room", { rid: this.roomService.roomId, uid: this.roomService.userId }]);
-    } else {
-      this.roomExistsWarning = true;
+    switch (result) {
+      case "JOIN_SUCCESSFUL":
+        this.roomExistsWarning = false;
+        this.connectionExistsWarning = false;
+        await this.roomService.getUsers();
+        this.router.navigate(["/room", { rid: this.roomService.roomId, uid: this.roomService.you.userId }]);
+        break;
+
+      case "ROOM_DOES_NOT_EXIST":
+        this.roomExistsWarning = true;
+        break;
+
+      case "CONNECTION_ALREADY_EXISTS":
+        this.connectionExistsWarning = true;
+        break;
     }
   }
 }

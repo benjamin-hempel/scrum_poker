@@ -2,4 +2,5 @@ export class User {
   userId: string;
   username: string;
   selectedCard: number;
+  isAdmin: boolean;
 }

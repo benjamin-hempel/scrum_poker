@@ -18,31 +18,36 @@ namespace scrum_poker.Hubs
             Room newRoom = new Room();
             Rooms.Add(newRoom);
 
-            return newRoom.GetID();
+            return newRoom.Id;
         }
 
         public string JoinRoom(string roomId, string username)
         {
             // Check if room exists
-            bool roomExists = Rooms.Exists(x => x.GetID() == roomId);
-            if (roomExists == false) return "ROOM_DOES_NOT_EXIST";
+            bool roomExists = Rooms.Exists(x => x.Id == roomId);
+            if (roomExists == false) 
+                return "ROOM_DOES_NOT_EXIST";
 
-            Room room = Rooms.Find(x => x.GetID() == roomId);
-            string userId = room.AddUser(username, Context.ConnectionId);
+            Room room = Rooms.Find(x => x.Id == roomId);
+            User user = room.AddUser(username, Context.ConnectionId);
+
+            if (user == null)
+                return "CONNECTION_ALREADY_EXISTS";
 
             // Notify clients
-            Clients.Clients(room.GetConnections()).SendAsync("UserJoined", userId, username);
+            Clients.Clients(room.Connections).SendAsync("UserJoined", user.Id, user.Name, user.IsAdmin);
 
-            return userId;
+            var obj = new { Id = user.Id, IsAdmin = user.IsAdmin };
+            return JsonSerializer.Serialize(obj);
         }
 
         public void LeaveRoom(string roomId, string userId)
         {
-            Room room = Rooms.Find(x => x.GetID() == roomId);
+            Room room = Rooms.Find(x => x.Id == roomId);
             if (room == null) return;
 
             // Remove connection, but keep user data around for potential reconnect
-            room.RemoveConnection(Context.ConnectionId);
+            room.Connections.Remove(Context.ConnectionId);
 
             User user = room.GetUser(userId);
             if (user == null) return;
@@ -63,7 +68,7 @@ namespace scrum_poker.Hubs
             }
     
             // Notify clients
-            Clients.Clients(room.GetConnections()).SendAsync("UserLeft", userId);
+            Clients.Clients(room.Connections).SendAsync("UserLeft", userId);
         }
 
         /// <summary>
@@ -78,7 +83,7 @@ namespace scrum_poker.Hubs
         /// </returns>
         public string Rejoin(string roomId, string userId)
         {
-            Room room = Rooms.Find(x => x.GetID() == roomId);
+            Room room = Rooms.Find(x => x.Id == roomId);
             if (room == null) return "ROOM_DOES_NOT_EXIST";
 
             // Mark user as active
@@ -87,20 +92,20 @@ namespace scrum_poker.Hubs
             user.MissingInAction = false;
 
             // Add connection
-            room.AddConnection(Context.ConnectionId);
+            room.Connections.Add(Context.ConnectionId);
 
             // Notify clients
-            Clients.Clients(room.GetConnections()).SendAsync("UserJoined", user.Id, user.Name);           
+            Clients.Clients(room.Connections).SendAsync("UserJoined", user.Id, user.Name, user.IsAdmin);           
             if(user.SelectedCard > -1) 
-                Clients.Clients(room.GetConnections()).SendAsync("CardSelected", user.Id, user.SelectedCard);
+                Clients.Clients(room.Connections).SendAsync("CardSelected", user.Id, user.SelectedCard);
 
-            var obj = new { Name = user.Name, SelectedCard = user.SelectedCard, CardsRevealed = room.GetRevealed()};
+            var obj = new { Name = user.Name, SelectedCard = user.SelectedCard, CardsRevealed = room.CardsRevealed, IsAdmin = user.IsAdmin };
             return JsonSerializer.Serialize(obj);
         }
 
         public void SelectCard(string roomId, string userId, int selectedCard)
         {
-            Room room = Rooms.Find(x => x.GetID() == roomId);
+            Room room = Rooms.Find(x => x.Id == roomId);
 
             // Update selection
             if (room == null) return;
@@ -109,33 +114,33 @@ namespace scrum_poker.Hubs
             callingUser.SelectedCard = selectedCard;
 
             // Notify clients
-            Clients.Clients(room.GetConnections()).SendAsync("CardSelected", userId, selectedCard);
+            Clients.Clients(room.Connections).SendAsync("CardSelected", userId, selectedCard);
         }
 
         public void RevealCards(string roomId)
         {
-            Room room = Rooms.Find(x => x.GetID() == roomId);
+            Room room = Rooms.Find(x => x.Id == roomId);
             if (room == null) return;
 
-            room.SetRevealed(true);
-            Clients.Clients(room.GetConnections()).SendAsync("CardsRevealed");
+            room.CardsRevealed = true;
+            Clients.Clients(room.Connections).SendAsync("CardsRevealed");
         }
 
         public void ResetCards(string roomId)
         {
-            Room room = Rooms.Find(x => x.GetID() == roomId);
+            Room room = Rooms.Find(x => x.Id == roomId);
             if (room == null) return;
 
             foreach (var user in room.GetUsers())
                 user.SelectedCard = -1;
 
-            room.SetRevealed(false);
-            Clients.Clients(room.GetConnections()).SendAsync("CardsReset");
+            room.CardsRevealed = false;
+            Clients.Clients(room.Connections).SendAsync("CardsReset");
         }
 
         public string GetUsers(string roomId)
         {
-            Room room = Rooms.Find(x => x.GetID() == roomId);
+            Room room = Rooms.Find(x => x.Id == roomId);
             if (room == null) return "ROOM_DOES_NOT_EXIST";
             List<User> users = room.GetUsers();
 

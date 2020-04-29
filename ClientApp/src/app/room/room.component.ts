@@ -1,7 +1,9 @@
 import { Component, HostListener } from '@angular/core';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 
-import { cards } from '../cards';
+import { faShieldAlt } from '@fortawesome/free-solid-svg-icons';
+
+import { cards } from '../models/cards';
 import { RoomService } from '../services/room.service';
 
 @Component({
@@ -15,11 +17,12 @@ export class RoomComponent {
 
   ngOnInit() {
     this.roomService.roomId = this.route.snapshot.paramMap.get("rid");
-    this.roomService.userId = this.route.snapshot.paramMap.get("uid");
+    this.roomService.you.userId = this.route.snapshot.paramMap.get("uid");
     this.joinUrl = window.location.protocol + "//" + window.location.host + "/" + this.roomService.roomId;
   }
 
   cards = cards;
+  faShieldAlt = faShieldAlt;
 
   async selectCard(index: number) {
     await this.roomService.selectCard(index);
