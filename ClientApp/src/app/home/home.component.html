@@ -21,6 +21,12 @@
     <div class="col" *ngIf="!joinByLink">
       <h2>Raum erstellen</h2>
       <div class="pt-4"></div>
+      <form>
+        <div class="form-group form-check">
+          <input type="checkbox" class="form-check-input" id="allUsersAreAdmins">
+          <label class="form-check-label" for="allUsersAreAdmins">Alle Nutzer sind Administrator</label>
+        </div>
+      </form>
       <button class="btn btn-primary" id="createRoom" type="submit" (click)="createRoom()">Raum erstellen</button>
     </div>
     <div class="col">

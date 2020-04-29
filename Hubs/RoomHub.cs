@@ -13,9 +13,9 @@ namespace scrum_poker.Hubs
     {
         private static List<Room> Rooms = new List<Room>();
         
-        public string CreateRoom()
+        public string CreateRoom(bool allUsersAreAdmins)
         {
-            Room newRoom = new Room();
+            Room newRoom = new Room(allUsersAreAdmins);
             Rooms.Add(newRoom);
 
             return newRoom.Id;

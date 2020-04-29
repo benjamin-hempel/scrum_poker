@@ -69,8 +69,8 @@ export class RoomService {
       .catch(err => console.log("Failed to establish connection to SignalR hub: " + err));
   }
 
-  async createRoom() {
-    await this._hubConnection.invoke("CreateRoom").then((newRoomId) => {
+  async createRoom(allUsersAreAdmins: boolean) {
+    await this._hubConnection.invoke("CreateRoom", allUsersAreAdmins).then((newRoomId) => {
       this.roomId = newRoomId;
     });
   }
@@ -81,7 +81,7 @@ export class RoomService {
     this.roomId = roomId;
     console.log("Your room ID is " + this.roomId);
 
-    // Invoke hub function#
+    // Invoke hub function
     let result = await this._hubConnection.invoke("JoinRoom", roomId, username).then((jsonData) => {
       if (jsonData == "ROOM_DOES_NOT_EXIST" || jsonData == "CONNECTION_ALREADY_EXISTS")
         return jsonData;

@@ -64,7 +64,9 @@ export class HomeComponent {
     let username = this.getUsername();
     if (username == "USERNAME_IS_EMPTY") return;
 
-    await this.roomService.createRoom();
+    let allUsersAreAdmins = (<HTMLInputElement>document.getElementById("allUsersAreAdmins")).checked;
+
+    await this.roomService.createRoom(allUsersAreAdmins);
     await this.roomService.joinRoom(username);
 
     this.router.navigate(["/room", { rid: this.roomService.roomId, uid: this.roomService.you.userId }]);
