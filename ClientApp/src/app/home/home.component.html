@@ -22,6 +22,15 @@
       <h2>Raum erstellen</h2>
       <div class="pt-4"></div>
       <form>
+        <div class="form-group">
+          <label for="predefinedCardDecks">Vordefinierte Kartensätze</label>
+          <select class="form-control" id="predefinedCardDecks">
+            <option value="default">Standard (0, ½, 1, 2, 3, 5, ...)</option>
+            <option value="fibonacci">Fibonacci (0, 1, 2, 3, 5, 8, ...)</option>
+            <option value="tshirt">T-Shirt (XS, S, M, L, XL, XXL, ...)</option>
+            <option value="0to24">0 bis 24 (0, ½, 1, 2, 3, 4, ...)</option>
+          </select>
+        </div>
         <div class="form-group form-check">
           <input type="checkbox" class="form-check-input" id="allUsersAreAdmins">
           <label class="form-check-label" for="allUsersAreAdmins">Alle Nutzer sind Administrator</label>

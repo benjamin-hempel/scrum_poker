@@ -12,14 +12,16 @@ namespace scrum_poker
         public List<string> Connections { get; private set; }
         public bool CardsRevealed { get; set; }
         public bool AllUsersAreAdmins { get; private set; }
+        public string CardDeck { get; private set; }
 
-        public Room(bool allUsersAreAdmins = false)
+        public Room(string cardDeck, bool allUsersAreAdmins = false)
         {
             Id = Guid.NewGuid().ToString();
             Users = new List<User>();
             Connections = new List<string>();
             CardsRevealed = false;
             AllUsersAreAdmins = allUsersAreAdmins;
+            CardDeck = cardDeck;
         }
 
         public User AddUser(string username, string connectionId)

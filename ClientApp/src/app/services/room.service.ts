@@ -11,6 +11,7 @@ export class RoomService {
 
   roomId: string;
   cardsRevealed: boolean = false;
+  cardDeck: string;
 
   you: User;
   
@@ -69,8 +70,8 @@ export class RoomService {
       .catch(err => console.log("Failed to establish connection to SignalR hub: " + err));
   }
 
-  async createRoom(allUsersAreAdmins: boolean) {
-    await this._hubConnection.invoke("CreateRoom", allUsersAreAdmins).then((newRoomId) => {
+  async createRoom(cardDeck: string, allUsersAreAdmins: boolean) {
+    await this._hubConnection.invoke("CreateRoom", cardDeck, allUsersAreAdmins).then((newRoomId) => {
       this.roomId = newRoomId;
     });
   }
@@ -89,6 +90,7 @@ export class RoomService {
       let data = JSON.parse(jsonData)
       this.you.userId = data.Id;
       this.you.isAdmin = data.IsAdmin;
+      this.cardDeck = data.CardDeck;
       console.log("Your user ID is " + this.you.userId);
       return "JOIN_SUCCESSFUL";
     });
@@ -125,6 +127,7 @@ export class RoomService {
       this.you.selectedCard = data.SelectedCard;
       this.you.isAdmin = data.IsAdmin;
       this.cardsRevealed = data.CardsRevealed;
+      this.cardDeck = data.CardDeck;
     });
   }
 

@@ -13,9 +13,9 @@ namespace scrum_poker.Hubs
     {
         private static List<Room> Rooms = new List<Room>();
         
-        public string CreateRoom(bool allUsersAreAdmins)
+        public string CreateRoom(string cardDeck, bool allUsersAreAdmins)
         {
-            Room newRoom = new Room(allUsersAreAdmins);
+            Room newRoom = new Room(cardDeck, allUsersAreAdmins);
             Rooms.Add(newRoom);
 
             return newRoom.Id;
@@ -37,7 +37,7 @@ namespace scrum_poker.Hubs
             // Notify clients
             Clients.Clients(room.Connections).SendAsync("UserJoined", user.Id, user.Name, user.IsAdmin);
 
-            var obj = new { Id = user.Id, IsAdmin = user.IsAdmin };
+            var obj = new { Id = user.Id, IsAdmin = user.IsAdmin, CardDeck = room.CardDeck };
             return JsonSerializer.Serialize(obj);
         }
 
@@ -99,7 +99,7 @@ namespace scrum_poker.Hubs
             if(user.SelectedCard > -1) 
                 Clients.Clients(room.Connections).SendAsync("CardSelected", user.Id, user.SelectedCard);
 
-            var obj = new { Name = user.Name, SelectedCard = user.SelectedCard, CardsRevealed = room.CardsRevealed, IsAdmin = user.IsAdmin };
+            var obj = new { Name = user.Name, SelectedCard = user.SelectedCard, CardsRevealed = room.CardsRevealed, IsAdmin = user.IsAdmin, CardDeck = room.CardDeck };
             return JsonSerializer.Serialize(obj);
         }
 

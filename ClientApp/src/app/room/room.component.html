@@ -26,7 +26,7 @@
   <div id="selectableCardsContainer"></div>
   <h4 style="margin: 15px 0 20px 0">Deine Schätzung</h4>
   <div class="row">
-    <div class="col-sm-3" style="margin-bottom: 1em" *ngFor="let card of cards['default']; let i=index;">
+    <div class="col-sm-3" style="margin-bottom: 1em" *ngFor="let card of cards[roomService.cardDeck]; let i=index;">
       <div class="card" [ngClass]="{'clickable': !roomService.cardsRevealed}" (click)="!roomService.cardsRevealed ? selectCard(i) : false">
         <div class="card-body">
           <h3 class="card-title" [ngClass]="{'selected': i == roomService.you.selectedCard}" style="user-select: none;">{{ card }}</h3>
@@ -43,7 +43,7 @@
         <div class="card" [ngClass]="{'bg-success': user.selectedCard > -1 && !roomService.cardsRevealed}">
           <div class="card-body">
             <h3 class="card-title">{{ user.username }} <fa-icon [icon]="faShieldAlt" *ngIf="user.isAdmin"></fa-icon></h3>
-            <h4 class="card-text" *ngIf="roomService.cardsRevealed && user.selectedCard != -1">{{ cards['default'][user.selectedCard] }}</h4>
+            <h4 class="card-text" *ngIf="roomService.cardsRevealed && user.selectedCard != -1">{{ cards[roomService.cardDeck][user.selectedCard] }}</h4>
           </div>
         </div>
       </div>
