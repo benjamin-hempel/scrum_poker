@@ -56,6 +56,17 @@ export class HomeComponent {
     return roomId;
   }
 
+  private getCardDeck(): string {
+    let cardDeck = (<HTMLInputElement>document.getElementById("customCardDeck")).value;
+    cardDeck = cardDeck.trim();
+
+    if (cardDeck === "") {
+      cardDeck = (<HTMLInputElement>document.getElementById("predefinedCardDecks")).value;
+    }
+
+    return cardDeck;
+  }
+
   // ---------------
   // On button click
   // ---------------
@@ -65,7 +76,7 @@ export class HomeComponent {
     if (username == "USERNAME_IS_EMPTY") return;
 
     let allUsersAreAdmins = (<HTMLInputElement>document.getElementById("allUsersAreAdmins")).checked;
-    let cardDeck = (<HTMLInputElement>document.getElementById("predefinedCardDecks")).value;
+    let cardDeck = this.getCardDeck();
 
     await this.roomService.createRoom(cardDeck, allUsersAreAdmins);
     await this.roomService.joinRoom(username);
