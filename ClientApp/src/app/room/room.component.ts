@@ -3,7 +3,6 @@ import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 
 import { faShieldAlt } from '@fortawesome/free-solid-svg-icons';
 
-import { cards } from '../models/cards';
 import { RoomService } from '../services/room.service';
 
 @Component({
@@ -21,7 +20,6 @@ export class RoomComponent {
     this.joinUrl = window.location.protocol + "//" + window.location.host + "/" + this.roomService.roomId;
   }
 
-  cards = cards;
   faShieldAlt = faShieldAlt;
 
   async selectCard(index: number) {
