@@ -37,7 +37,7 @@ namespace scrum_poker.Hubs
             // Notify clients
             Clients.Clients(room.Connections).SendAsync("UserJoined", user.Id, user.Name, user.IsAdmin);
 
-            var obj = new { Id = user.Id, IsAdmin = user.IsAdmin, CardDeck = room.CardDeck };
+            var obj = new { Id = user.Id, IsAdmin = user.IsAdmin, CardDeck = room.CardDeck, CardsRevealed = room.CardsRevealed };
             return JsonSerializer.Serialize(obj);
         }
 

@@ -92,6 +92,7 @@ export class RoomService {
       this.you.userId = data.Id;
       this.you.isAdmin = data.IsAdmin;
       this.cards = data.CardDeck.split(',');
+      this.cardsRevealed = data.CardsRevealed;
       console.log("Your user ID is " + this.you.userId);
       return "JOIN_SUCCESSFUL";
     });
