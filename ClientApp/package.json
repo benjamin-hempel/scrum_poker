@@ -28,6 +28,7 @@
     "@fortawesome/free-solid-svg-icons": "^5.13.0",
     "@nguniversal/module-map-ngfactory-loader": "8.1.1",
     "@types/jquery": "^3.3.35",
+    "angularx-qrcode": "^2.1.1",
     "aspnet-prerendering": "^3.0.1",
     "bootstrap": "^4.4.1",
     "core-js": "^3.6.5",

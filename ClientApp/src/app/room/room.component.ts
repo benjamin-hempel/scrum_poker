@@ -1,5 +1,5 @@
 import { Component, HostListener } from '@angular/core';
-import { Router, ActivatedRoute, ParamMap } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 
 import { faShieldAlt } from '@fortawesome/free-solid-svg-icons';
 
@@ -40,3 +40,4 @@ export class RoomComponent {
   }
 
 }
+
