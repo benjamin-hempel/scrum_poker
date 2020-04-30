@@ -11,6 +11,7 @@ namespace scrum_poker
         private List<User> Users { get; set; }
         public List<string> Connections { get; private set; }
         public bool CardsRevealed { get; set; }
+        public int PlayedCards { get; set; }
         public bool AllUsersAreAdmins { get; private set; }
         public string CardDeck { get; private set; }
 

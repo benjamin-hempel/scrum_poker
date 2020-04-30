@@ -37,7 +37,7 @@ namespace scrum_poker.Hubs
             // Notify clients
             Clients.Clients(room.Connections).SendAsync("UserJoined", user.Id, user.Name, user.IsAdmin);
 
-            var obj = new { Id = user.Id, IsAdmin = user.IsAdmin, CardDeck = room.CardDeck, CardsRevealed = room.CardsRevealed };
+            var obj = new { Id = user.Id, IsAdmin = user.IsAdmin, CardDeck = room.CardDeck, CardsRevealed = room.CardsRevealed, PlayedCards = room.PlayedCards };
             return JsonSerializer.Serialize(obj);
         }
 
@@ -99,7 +99,7 @@ namespace scrum_poker.Hubs
             if(user.SelectedCard > -1) 
                 Clients.Clients(room.Connections).SendAsync("CardSelected", user.Id, user.SelectedCard);
 
-            var obj = new { Name = user.Name, SelectedCard = user.SelectedCard, CardsRevealed = room.CardsRevealed, IsAdmin = user.IsAdmin, CardDeck = room.CardDeck };
+            var obj = new { Name = user.Name, SelectedCard = user.SelectedCard, CardsRevealed = room.CardsRevealed, IsAdmin = user.IsAdmin, CardDeck = room.CardDeck, PlayedCards = room.PlayedCards };
             return JsonSerializer.Serialize(obj);
         }
 
@@ -107,14 +107,22 @@ namespace scrum_poker.Hubs
         {
             Room room = Rooms.Find(x => x.Id == roomId);
 
-            // Update selection
+            // Get room and user
             if (room == null) return;
-            User callingUser = room.GetUser(userId);
-            if (callingUser == null) return;
-            callingUser.SelectedCard = selectedCard;
+            User user = room.GetUser(userId);
+            if (user == null) return;
+
+            // Update played card counter accordingly
+            if (user.SelectedCard == -1)
+                room.PlayedCards++;
+            if (selectedCard == -1)
+                room.PlayedCards--;
+
+            // Update selection
+            user.SelectedCard = selectedCard;
 
             // Notify clients
-            Clients.Clients(room.Connections).SendAsync("CardSelected", userId, selectedCard);
+            Clients.Clients(room.Connections).SendAsync("CardSelected", user.Id, user.SelectedCard, room.PlayedCards);
         }
 
         public void RevealCards(string roomId)

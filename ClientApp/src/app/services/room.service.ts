@@ -11,6 +11,7 @@ export class RoomService {
 
   roomId: string;
   cardsRevealed: boolean = false;
+  playedCards: number = 0;
   cards: string[];
 
   you: User;
@@ -43,9 +44,10 @@ export class RoomService {
       this.users.splice(index, 1);
     });
 
-    this._hubConnection.on("CardSelected", (userId, selectedCard) => {
+    this._hubConnection.on("CardSelected", (userId, selectedCard, playedCards) => {
       let index = this.users.findIndex(user => user.userId === userId);
       this.users[index].selectedCard = selectedCard;
+      this.playedCards = playedCards;
     });
 
     this._hubConnection.on("CardsRevealed", () => {
@@ -93,6 +95,7 @@ export class RoomService {
       this.you.isAdmin = data.IsAdmin;
       this.cards = data.CardDeck.split(',');
       this.cardsRevealed = data.CardsRevealed;
+      this.playedCards = data.PlayedCards;
       console.log("Your user ID is " + this.you.userId);
       return "JOIN_SUCCESSFUL";
     });
@@ -130,6 +133,7 @@ export class RoomService {
       this.you.isAdmin = data.IsAdmin;
       this.cardsRevealed = data.CardsRevealed;
       this.cards = data.CardDeck.split(',');
+      this.playedCards = data.PlayedCards;
     });
   }
 
