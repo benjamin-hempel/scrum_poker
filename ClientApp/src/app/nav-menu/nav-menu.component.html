@@ -4,21 +4,17 @@
   >
     <div class="container">
       <a class="navbar-brand">Scrum Poker</a>
-      <button
-        class="navbar-toggler"
-        type="button"
-        data-toggle="collapse"
-        data-target=".navbar-collapse"
-        aria-label="Toggle navigation"
-        [attr.aria-expanded]="isExpanded"
-        (click)="toggle()"
-      >
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div
-        class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse"
-        [ngClass]="{ show: isExpanded }"
-      >
+      <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse"
+           [ngClass]="{ show: isExpanded }">
+        <div class="dropdown">
+          <button class="btn btn-secondary dropdown-toggle" type="button" id="chooseLanguageDropdownButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <fa-icon [icon]="faGlobe"></fa-icon> {{ 'general.selectLanguageButton' | translate }}
+          </button>
+          <div class="dropdown-menu" aria-labelledby="chooseLanguageDropdownButton">
+            <a class="dropdown-item clickable" (click)="useLanguage('de')">Deutsch</a>
+            <a class="dropdown-item clickable" (click)="useLanguage('en')">English</a>
+          </div>
+        </div>
       </div>
     </div>
   </nav>

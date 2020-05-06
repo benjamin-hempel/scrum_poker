@@ -1,4 +1,7 @@
 import { Component } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
+
+import { faGlobe } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-nav-menu',
@@ -6,13 +9,11 @@ import { Component } from '@angular/core';
   styleUrls: ['./nav-menu.component.css']
 })
 export class NavMenuComponent {
-  isExpanded = false;
+  constructor(private translate: TranslateService) { }
 
-  collapse() {
-    this.isExpanded = false;
-  }
+  faGlobe = faGlobe;
 
-  toggle() {
-    this.isExpanded = !this.isExpanded;
+  useLanguage(language: string) {
+    this.translate.use(language);
   }
 }
