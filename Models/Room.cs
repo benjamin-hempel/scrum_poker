@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace scrum_poker
+namespace scrum_poker.Models
 {
     public class Room
     {
@@ -15,8 +13,9 @@ namespace scrum_poker
         public bool AllUsersAreAdmins { get; private set; }
         public string CardDeck { get; private set; }
 
-        public Room(string cardDeck, bool allUsersAreAdmins = false)
+        public Room(string cardDeck, bool allUsersAreAdmins)
         {
+            // Initialize/set room data
             Id = Guid.NewGuid().ToString();
             Users = new List<User>();
             Connections = new List<string>();
@@ -27,19 +26,17 @@ namespace scrum_poker
 
         public User AddUser(string username, string connectionId)
         {
-            if (Connections.Contains(connectionId)) return null;
+            if (Connections.Contains(connectionId)) 
+                return null;
             Connections.Add(connectionId);
 
             User newUser;
 
+            // Make user admin if they are the creator or all users in the room shall be admins
             if(Users.Count == 0 || AllUsersAreAdmins == true)
-            {
                 newUser = new User(username, true);
-            }
             else
-            {
                 newUser = new User(username);
-            }
             
             Users.Add(newUser);
 
@@ -49,7 +46,8 @@ namespace scrum_poker
         public void RemoveUser(string userId)
         {
             User userToRemove = Users.Find(x => x.Id == userId);
-            if(userToRemove != null) Users.Remove(userToRemove);
+            if(userToRemove != null) 
+                Users.Remove(userToRemove);
         }
 
         public User GetUser(string userId)

@@ -1,3 +1,4 @@
+<!-- Room details-->
 <div *ngIf="roomService.roomId && roomService.you.username != null">
   <h4>{{ 'room.detailsTitle' | translate }}</h4>
   <div class="row">
@@ -33,16 +34,19 @@
       </div>   
     </div>   
   </div>
-  <div class="pt-3">
-    <button class="btn btn-primary mr-1" type="button" data-toggle="collapse" data-target="#selectableCardsContainer" aria-expanded="false" aria-controls="selectableCardsContainer">{{ 'room.playCardButton' | translate }}</button>
-    <button type="button" *ngIf="!roomService.cardsRevealed && roomService.you.isAdmin" class="btn btn-primary" (click)="revealCards()">{{ 'room.revealCardsButton' | translate }}</button>
-    <button type="button" *ngIf="roomService.cardsRevealed && roomService.you.isAdmin" class="btn btn-danger" (click)="resetCards()">{{ 'room.resetCardsButton' | translate }}</button>
-  </div>
+
+  <!-- Button controls -->
+  <div class="pt-3"></div>
+  <button type="button" class="btn btn-primary mr-1" data-toggle="collapse" data-target="#selectableCardsContainer" aria-expanded="false" aria-controls="selectableCardsContainer">{{ 'room.playCardButton' | translate }}</button>
+  <button type="button" *ngIf="!roomService.cardsRevealed && roomService.you.isAdmin" class="btn btn-primary" (click)="revealCards()">{{ 'room.revealCardsButton' | translate }}</button>
+  <button type="button" *ngIf="roomService.cardsRevealed && roomService.you.isAdmin" class="btn btn-danger" (click)="resetCards()">{{ 'room.resetCardsButton' | translate }}</button>
+
+  <!-- Selectable cards collapsible-->
   <div class="collapse" id="selectableCardsContainer">
     <hr />
-    <h4 style="margin: 15px 0 20px 0">{{ 'room.yourEstimateTitle' | translate }}</h4>
+    <h4 class="mb-3">{{ 'room.yourEstimateTitle' | translate }}</h4>
     <div class="row">
-      <div class="col-md-3 col-sm-12" style="margin-bottom: 1em" *ngFor="let card of roomService.cards; let i=index;">
+      <div class="col-md-3 col-sm-12 mb-3" *ngFor="let card of roomService.cards; let i=index;">
         <div class="card" data-toggle="collapse" data-target="#selectableCardsContainer" aria-controls="selectableCardsContainer" [ngClass]="{'clickable': !roomService.cardsRevealed}" (click)="!roomService.cardsRevealed ? selectCard(i) : false">
           <div class="card-body">
             <h3 class="card-title" [ngClass]="{'selected': i == roomService.you.selectedCard}" style="user-select: none;">{{ card }}</h3>
@@ -51,25 +55,27 @@
       </div>
     </div>
   </div>
+
+  <!-- Other users -->
   <hr />
   <div id="otherUsersContainer">
-    <h4 class="spacer-top-15 spacer-bottom-20">{{ 'room.roomUsersTitle' | translate }}</h4>
+    <h4 class="mb-3">{{ 'room.roomUsersTitle' | translate }}</h4>
     <div class="row">
-      <div class="col-sm-12 col-md-4" style="margin-bottom: 1em" *ngFor="let user of roomService.users">
+      <div class="col-sm-12 col-md-4 mb-3" *ngFor="let user of roomService.users">
         <div class="card" [ngClass]="{'bg-success': user.selectedCard > -1 && !roomService.cardsRevealed}">
           <div class="card-body">
-            <h3 class="card-title">{{ user.username }} <fa-icon [icon]="faShieldAlt" *ngIf="user.isAdmin"></fa-icon></h3>
+            <h3 class="card-title"><fa-icon [icon]="faShieldAlt" *ngIf="user.isAdmin"></fa-icon> {{ user.username }}</h3>
             <h4 class="card-text" *ngIf="roomService.cardsRevealed && user.selectedCard != -1">{{ roomService.cards[user.selectedCard] }}</h4>
           </div>
         </div>
       </div>
     </div>
   </div>
+</div>
 
-  </div>
-
-  <div *ngIf="!roomService.roomId">
-    <h2>{{ 'room.noRoom.title' | translate }}</h2>
-    <p>{{ 'room.noRoom.explanationPrefix' | translate }} <a href="/">{{ 'room.noRoom.homepageLinkLabel' | translate }}</a> {{ 'room.noRoom.explanationSuffix' | translate }}</p>
-  </div>
+<!-- Shown if the user is currently not in a room -->
+<div *ngIf="!roomService.roomId">
+  <h2>{{ 'room.noRoom.title' | translate }}</h2>
+  <p>{{ 'room.noRoom.explanationPrefix' | translate }} <a href="/">{{ 'room.noRoom.homepageLinkLabel' | translate }}</a> {{ 'room.noRoom.explanationSuffix' | translate }}</p>
+</div>
 

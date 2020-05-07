@@ -1,4 +1,4 @@
-import { Injectable, HostListener } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { User } from '../models/user';
 import * as signalR from "@aspnet/signalr";
@@ -9,20 +9,25 @@ import * as signalR from "@aspnet/signalr";
 export class RoomService {
   private _hubConnection: signalR.HubConnection;
 
+  // Room properties
   roomId: string;
   cardsRevealed: boolean = false;
   playedCards: number = 0;
   cards: string[];
 
+  // Current user
   you: User;
-  
+
+  // Other room users
   users: Array<User>;
 
   constructor(private route: ActivatedRoute) {
+    // Setup and start connection
     this.createConnection();
     this.registerCallbacks();
     this.startConnection();
 
+    // Initialize objects
     this.you = new User();
     this.users = new Array<User>();
   }
@@ -39,7 +44,6 @@ export class RoomService {
     });
 
     this._hubConnection.on("UserLeft", (userId) => {
-      console.log("User " + userId + " left");
       let index = this.users.findIndex(user => user.userId == userId)
       this.users.splice(index, 1);
     });
@@ -66,10 +70,11 @@ export class RoomService {
     this._hubConnection
       .start()
       .then(() => {
+        // Try rejoining if room and user ID were found in the URL
         if (this.roomId == null || this.you.userId == null) return;
         this.rejoinRoom().then(() => this.getUsers());  
       })
-      .catch(err => console.log("Failed to establish connection to SignalR hub: " + err));
+      .catch(err => console.log("Could not establish connection to SignalR hub: " + err));
   }
 
   async createRoom(cardDeck: string, allUsersAreAdmins: boolean) {
@@ -83,20 +88,21 @@ export class RoomService {
     // Set data
     this.you.username = username;
     this.roomId = roomId;
-    console.log("Your room ID is " + this.roomId);
 
     // Invoke hub function
     let result = await this._hubConnection.invoke("JoinRoom", roomId, username).then((jsonData) => {
+      // Abort on error
       if (jsonData == "ROOM_DOES_NOT_EXIST" || jsonData == "CONNECTION_ALREADY_EXISTS")
         return jsonData;
 
+      // Get data from JSON
       let data = JSON.parse(jsonData)
       this.you.userId = data.Id;
       this.you.isAdmin = data.IsAdmin;
       this.cards = data.CardDeck.split(',');
       this.cardsRevealed = data.CardsRevealed;
       this.playedCards = data.PlayedCards;
-      console.log("Your user ID is " + this.you.userId);
+
       return "JOIN_SUCCESSFUL";
     });
 
@@ -108,6 +114,7 @@ export class RoomService {
       // Check if room exists
       if (jsonUsers == "ROOM_DOES_NOT_EXIST") return;
 
+      // Get user data from JSON
       var users = JSON.parse(jsonUsers);
       for (let user of users) {
         if(user.Id != this.you.userId)
@@ -122,11 +129,14 @@ export class RoomService {
 
   async rejoinRoom() {
     await this._hubConnection.invoke("Rejoin", this.roomId, this.you.userId).then((result) => {
+      // Abort if room or user do not exist
       if (result == "ROOM_DOES_NOT_EXIST" || result == "USER_DOES_NOT_EXIST") {
         this.roomId = null;
         this.you.userId = null;
         return;
       }
+
+      // Get data from JSON
       var data = JSON.parse(result);
       this.you.username = data.Name;
       this.you.selectedCard = data.SelectedCard;
@@ -138,6 +148,7 @@ export class RoomService {
   }
 
   selectCard(selectedCard: number) {
+    // Deselect card if the user clicks the same card again
     if (selectedCard == this.you.selectedCard)
       this.you.selectedCard = -1;
     else
@@ -156,10 +167,12 @@ export class RoomService {
 
   private addUserToList(userId: string, username: string, isAdmin: boolean, selectedCard: number = -1) {
     let newUser = new User();
+
     newUser.userId = userId;
     newUser.username = username;
     newUser.selectedCard = selectedCard;
     newUser.isAdmin = isAdmin;
+
     this.users.push(newUser);
   }
 }

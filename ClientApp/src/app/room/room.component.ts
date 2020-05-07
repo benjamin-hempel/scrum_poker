@@ -1,6 +1,7 @@
 import { Component, HostListener } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
+// Icons
 import { faShieldAlt } from '@fortawesome/free-solid-svg-icons';
 
 import { RoomService } from '../services/room.service';
@@ -15,8 +16,11 @@ export class RoomComponent {
   joinUrl: string; 
 
   ngOnInit() {
+    // Get room ID and user ID for potential rejoin
     this.roomService.roomId = this.route.snapshot.paramMap.get("rid");
     this.roomService.you.userId = this.route.snapshot.paramMap.get("uid");
+
+    // Build join URL
     this.joinUrl = window.location.protocol + "//" + window.location.host + "/" + this.roomService.roomId;
   }
 
@@ -34,6 +38,7 @@ export class RoomComponent {
     await this.roomService.resetCards();
   }
 
+  // Automatically leave if the user closes the tab
   @HostListener('window:beforeunload')
   async leaveRoom() {
     await this.roomService.leaveRoom();

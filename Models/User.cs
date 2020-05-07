@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace scrum_poker
+namespace scrum_poker.Models
 {
     public class User
     {
@@ -15,6 +12,7 @@ namespace scrum_poker
 
         public User(string username, bool isAdmin = false)
         {
+            // Initialize/set user data
             Id = Guid.NewGuid().ToString();
             Name = username;
             SelectedCard = -1;
