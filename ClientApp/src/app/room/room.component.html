@@ -33,18 +33,20 @@
       </div>   
     </div>   
   </div>
-  <div class="spacer-bottom-25">
-    <button type="button" *ngIf="!roomService.cardsRevealed && roomService.you.isAdmin" class="btn btn-primary mr-1" (click)="revealCards()">{{ 'room.revealCardsButton' | translate }}</button>
+  <div class="pt-3">
+    <button class="btn btn-primary mr-1" type="button" data-toggle="collapse" data-target="#selectableCardsContainer" aria-expanded="false" aria-controls="selectableCardsContainer">{{ 'room.playCardButton' | translate }}</button>
+    <button type="button" *ngIf="!roomService.cardsRevealed && roomService.you.isAdmin" class="btn btn-primary" (click)="revealCards()">{{ 'room.revealCardsButton' | translate }}</button>
     <button type="button" *ngIf="roomService.cardsRevealed && roomService.you.isAdmin" class="btn btn-danger" (click)="resetCards()">{{ 'room.resetCardsButton' | translate }}</button>
   </div>
-  <hr />
-  <div id="selectableCardsContainer"></div>
-  <h4 style="margin: 15px 0 20px 0">{{ 'room.yourEstimateTitle' | translate }}</h4>
-  <div class="row">
-    <div class="col-md-3 col-sm-12" style="margin-bottom: 1em" *ngFor="let card of roomService.cards; let i=index;">
-      <div class="card" [ngClass]="{'clickable': !roomService.cardsRevealed}" (click)="!roomService.cardsRevealed ? selectCard(i) : false">
-        <div class="card-body">
-          <h3 class="card-title" [ngClass]="{'selected': i == roomService.you.selectedCard}" style="user-select: none;">{{ card }}</h3>
+  <div class="collapse" id="selectableCardsContainer">
+    <hr />
+    <h4 style="margin: 15px 0 20px 0">{{ 'room.yourEstimateTitle' | translate }}</h4>
+    <div class="row">
+      <div class="col-md-3 col-sm-12" style="margin-bottom: 1em" *ngFor="let card of roomService.cards; let i=index;">
+        <div class="card" data-toggle="collapse" data-target="#selectableCardsContainer" aria-controls="selectableCardsContainer" [ngClass]="{'clickable': !roomService.cardsRevealed}" (click)="!roomService.cardsRevealed ? selectCard(i) : false">
+          <div class="card-body">
+            <h3 class="card-title" [ngClass]="{'selected': i == roomService.you.selectedCard}" style="user-select: none;">{{ card }}</h3>
+          </div>
         </div>
       </div>
     </div>
