@@ -1,9 +1,5 @@
-a {
-  color: #0366d6;
-}
-
-code {
-  color: #e01a76;
+.nav-link {
+    color: #fff !important;
 }
 
 .btn-primary {

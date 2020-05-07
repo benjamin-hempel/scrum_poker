@@ -1,6 +1,6 @@
 <!-- Username input -->
 <div class="row">
-  <div class="col">
+  <div class="col-sm-12 col-md-6">
     <div class="pt-2"></div>
     <form>
       <div class="form-group">
@@ -13,13 +13,16 @@
         {{ 'home.warnings.noUsername' | translate }}
       </div>
     </div>
-    <div class="pt-3"></div>
   </div>
 </div>
 
 <div class="row">
+  <div class="col-sm-12 d-none d-md-block">
+    <hr />
+  </div>
   <!-- Create room -->
   <div class="col-md-6 col-sm-12" *ngIf="!joinByLink">
+    <hr class="d-md-none"/>
     <h2>{{ 'home.createRoom' | translate }}</h2>
     <div class="pt-4"></div>
     <form>
@@ -42,12 +45,13 @@
       </div>
     </form>
     <div class="pt-3"></div>
-    <button class="btn btn-primary" id="createRoom" type="submit" (click)="createRoom()">{{ 'home.createRoom' | translate }}</button>
-    <div class="pt-5"></div>
+    <button class="btn btn-dark" id="createRoom" type="submit" (click)="createRoom()">{{ 'home.createRoom' | translate }}</button>
+    <div class="pt-3"></div>
   </div>
 
   <!-- Join room -->
   <div class="col-md-6 col-sm-12">
+    <hr class="d-md-none" />
     <h2>{{ 'home.joinRoom' | translate }}</h2>
     <div class="pt-4"></div>
     <form>
@@ -66,7 +70,7 @@
       {{ 'home.warnings.alreadyConnected' | translate }}
     </div>
     <div class="pt-3"></div>
-    <button class="btn btn-primary" id="joinRoom" type="submit" (click)="joinRoom()">{{ 'home.joinRoom' | translate }}</button>
+    <button class="btn btn-dark" id="joinRoom" type="submit" (click)="joinRoom()">{{ 'home.joinRoom' | translate }}</button>
   </div>
 </div>
 
