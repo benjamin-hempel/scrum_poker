@@ -47,7 +47,8 @@
     <h4 class="mb-3">{{ 'room.yourEstimateTitle' | translate }}</h4>
     <div class="row">
       <div class="col-md-3 col-sm-12 mb-3" *ngFor="let card of roomService.cards; let i=index;">
-        <div class="card" data-toggle="collapse" data-target="#selectableCardsContainer" aria-controls="selectableCardsContainer" [ngClass]="{'clickable': !roomService.cardsRevealed}" (click)="!roomService.cardsRevealed ? selectCard(i) : false">
+        <div class="card" data-toggle="collapse" [attr.data-target]="!roomService.cardsRevealed ? '#selectableCardsContainer' : null" aria-controls="selectableCardsContainer"
+             [ngClass]="{'clickable': !roomService.cardsRevealed}" (click)="!roomService.cardsRevealed ? selectCard(i) : false">
           <div class="card-body">
             <h3 class="card-title" [ngClass]="{'selected': i == roomService.you.selectedCard}" style="user-select: none;">{{ card }}</h3>
           </div>
