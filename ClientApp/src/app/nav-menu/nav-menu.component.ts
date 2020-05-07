@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 
-import { faGlobe } from '@fortawesome/free-solid-svg-icons';
+import { faGlobeEurope } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-nav-menu',
@@ -11,7 +11,7 @@ import { faGlobe } from '@fortawesome/free-solid-svg-icons';
 export class NavMenuComponent {
   constructor(private translate: TranslateService) { }
 
-  faGlobe = faGlobe;
+  faGlobeEurope = faGlobeEurope;
 
   useLanguage(language: string) {
     this.translate.use(language);
