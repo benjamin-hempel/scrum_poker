@@ -11,6 +11,12 @@ namespace scrum_poker.Hubs
     {
         private static List<Room> Rooms = new List<Room>();
         
+        /// <summary>
+        /// Creates a new room.
+        /// </summary>
+        /// <param name="cardDeck">The comma-separated card deck to use for the room.</param>
+        /// <param name="allUsersAreAdmins">Determines whether or not all users joining the room shall be administrators.</param>
+        /// <returns>The ID of the newly created room.</returns>
         public string CreateRoom(string cardDeck, bool allUsersAreAdmins)
         {
             Room newRoom = new Room(cardDeck, allUsersAreAdmins);
@@ -19,6 +25,17 @@ namespace scrum_poker.Hubs
             return newRoom.Id;
         }
 
+        /// <summary>
+        /// Join an existing room.
+        /// Notifies all clients that the user has joined the room.
+        /// </summary>
+        /// <param name="roomId">The ID of the room to join.</param>
+        /// <param name="username">The (non-unique) username of the joining user.</param>
+        /// <returns>
+        /// A JSON string containing information about the room if joining was successful.
+        /// "ROOM_DOES_NOT_EXIST" if the room with the specified ID does not exist.
+        /// "CONNECTION_ALREADY_EXISTS" if the connection ID of the joining user is already associated with the specified room.
+        /// </returns>
         public string JoinRoom(string roomId, string username)
         {   
             Room room = Rooms.Find(x => x.Id == roomId);
@@ -37,6 +54,15 @@ namespace scrum_poker.Hubs
             return JsonSerializer.Serialize(obj);
         }
 
+        /// <summary>
+        /// Leave an existing room. 
+        /// Notifies all clients that the user left the room.
+        /// User data is kept around for 30 seconds for a potential rejoin.
+        /// If the room is empty after the user left, room data is kept around for 30 seconds for a potential rejoin.
+        /// After that, the room and its data will be removed.
+        /// </summary>
+        /// <param name="roomId">The ID of the room to leave.</param>
+        /// <param name="userId">The ID of the user that is leaving the room.</param>
         public void LeaveRoom(string roomId, string userId)
         {
             Room room = Rooms.Find(x => x.Id == roomId);
@@ -69,6 +95,17 @@ namespace scrum_poker.Hubs
             Clients.Clients(room.Connections).SendAsync("UserLeft", userId);
         }
 
+        /// <summary>
+        /// Rejoin an existing room, given the room and user data still exist.
+        /// Notifies all clients that the user has rejoined and sends all data necessary to rebuild the state before the user left.
+        /// </summary>
+        /// <param name="roomId">The ID of the room to rejoin.</param>
+        /// <param name="userId">The ID of the user that is rejoining.</param>
+        /// <returns>
+        /// A JSON string containing information about the user and room if rejoining was successful.
+        /// "ROOM_DOES_NOT_EXIST" if the room with the specified ID does not exist (anymore).
+        /// "USER_DOES_NOT_EXIST" if the user with the specified ID does not exist (anymore).
+        /// </returns>
         public string Rejoin(string roomId, string userId)
         {
             Room room = Rooms.Find(x => x.Id == roomId);
@@ -94,6 +131,12 @@ namespace scrum_poker.Hubs
             return JsonSerializer.Serialize(obj);
         }
 
+        /// <summary>
+        /// Handles a user selecting a card. Sends the selected card as well as the current played cards counter to all clients in the room.
+        /// </summary>
+        /// <param name="roomId">The ID of the room the user is in.</param>
+        /// <param name="userId">The ID of the user selecting the card.</param>
+        /// <param name="selectedCard">The index of the card the user has selected.</param>
         public void SelectCard(string roomId, string userId, int selectedCard)
         {
             Room room = Rooms.Find(x => x.Id == roomId);
@@ -117,6 +160,10 @@ namespace scrum_poker.Hubs
             Clients.Clients(room.Connections).SendAsync("CardSelected", user.Id, user.SelectedCard, room.PlayedCards);
         }
 
+        /// <summary>
+        /// Notifies all clients in the room that the selected cards have been revealed.
+        /// </summary>
+        /// <param name="roomId">The ID of the room to reveal the cards for.</param>
         public void RevealCards(string roomId)
         {
             Room room = Rooms.Find(x => x.Id == roomId);
@@ -129,6 +176,10 @@ namespace scrum_poker.Hubs
             Clients.Clients(room.Connections).SendAsync("CardsRevealed");
         }
 
+        /// <summary>
+        /// Notifies all clients in the room that all card selections have been reset.
+        /// </summary>
+        /// <param name="roomId">The ID of the room to reset the cards for.</param>
         public void ResetCards(string roomId)
         {
             Room room = Rooms.Find(x => x.Id == roomId);
@@ -144,6 +195,14 @@ namespace scrum_poker.Hubs
             Clients.Clients(room.Connections).SendAsync("CardsReset");
         }
 
+        /// <summary>
+        /// Get all users in the specified room.
+        /// </summary>
+        /// <param name="roomId">The ID of the desired room.</param>
+        /// <returns>
+        /// A JSON string containing all data of users that are currently logged in.
+        /// "ROOM_DOES_NOT_EXIST" if the room with the specified ID does not exist.
+        /// </returns>
         public string GetUsers(string roomId)
         {
             Room room = Rooms.Find(x => x.Id == roomId);
@@ -157,6 +216,11 @@ namespace scrum_poker.Hubs
 
         #region TimerMethods
 
+        /// <summary>
+        /// Removes a user from the room if they haven't rejoined in the meantime.
+        /// </summary>
+        /// <param name="room">The room that the user shall be removed from.</param>
+        /// <param name="user">The user to remove.</param>
         private void RemoveUserFromRoom(Object source, ElapsedEventArgs e, Room room, User user)
         {
             // Check if user is still missing in action
@@ -164,6 +228,10 @@ namespace scrum_poker.Hubs
                 room.RemoveUser(user.Id);
         }
 
+        /// <summary>
+        /// Removes a room if no one has (re)joined in the meantime.
+        /// </summary>
+        /// <param name="room">The room to remove.</param>
         private void RemoveRoom(Object source, ElapsedEventArgs e, Room room)
         {
             // Check if room is still empty
