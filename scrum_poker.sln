@@ -5,6 +5,8 @@ VisualStudioVersion = 16.0.29728.190
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "scrum_poker", "scrum_poker\scrum_poker.csproj", "{D2A768DD-9A5C-417A-A80B-05B55E99AFCD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "scrum_poker.Tests", "scrum_poker.Tests\scrum_poker.Tests.csproj", "{0A041416-347A-4560-9B0A-200E45FC33E0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{D2A768DD-9A5C-417A-A80B-05B55E99AFCD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D2A768DD-9A5C-417A-A80B-05B55E99AFCD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D2A768DD-9A5C-417A-A80B-05B55E99AFCD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0A041416-347A-4560-9B0A-200E45FC33E0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0A041416-347A-4560-9B0A-200E45FC33E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0A041416-347A-4560-9B0A-200E45FC33E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0A041416-347A-4560-9B0A-200E45FC33E0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
