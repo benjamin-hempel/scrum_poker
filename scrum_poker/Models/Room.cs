@@ -45,7 +45,7 @@ namespace scrum_poker.Models
         /// </summary>
         /// <param name="cardDeck">A comma-separated string representing the card deck to use for this room.</param>
         /// <param name="allUsersAreAdmins">Whether or not all users joining the room shall be made administrators.</param>
-        public Room(string cardDeck, bool allUsersAreAdmins)
+        public Room(string cardDeck, bool allUsersAreAdmins = false)
         {
             // Initialize/set room data
             Id = Guid.NewGuid().ToString();
