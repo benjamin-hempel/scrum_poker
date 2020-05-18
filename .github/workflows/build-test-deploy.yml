@@ -26,3 +26,12 @@ jobs:
     - name: Run all tests
       run: dotnet test
       working-directory: ./scrum_poker.Tests
+    - name: Publish
+      run: |
+        dotnet publish -c Release -o scrum_poker
+    - name: Deploy to Azure
+      uses: azure/webapps-deploy@v1
+      with:
+        app-name: scrum-poker1
+        publish-profile: ${{ secrets.publish_profile }}
+        package: './scrum_poker'
