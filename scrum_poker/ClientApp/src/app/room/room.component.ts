@@ -11,7 +11,7 @@ import { RoomService } from '../services/room.service';
   templateUrl: './room.component.html'
 })
 export class RoomComponent {
-  constructor(private roomService: RoomService, private route: ActivatedRoute) { }
+  constructor(public roomService: RoomService, private route: ActivatedRoute) { }
 
   joinUrl: string; 
 
