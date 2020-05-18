@@ -1,6 +1,7 @@
 ﻿using System;
 using TechTalk.SpecFlow;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Collections.Generic;
 
 namespace scrum_poker.Tests.Bindings
 {
@@ -15,7 +16,13 @@ namespace scrum_poker.Tests.Bindings
         {
             room = new Models.Room(cardDeck);
         }
-        
+
+        [Given(@"I have created a room with the card deck ""(.*)"" in which all users should be administrator")]
+        public void GivenIHaveCreatedARoomWithTheCardDeckInWhichAllUsersShouldBeAdministrator(string cardDeck)
+        {
+            room = new Models.Room(cardDeck, true);
+        }
+
         [Then(@"the ""(.*)"" attribute should be a GUID")]
         public void ThenTheAttributeShouldBeAGUID(string attribute)
         {
@@ -63,5 +70,16 @@ namespace scrum_poker.Tests.Bindings
             Models.User firstUser = room.GetUsers()[0];
             Assert.IsTrue(firstUser.IsAdmin, "The first user in the room should be administrator.");
         }
+
+        [Then(@"all users in the room should be administrator")]
+        public void ThenAllUsersInTheRoomShouldBeAdministrator()
+        {
+            List<Models.User> users = room.GetUsers();
+            foreach(var user in users)
+            {
+                Assert.IsTrue(user.IsAdmin, "All users in the room should be administrator.");
+            }
+        }
+
     }
 }
