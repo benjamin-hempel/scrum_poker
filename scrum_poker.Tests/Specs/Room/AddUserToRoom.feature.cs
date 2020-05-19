@@ -49,7 +49,7 @@ namespace scrum_poker.Tests.Specs.Room
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
             TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "AddUserToRoom", "\tIn order to enable users to join the room\r\n\tAnd to keep all room data organized\r" +
-                    "\n\tI want to add a new user to a Room object.", ProgrammingLanguage.CSharp, ((string[])(null)));
+                    "\n\tI want to add a new user to a Room.", ProgrammingLanguage.CSharp, ((string[])(null)));
             testRunner.OnFeatureStart(featureInfo);
         }
         
