@@ -1,8 +1,8 @@
-name: Build, Test, Deploy
+name: ReleaseDeploy
 
 on:
   push:
-    branches: [ dev ]
+    branches: [ master ]
   pull_request:
     branches: [ master ]
 
@@ -28,10 +28,10 @@ jobs:
       working-directory: ./scrum_poker.Tests
     - name: Publish
       run: |
-        dotnet publish -c Release -o scrum_poker
+        dotnet publish -c Release -o scrum-poker1
     - name: Deploy to Azure
       uses: azure/webapps-deploy@v1
       with:
         app-name: scrum-poker1
-        publish-profile: ${{ secrets.publish_profile }}
-        package: './scrum_poker'
+        publish-profile: ${{ secrets.PUBLISH_PROFILE }}
+        package: './scrum-poker1'
