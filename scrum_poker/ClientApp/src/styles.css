@@ -1,0 +1,27 @@
+.nav-link {
+    color: #fff !important;
+}
+
+.btn-primary {
+  color: #fff;
+  background-color: #1b6ec2;
+  border-color: #1861ac;
+}
+
+.clickable:hover {
+    cursor: pointer;
+}
+
+.selected {
+    font-weight: 900;
+}
+
+.navbar-expand > .container {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.navbar {
+    padding-right: 0;
+    padding-left: 0;
+}

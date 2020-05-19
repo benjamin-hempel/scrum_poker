@@ -1,0 +1,48 @@
+{
+  "general": {
+    "roomID": "Raum-ID",
+    "selectLanguageButton": "Sprache wählen"
+  },
+
+  "home": {
+    "usernameLabel": "Benutzername",
+    "usernamePlaceholder": "Max Mustermann",
+    "createRoom": "Raum erstellen",
+    "allUsersAreAdminsLabel": "Alle Benutzer sind Administrator",
+    "customDeckLabel": "Benutzerdefinierter Kartensatz (kommasepariert)",
+    "joinRoom": "Raum beitreten",
+    "predefinedDecks": {
+      "label": "Vordefinierte Kartensätze",
+      "options": {
+        "default": "Standard",
+        "fibonacci": "Fibonacci",
+        "shirt": "T-Shirt",
+        "0to24": "0 bis 24"
+      }
+    },
+    "warnings": {
+      "noUsername": "Du musst einen Benutzernamen angeben.",
+      "noRoomID": "Du musst eine Raum-ID angeben.",
+      "roomDoesNotExist": "Der angegebene Raum existiert nicht.",
+      "alreadyConnected": "Du bist bereits mit diesem Raum verbunden."
+    }
+  },
+
+  "room": {
+    "detailsTitle": "Details",
+    "yourNameTitle": "Dein Name",
+    "roomUsersTitle": "Benutzer im Raum",
+    "playedCardsCounterTitle": "Gespielte Karten",
+    "joinLinkTitle": "Link zum Mitmachen",
+    "playCardButton": "Pokern",
+    "revealCardsButton": "Karten aufdecken",
+    "resetCardsButton": "Karten zurücksetzen",
+    "yourEstimateTitle": "Deine Schätzung",
+    "noRoom": {
+      "title": "Du bist zurzeit in keinem Raum!",
+      "explanationPrefix": "Kehre zur",
+      "homepageLinkLabel":  "Startseite",
+      "explanationSuffix": "zurück, um einen Raum zu erstellen oder einem beizutreten."
+    }
+  }
+}

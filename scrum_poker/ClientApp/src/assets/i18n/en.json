@@ -1,0 +1,48 @@
+{
+  "general": {
+    "roomID": "Room ID",
+    "selectLanguageButton": "Choose language"
+  },
+
+  "home": {
+    "usernameLabel": "Username",
+    "usernamePlaceholder": "John Doe",
+    "createRoom": "Create room",
+    "allUsersAreAdminsLabel": "All users are administrators",
+    "customDeckLabel": "Custom card deck (comma-separated)",
+    "joinRoom": "Join room",
+    "predefinedDecks": {
+      "label": "Predefined card decks",
+      "options": {
+        "default": "Default",
+        "fibonacci": "Fibonacci",
+        "shirt": "Shirt sizes",
+        "0to24": "0 to 24"
+      }
+    },
+    "warnings": {
+      "noUsername": "A username is required.",
+      "noRoomID": "A room ID is required.",
+      "roomDoesNotExist": "This room does not exist.",
+      "alreadyConnected": "You are already connected to this room."
+    }
+  },
+
+  "room": {
+    "detailsTitle": "Details",
+    "yourNameTitle": "Your name",
+    "roomUsersTitle": "Users in room",
+    "playedCardsCounterTitle": "Played cards",
+    "joinLinkTitle": "Join link",
+    "playCardButton": "Play card",
+    "revealCardsButton": "Reveal cards",
+    "resetCardsButton": "Reset cards",
+    "yourEstimateTitle": "Your estimate",
+    "noRoom": {
+      "title": "You are currently not in a room!",
+      "explanationPrefix": "Return to the",
+      "homepageLinkLabel": "homepage",
+      "explanationSuffix": "to create or join a room."
+    }
+  }
+}
