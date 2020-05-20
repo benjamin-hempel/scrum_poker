@@ -1,11 +1,13 @@
-﻿Feature: CreateRoom
-	In order to avoid silly mistakes
-	As a math idiot
-	I want to be told the sum of two numbers
+﻿Feature: Create Room
+	In order to keep all room data organized
+	I want to create a new Room and add it to the SignalR hub.
 
-@mytag
-Scenario: Add two numbers
-	Given I have entered 50 into the calculator
-	And I have entered 70 into the calculator
-	When I press add
-	Then the result should be 120 on the screen
+Scenario: Add single room
+	When I add a new room to the hub with the card deck "1,2,3,4,5,6"
+	Then the hub should contain "1" rooms
+
+Scenario: Add multiple rooms
+	When I add a new room to the hub with the card deck "1,2,3,4,5,6"
+	And I add a new room to the hub with the card deck "1,2,3,4,5,6"
+	And I add a new room to the hub with the card deck "1,2,3,4,5,6"
+	Then the hub should contain "3" rooms
