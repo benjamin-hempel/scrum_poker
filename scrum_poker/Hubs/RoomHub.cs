@@ -47,8 +47,12 @@ namespace scrum_poker.Hubs
                 return "CONNECTION_ALREADY_EXISTS";
 
             // Notify clients
-            Clients.Clients(room.Connections).SendAsync("UserJoined", user.Id, user.Name, user.IsAdmin);
-
+            var clients = Clients.Clients(room.Connections);
+            if(clients != null)
+            {
+                clients.SendAsync("UserJoined", user.Id, user.Name, user.IsAdmin);
+            }
+            
             // Serialize and return room data
             var obj = new { Id = user.Id, IsAdmin = user.IsAdmin, CardDeck = room.CardDeck, CardsRevealed = room.CardsRevealed, PlayedCards = room.PlayedCards };
             return JsonSerializer.Serialize(obj);
