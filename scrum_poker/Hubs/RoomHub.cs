@@ -9,8 +9,8 @@ namespace scrum_poker.Hubs
 {
     public class RoomHub : Hub
     {
-        private static List<Room> Rooms = new List<Room>();
-        
+        public static List<Room> Rooms { get; private set; } = new List<Room>();
+
         /// <summary>
         /// Creates a new room.
         /// </summary>
