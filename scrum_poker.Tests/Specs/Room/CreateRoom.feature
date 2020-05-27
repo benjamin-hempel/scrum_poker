@@ -1,6 +1,4 @@
 ﻿Feature: CreateRoom
-	In order to keep all room data organized
-	I want to create a new Room.
 
 Scenario: Create Room
 	When I create a new room with the card deck "1,2,3,4,5,6"

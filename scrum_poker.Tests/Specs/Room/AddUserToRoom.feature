@@ -1,7 +1,4 @@
 ﻿Feature: AddUserToRoom
-	In order to enable users to join the room
-	And to keep all room data organized
-	I want to add a new user to a Room.
 
 Scenario: Add users to room
 	Given I have created a room with the card deck "1,2,3,4,5,6"
