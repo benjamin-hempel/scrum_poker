@@ -38,6 +38,7 @@ namespace scrum_poker.Tests.Bindings
         }
 
         [When(@"I let a user with username ""(.*)"" join room ""(.*)""")]
+        [Given(@"I let a user with username ""(.*)"" join room ""(.*)""")]
         public void WhenILetAUserWithUsernameJoinRoom(string username, int roomIndex)
         {
             string roomId;
@@ -58,11 +59,11 @@ namespace scrum_poker.Tests.Bindings
             JoinReturnValues.Add(username, result);
         }
 
-        [Then(@"room ""(.*)"" should contain ""(.*)"" users")]
-        public void ThenRoomShouldContainUsers(int roomIndex, int expectedUserCount)
+        [Then(@"room ""(.*)"" should contain ""(.*)"" active users")]
+        public void ThenRoomShouldContainActiveUsers(int roomIndex, int expectedUserCount)
         {
             Models.Room room = Hubs.RoomHub.Rooms[roomIndex - 1];
-            List<Models.User> users = room.GetUsers();
+            List<Models.User> users = room.GetActiveUsers();
 
             Assert.AreEqual(expectedUserCount, users.Count, $"Room {roomIndex} should contain {expectedUserCount} users.");
         }

@@ -87,7 +87,7 @@ namespace scrum_poker.Hubs
             removeUserTimer.Enabled = true;
 
             // Remove room if it's empty after 30 seconds
-            if (room.GetUsers().Count == 0)
+            if (room.GetActiveUsers().Count == 0)
             {
                 Timer removeRoomTimer = new Timer(30000);
                 removeRoomTimer.Elapsed += (sender, e) => RemoveRoom(sender, e, room);
@@ -190,7 +190,7 @@ namespace scrum_poker.Hubs
             if (room == null) 
                 return;
 
-            foreach (var user in room.GetUsers())
+            foreach (var user in room.GetAllUsers())
                 user.SelectedCard = -1;
 
             room.CardsRevealed = false;
@@ -214,7 +214,7 @@ namespace scrum_poker.Hubs
                 return "ROOM_DOES_NOT_EXIST";
 
             // Get and serialize users
-            List<User> users = room.GetUsers();
+            List<User> users = room.GetActiveUsers();
             return JsonSerializer.Serialize(users);
         }
 
@@ -239,7 +239,7 @@ namespace scrum_poker.Hubs
         private void RemoveRoom(Object source, ElapsedEventArgs e, Room room)
         {
             // Check if room is still empty
-            if (room.GetUsers().Count == 0)
+            if (room.GetActiveUsers().Count == 0)
                 Rooms.Remove(room);
         }
 

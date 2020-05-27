@@ -54,7 +54,7 @@ namespace scrum_poker.Tests.Bindings
         [Then(@"the room should contain ""(.*)"" users")]
         public void ThenTheRoomShouldContainUsers(int expectedUsers)
         {
-            int actualUsers = Room.GetUsers().Count;
+            int actualUsers = Room.GetAllUsers().Count;
             Assert.AreEqual(expectedUsers, actualUsers, $"The room should contain {expectedUsers} users.");
         }
 
@@ -68,14 +68,14 @@ namespace scrum_poker.Tests.Bindings
         [Then(@"the first user in the room should be administrator")]
         public void ThenTheFirstUserInTheRoomShouldBeAdministrator()
         {
-            Models.User firstUser = Room.GetUsers()[0];
+            Models.User firstUser = Room.GetAllUsers()[0];
             Assert.IsTrue(firstUser.IsAdmin, "The first user in the room should be administrator.");
         }
 
         [Then(@"all users in the room should be administrator")]
         public void ThenAllUsersInTheRoomShouldBeAdministrator()
         {
-            List<Models.User> users = Room.GetUsers();
+            List<Models.User> users = Room.GetAllUsers();
             foreach(var user in users)
             {
                 Assert.IsTrue(user.IsAdmin, "All users in the room should be administrator.");
@@ -85,7 +85,7 @@ namespace scrum_poker.Tests.Bindings
         [When(@"I remove the user with username ""(.*)"" from the room")]
         public void WhenIRemoveTheUserWithConnectionIDFromTheRoom(string username)
         {
-            List<Models.User> users = Room.GetUsers();
+            List<Models.User> users = Room.GetAllUsers();
             Models.User user = users.Find(x => x.Name == username);
             Room.RemoveUser(user.Id);
         }

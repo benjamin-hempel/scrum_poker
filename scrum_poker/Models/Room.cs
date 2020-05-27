@@ -109,9 +109,18 @@ namespace scrum_poker.Models
         /// Get a list of all users in this room that are not missing in action.
         /// </summary>
         /// <returns>A list of all user objects representing the active users in this room.</returns>
-        public List<User> GetUsers()
+        public List<User> GetActiveUsers()
         {
             return Users.FindAll(x => !x.MissingInAction);
+        }
+
+        /// <summary>
+        /// Get a list of all users in this room, including ones missing in action.
+        /// </summary>
+        /// <returns>A list of all user objects.</returns>
+        public List<User> GetAllUsers()
+        {
+            return Users;
         }
     }
 }
