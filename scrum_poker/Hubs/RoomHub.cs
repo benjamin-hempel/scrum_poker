@@ -168,7 +168,11 @@ namespace scrum_poker.Hubs
             user.SelectedCard = selectedCard;
 
             // Notify clients
-            Clients.Clients(room.Connections).SendAsync("CardSelected", user.Id, user.SelectedCard, room.PlayedCards);
+            var clients = Clients.Clients(room.Connections);
+            if(clients != null)
+            {
+                clients.SendAsync("CardSelected", user.Id, user.SelectedCard, room.PlayedCards);
+            }           
         }
 
         /// <summary>
@@ -184,7 +188,11 @@ namespace scrum_poker.Hubs
             room.CardsRevealed = true;
 
             // Notify clients
-            Clients.Clients(room.Connections).SendAsync("CardsRevealed");
+            var clients = Clients.Clients(room.Connections);
+            if(clients != null)
+            {
+                clients.SendAsync("CardsRevealed");
+            }           
         }
 
         /// <summary>
@@ -203,7 +211,11 @@ namespace scrum_poker.Hubs
             room.CardsRevealed = false;
 
             // Notify clients
-            Clients.Clients(room.Connections).SendAsync("CardsReset");
+            var clients = Clients.Clients(room.Connections);
+            if(clients != null)
+            {
+                clients.SendAsync("CardsReset");
+            }            
         }
 
         /// <summary>
