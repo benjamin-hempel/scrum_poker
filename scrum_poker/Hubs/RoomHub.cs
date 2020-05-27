@@ -129,9 +129,13 @@ namespace scrum_poker.Hubs
             room.Connections.Add(Context.ConnectionId);
 
             // Notify clients
-            Clients.Clients(room.Connections).SendAsync("UserJoined", user.Id, user.Name, user.IsAdmin);           
-            if(user.SelectedCard > -1) 
-                Clients.Clients(room.Connections).SendAsync("CardSelected", user.Id, user.SelectedCard);
+            var clients = Clients.Clients(room.Connections);
+            if(clients != null)
+            {
+                clients.SendAsync("UserJoined", user.Id, user.Name, user.IsAdmin);
+                if (user.SelectedCard > -1)
+                    clients.SendAsync("CardSelected", user.Id, user.SelectedCard);
+            }        
 
             // Serialize and return room data
             var obj = new { Name = user.Name, SelectedCard = user.SelectedCard, CardsRevealed = room.CardsRevealed, IsAdmin = user.IsAdmin, CardDeck = room.CardDeck, PlayedCards = room.PlayedCards };
