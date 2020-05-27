@@ -41,25 +41,15 @@ namespace scrum_poker.Tests.Bindings
         [Given(@"I let a user with username ""(.*)"" join room ""(.*)""")]
         public void WhenILetAUserWithUsernameJoinRoom(string username, int roomIndex)
         {
-            string roomId;
             UpdateMockConnectionId();
-
-            try
-            {
-                Models.Room room = Hubs.RoomHub.Rooms[roomIndex - 1];
-                roomId = room.Id;
-            }
-            catch(ArgumentOutOfRangeException e)
-            {
-                // Use "fake" room ID if room does not exist
-                roomId = new Guid().ToString();
-            }
+            string roomId = GetRoomId(roomIndex);
 
             string result = RoomHub.JoinRoom(roomId, username);
             JoinReturnValues.Add(username, result);
         }
 
         [Then(@"room ""(.*)"" should contain ""(.*)"" active users")]
+        [Given(@"room ""(.*)"" contains ""(.*)"" active users")]
         public void ThenRoomShouldContainActiveUsers(int roomIndex, int expectedUserCount)
         {
             Models.Room room = Hubs.RoomHub.Rooms[roomIndex - 1];
@@ -69,6 +59,7 @@ namespace scrum_poker.Tests.Bindings
         }
 
         [Then(@"room ""(.*)"" should contain ""(.*)"" total users")]
+        [Given(@"room ""(.*)"" contains ""(.*)"" total users")]
         public void ThenRoomShouldContainTotalUsers(int roomIndex, int expectedUserCount)
         {
             Models.Room room = Hubs.RoomHub.Rooms[roomIndex - 1];
@@ -101,40 +92,75 @@ namespace scrum_poker.Tests.Bindings
         }
 
         [When(@"user ""(.*)"" leaves room ""(.*)""")]
+        [Given(@"user ""(.*)"" leaves room ""(.*)""")]
         public void WhenUserLeavesRoom(string username, int roomIndex)
         {
-            string roomId = "";
-            string userId = "";
             UpdateMockConnectionId();
+            string roomId = GetRoomId(roomIndex);
+            string userId = GetUserId(username, roomId);
+
+            RoomHub.LeaveRoom(roomId, userId);
+        }
+
+        [When(@"user ""(.*)"" rejoins room ""(.*)""")]
+        public void WhenUserRejoinsRoom(string username, int roomIndex)
+        {
+            UpdateMockConnectionId();
+            string roomId = GetRoomId(roomIndex);
+            string userId = GetUserId(username, roomId);
+
+            string result = RoomHub.Rejoin(roomId, userId);
+
+            JoinReturnValues.Remove(username);
+            JoinReturnValues.Add(username, result);
+        }
+
+        #region HelperMethods
+
+        public string GetRoomId(int roomIndex)
+        {
+            string roomId;
 
             try
             {
                 Models.Room room = Hubs.RoomHub.Rooms[roomIndex - 1];
                 roomId = room.Id;
-
-                Models.User user = room.GetActiveUsers().Find(x => x.Name == username);
-                userId = user.Id;
             }
-            catch (ArgumentOutOfRangeException e)
+            catch (ArgumentOutOfRangeException)
             {
                 // Use "fake" room ID if room does not exist
                 roomId = new Guid().ToString();
             }
-            catch(NullReferenceException e)
+
+            return roomId;
+        }
+
+        public string GetUserId(string username, string roomId)
+        {
+            string userId;
+
+            try
+            {
+                Models.Room room = Hubs.RoomHub.Rooms.Find(x => x.Id == roomId);
+                Models.User user = room.GetAllUsers().Find(x => x.Name == username);
+                userId = user.Id;
+            } 
+            catch(NullReferenceException)
             {
                 // Use "fake" user ID if user does not exist in room
                 userId = new Guid().ToString();
             }
 
-            RoomHub.LeaveRoom(roomId, userId);
+            return userId;
         }
-
 
         public void UpdateMockConnectionId()
         {
             mockHubCallerContext.Setup(c => c.ConnectionId).Returns(Guid.NewGuid().ToString());
             RoomHub.Context = mockHubCallerContext.Object;
         }
+
+        #endregion
 
         #region BeforeAfterMethods
 
