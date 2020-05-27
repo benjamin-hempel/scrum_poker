@@ -40,11 +40,19 @@ namespace scrum_poker.Tests.Bindings
         [When(@"I let a user with username ""(.*)"" join room ""(.*)""")]
         public void WhenILetAUserWithUsernameJoinRoom(string username, int roomIndex)
         {
+            string roomId;
             UpdateMockConnectionId();
-            
-            Models.Room room = Hubs.RoomHub.Rooms[roomIndex - 1];
-            string roomId = room.Id;
-            Assert.IsNotNull(roomId, $"Room {roomIndex} does not exist.");
+
+            try
+            {
+                Models.Room room = Hubs.RoomHub.Rooms[roomIndex - 1];
+                roomId = room.Id;
+            }
+            catch(ArgumentOutOfRangeException e)
+            {
+                // Use "fake" room ID if room does not exist
+                roomId = new Guid().ToString();
+            }
 
             string result = RoomHub.JoinRoom(roomId, username);
             JoinReturnValues.Add(username, result);
@@ -73,6 +81,15 @@ namespace scrum_poker.Tests.Bindings
                 Assert.IsTrue(false, $"The return value {json} is not valid JSON.");
             }
         }
+
+        [Then(@"the return value for user ""(.*)"" should be ""(.*)""")]
+        public void ThenTheReturnValueForUserShouldBe(string username, string expectedReturnValue)
+        {
+            string actualReturnValue = JoinReturnValues[username];
+
+            Assert.AreEqual(expectedReturnValue, actualReturnValue, $"The return value for user {username} should be {expectedReturnValue}.");
+        }
+
 
         public void UpdateMockConnectionId()
         {
