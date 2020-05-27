@@ -115,6 +115,41 @@ namespace scrum_poker.Tests.Bindings
             JoinReturnValues.Add(username, result);
         }
 
+        [When(@"user ""(.*)"" in room ""(.*)"" selects card ""(.*)""")]
+        [Given(@"user ""(.*)"" in room ""(.*)"" selects card ""(.*)""")]
+        public void WhenUserInRoomSelectsCard(string username, int roomIndex, int selectedCard)
+        {
+            UpdateMockConnectionId();
+            string roomId = GetRoomId(roomIndex);
+            string userId = GetUserId(username, roomId);
+
+            RoomHub.SelectCard(roomId, userId, selectedCard);
+        }
+
+        [Then(@"user ""(.*)"" in room ""(.*)"" should have card ""(.*)"" selected")]
+        [Given(@"user ""(.*)"" in room ""(.*)"" has card ""(.*)"" selected")]
+        public void ThenUserInRoomShouldHaveCardSelected(string username, int roomIndex, int expectedSelectedCard)
+        {
+            ScenarioContext.Current.Pending();
+        }
+
+        [Then(@"the played cards counter in room ""(.*)"" should be ""(.*)""")]
+        [Given(@"the played cards counter in room ""(.*)"" is ""(.*)""")]
+        public void ThenThePlayedCardsCounterInRoomShouldBe(int roomIndex, int expectedCardsCounter)
+        {
+            ScenarioContext.Current.Pending();
+        }
+
+        [When(@"user ""(.*)"" in room ""(.*)"" deselects their card")]
+        public void WhenUserInRoomDeselectsTheirCard(string username, int roomIndex)
+        {
+            UpdateMockConnectionId();
+            string roomId = GetRoomId(roomIndex);
+            string userId = GetUserId(username, roomId);
+
+            RoomHub.SelectCard(roomId, userId, -1);
+        }
+
         #region HelperMethods
 
         public string GetRoomId(int roomIndex)
