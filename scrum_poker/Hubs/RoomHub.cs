@@ -70,7 +70,7 @@ namespace scrum_poker.Hubs
         public void LeaveRoom(string roomId, string userId)
         {
             Room room = Rooms.Find(x => x.Id == roomId);
-            if (room == null) 
+            if (room == null)
                 return;
 
             // Remove connection, but keep user data around for potential reconnect
@@ -94,9 +94,12 @@ namespace scrum_poker.Hubs
                 removeRoomTimer.AutoReset = false;
                 removeRoomTimer.Enabled = true;
             }
-    
+
             // Notify clients
-            Clients.Clients(room.Connections).SendAsync("UserLeft", userId);
+            var clients = Clients.Clients(room.Connections);
+            if (clients != null) { 
+                clients.SendAsync("UserLeft", userId);
+            }
         }
 
         /// <summary>
