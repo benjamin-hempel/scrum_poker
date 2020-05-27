@@ -65,7 +65,16 @@ namespace scrum_poker.Tests.Bindings
             Models.Room room = Hubs.RoomHub.Rooms[roomIndex - 1];
             List<Models.User> users = room.GetActiveUsers();
 
-            Assert.AreEqual(expectedUserCount, users.Count, $"Room {roomIndex} should contain {expectedUserCount} users.");
+            Assert.AreEqual(expectedUserCount, users.Count, $"Room {roomIndex} should contain {expectedUserCount} active users.");
+        }
+
+        [Then(@"room ""(.*)"" should contain ""(.*)"" total users")]
+        public void ThenRoomShouldContainTotalUsers(int roomIndex, int expectedUserCount)
+        {
+            Models.Room room = Hubs.RoomHub.Rooms[roomIndex - 1];
+            List<Models.User> users = room.GetAllUsers();
+
+            Assert.AreEqual(expectedUserCount, users.Count, $"Room {roomIndex} should contain {expectedUserCount} total users.");
         }
 
         [Then(@"the return value for user ""(.*)"" should be valid JSON")]
@@ -89,6 +98,35 @@ namespace scrum_poker.Tests.Bindings
             string actualReturnValue = JoinReturnValues[username];
 
             Assert.AreEqual(expectedReturnValue, actualReturnValue, $"The return value for user {username} should be {expectedReturnValue}.");
+        }
+
+        [When(@"user ""(.*)"" leaves room ""(.*)""")]
+        public void WhenUserLeavesRoom(string username, int roomIndex)
+        {
+            string roomId = "";
+            string userId = "";
+            UpdateMockConnectionId();
+
+            try
+            {
+                Models.Room room = Hubs.RoomHub.Rooms[roomIndex - 1];
+                roomId = room.Id;
+
+                Models.User user = room.GetActiveUsers().Find(x => x.Name == username);
+                userId = user.Id;
+            }
+            catch (ArgumentOutOfRangeException e)
+            {
+                // Use "fake" room ID if room does not exist
+                roomId = new Guid().ToString();
+            }
+            catch(NullReferenceException e)
+            {
+                // Use "fake" user ID if user does not exist in room
+                userId = new Guid().ToString();
+            }
+
+            RoomHub.LeaveRoom(roomId, userId);
         }
 
 
