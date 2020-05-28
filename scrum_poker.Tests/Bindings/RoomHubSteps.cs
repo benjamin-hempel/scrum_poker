@@ -52,8 +52,7 @@ namespace scrum_poker.Tests.Bindings
         [Given(@"room ""(.*)"" contains ""(.*)"" active users")]
         public void ThenRoomShouldContainActiveUsers(int roomIndex, int expectedUserCount)
         {
-            Models.Room room = Hubs.RoomHub.Rooms[roomIndex - 1];
-            List<Models.User> users = room.GetActiveUsers();
+            List<Models.User> users = GetActiveUsers(roomIndex);
 
             Assert.AreEqual(expectedUserCount, users.Count, $"Room {roomIndex} should contain {expectedUserCount} active users.");
         }
@@ -62,8 +61,7 @@ namespace scrum_poker.Tests.Bindings
         [Given(@"room ""(.*)"" contains ""(.*)"" total users")]
         public void ThenRoomShouldContainTotalUsers(int roomIndex, int expectedUserCount)
         {
-            Models.Room room = Hubs.RoomHub.Rooms[roomIndex - 1];
-            List<Models.User> users = room.GetAllUsers();
+            List<Models.User> users = GetAllUsers(roomIndex);
 
             Assert.AreEqual(expectedUserCount, users.Count, $"Room {roomIndex} should contain {expectedUserCount} total users.");
         }
@@ -130,14 +128,28 @@ namespace scrum_poker.Tests.Bindings
         [Given(@"user ""(.*)"" in room ""(.*)"" has card ""(.*)"" selected")]
         public void ThenUserInRoomShouldHaveCardSelected(string username, int roomIndex, int expectedSelectedCard)
         {
-            ScenarioContext.Current.Pending();
+            Models.User user = GetUser(roomIndex, username);
+
+            Assert.AreEqual(expectedSelectedCard, user.SelectedCard, $"The user should have card {expectedSelectedCard} selected.");
         }
 
         [Then(@"the played cards counter in room ""(.*)"" should be ""(.*)""")]
         [Given(@"the played cards counter in room ""(.*)"" is ""(.*)""")]
         public void ThenThePlayedCardsCounterInRoomShouldBe(int roomIndex, int expectedCardsCounter)
         {
-            ScenarioContext.Current.Pending();
+            int actualCardsCounter = -1;
+
+            try
+            {
+                Models.Room room = GetRoom(roomIndex);
+                actualCardsCounter = room.PlayedCards;
+            } 
+            catch (NullReferenceException)
+            {
+                Assert.IsTrue(false, $"Room {roomIndex} does not exist.");
+            }
+
+            Assert.AreEqual(expectedCardsCounter, actualCardsCounter, $"Room {roomIndex} should have {expectedCardsCounter} played cards.");
         }
 
         [When(@"user ""(.*)"" in room ""(.*)"" deselects their card")]
@@ -152,16 +164,83 @@ namespace scrum_poker.Tests.Bindings
 
         #region HelperMethods
 
+        public Models.Room GetRoom(int roomIndex)
+        {
+            Models.Room room;
+
+            try
+            {
+                room = Hubs.RoomHub.Rooms[roomIndex - 1];
+            }
+            catch(ArgumentOutOfRangeException)
+            {
+                room = null;
+            }
+
+            return room;
+        }
+
+        public List<Models.User> GetActiveUsers(int roomIndex)
+        {
+            List<Models.User> users = null;
+
+            try
+            {
+                Models.Room room = GetRoom(roomIndex);
+                users = room.GetActiveUsers();
+            }
+            catch (NullReferenceException)
+            {
+                Assert.IsTrue(false, $"Room {roomIndex} does not exist.");
+            }
+
+            return users;
+        }
+
+        public List<Models.User> GetAllUsers(int roomIndex)
+        {
+            List<Models.User> users = null;
+
+            try
+            {
+                Models.Room room = GetRoom(roomIndex);
+                users = room.GetAllUsers();
+            }
+            catch(NullReferenceException)
+            {
+                Assert.IsTrue(false, $"Room {roomIndex} does not exist.");
+            }
+
+            return users;
+        }
+
+        public Models.User GetUser(int roomIndex, string username)
+        {
+            Models.User user = null;
+            
+            try
+            {
+                Models.Room room = GetRoom(roomIndex);
+                user = room.GetAllUsers().Find(x => x.Name == username);
+            }
+            catch (NullReferenceException)
+            {
+                Assert.IsTrue(false, $"Room {roomIndex} does not exist.");
+            }
+
+            return user;
+        }
+
         public string GetRoomId(int roomIndex)
         {
             string roomId;
 
             try
             {
-                Models.Room room = Hubs.RoomHub.Rooms[roomIndex - 1];
+                Models.Room room = GetRoom(roomIndex);
                 roomId = room.Id;
             }
-            catch (ArgumentOutOfRangeException)
+            catch (NullReferenceException)
             {
                 // Use "fake" room ID if room does not exist
                 roomId = new Guid().ToString();
