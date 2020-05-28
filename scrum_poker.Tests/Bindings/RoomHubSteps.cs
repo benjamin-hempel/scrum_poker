@@ -178,6 +178,22 @@ namespace scrum_poker.Tests.Bindings
             Assert.IsTrue(room.CardsRevealed, $"The cards in room {roomIndex} should be revealed.");
         }
 
+        [When(@"the cards in room ""(.*)"" are reset")]
+        public void WhenTheCardsInRoomAreReset(int roomIndex)
+        {
+            string roomId = GetRoomId(roomIndex);
+
+            RoomHub.ResetCards(roomId);
+        }
+
+        [Then(@"the cards in room ""(.*)"" should not be revealed")]
+        public void ThenTheCardsInRoomShouldNotBeRevealed(int roomIndex)
+        {
+            Models.Room room = GetRoom(roomIndex);
+
+            Assert.IsFalse(room.CardsRevealed, $"The cards in room {roomIndex} should not be revealed.");
+        }
+
         #region HelperMethods
 
         public Models.Room GetRoom(int roomIndex)
