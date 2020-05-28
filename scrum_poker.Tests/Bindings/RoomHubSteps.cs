@@ -194,6 +194,26 @@ namespace scrum_poker.Tests.Bindings
             Assert.IsFalse(room.CardsRevealed, $"The cards in room {roomIndex} should not be revealed.");
         }
 
+        [Then(@"""(.*)"" users should be returned by the hub for room ""(.*)""")]
+        public void ThenUsersShouldBeReturnedByTheHubForRoom(string expectedResult, int roomIndex)
+        {
+            string roomId = GetRoomId(roomIndex);
+            string result = RoomHub.GetUsers(roomId);
+
+            switch(expectedResult)
+            {
+                case "ROOM_DOES_NOT_EXIST":
+                    Assert.AreEqual(expectedResult, result, $"{expectedResult} should be returned for room {roomIndex}.");
+                    break;
+
+                default:
+                    List<object> users = JsonSerializer.Deserialize<List<object>>(result);
+                    Assert.AreEqual(expectedResult, users.Count.ToString(), $"{expectedResult} users should be returned for room {roomIndex}.");
+                    break;
+            }
+        }
+
+
         #region HelperMethods
 
         public Models.Room GetRoom(int roomIndex)
