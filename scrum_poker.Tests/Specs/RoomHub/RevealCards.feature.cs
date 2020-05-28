@@ -10,7 +10,7 @@
 // ------------------------------------------------------------------------------
 #region Designer generated code
 #pragma warning disable
-namespace scrum_poker.Tests.Specs.Room
+namespace scrum_poker.Tests.Specs.RoomHub
 {
     using TechTalk.SpecFlow;
     using System;
@@ -20,7 +20,7 @@ namespace scrum_poker.Tests.Specs.Room
     [System.CodeDom.Compiler.GeneratedCodeAttribute("TechTalk.SpecFlow", "3.1.0.0")]
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     [Microsoft.VisualStudio.TestTools.UnitTesting.TestClassAttribute()]
-    public partial class CreateRoomFeature
+    public partial class RevealCardsFeature
     {
         
         private static TechTalk.SpecFlow.ITestRunner testRunner;
@@ -29,7 +29,7 @@ namespace scrum_poker.Tests.Specs.Room
         
         private string[] _featureTags = ((string[])(null));
         
-#line 1 "CreateRoom.feature"
+#line 1 "RevealCards.feature"
 #line hidden
         
         public virtual Microsoft.VisualStudio.TestTools.UnitTesting.TestContext TestContext
@@ -48,7 +48,7 @@ namespace scrum_poker.Tests.Specs.Room
         public static void FeatureSetup(Microsoft.VisualStudio.TestTools.UnitTesting.TestContext testContext)
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
-            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "CreateRoom", null, ProgrammingLanguage.CSharp, ((string[])(null)));
+            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Reveal Cards", null, ProgrammingLanguage.CSharp, ((string[])(null)));
             testRunner.OnFeatureStart(featureInfo);
         }
         
@@ -63,9 +63,9 @@ namespace scrum_poker.Tests.Specs.Room
         public virtual void TestInitialize()
         {
             if (((testRunner.FeatureContext != null) 
-                        && (testRunner.FeatureContext.FeatureInfo.Title != "CreateRoom")))
+                        && (testRunner.FeatureContext.FeatureInfo.Title != "Reveal Cards")))
             {
-                global::scrum_poker.Tests.Specs.Room.CreateRoomFeature.FeatureSetup(null);
+                global::scrum_poker.Tests.Specs.RoomHub.RevealCardsFeature.FeatureSetup(null);
             }
         }
         
@@ -92,12 +92,12 @@ namespace scrum_poker.Tests.Specs.Room
         }
         
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
-        [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("Create Room")]
-        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("FeatureTitle", "CreateRoom")]
-        public virtual void CreateRoom()
+        [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("Reveal Cards")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("FeatureTitle", "Reveal Cards")]
+        public virtual void RevealCards()
         {
             string[] tagsOfScenario = ((string[])(null));
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Create Room", null, ((string[])(null)));
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Reveal Cards", null, ((string[])(null)));
 #line 3
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
@@ -119,13 +119,13 @@ this.ScenarioInitialize(scenarioInfo);
             {
                 this.ScenarioStart();
 #line 4
- testRunner.When("I create a new room with the card deck \"1,2,3,4,5,6\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+ testRunner.Given("I have added a new room to the hub with the card deck \"1,2,3,4,5,6\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
 #line 5
- testRunner.Then("the \"Id\" attribute should be a GUID", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.When("the cards in room \"1\" are revealed", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 6
- testRunner.And("the \"CardDeck\" attribute should be \"1,2,3,4,5,6\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.Then("the cards in room \"1\" should be revealed", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
             this.ScenarioCleanup();

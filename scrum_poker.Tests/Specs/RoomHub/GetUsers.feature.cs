@@ -10,7 +10,7 @@
 // ------------------------------------------------------------------------------
 #region Designer generated code
 #pragma warning disable
-namespace scrum_poker.Tests.Specs.Room
+namespace scrum_poker.Tests.Specs.RoomHub
 {
     using TechTalk.SpecFlow;
     using System;
@@ -20,7 +20,7 @@ namespace scrum_poker.Tests.Specs.Room
     [System.CodeDom.Compiler.GeneratedCodeAttribute("TechTalk.SpecFlow", "3.1.0.0")]
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     [Microsoft.VisualStudio.TestTools.UnitTesting.TestClassAttribute()]
-    public partial class AddUserToRoomFeature
+    public partial class GetUsersFeature
     {
         
         private static TechTalk.SpecFlow.ITestRunner testRunner;
@@ -29,7 +29,7 @@ namespace scrum_poker.Tests.Specs.Room
         
         private string[] _featureTags = ((string[])(null));
         
-#line 1 "AddUserToRoom.feature"
+#line 1 "GetUsers.feature"
 #line hidden
         
         public virtual Microsoft.VisualStudio.TestTools.UnitTesting.TestContext TestContext
@@ -48,7 +48,7 @@ namespace scrum_poker.Tests.Specs.Room
         public static void FeatureSetup(Microsoft.VisualStudio.TestTools.UnitTesting.TestContext testContext)
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
-            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "AddUserToRoom", null, ProgrammingLanguage.CSharp, ((string[])(null)));
+            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Get Users", null, ProgrammingLanguage.CSharp, ((string[])(null)));
             testRunner.OnFeatureStart(featureInfo);
         }
         
@@ -63,9 +63,9 @@ namespace scrum_poker.Tests.Specs.Room
         public virtual void TestInitialize()
         {
             if (((testRunner.FeatureContext != null) 
-                        && (testRunner.FeatureContext.FeatureInfo.Title != "AddUserToRoom")))
+                        && (testRunner.FeatureContext.FeatureInfo.Title != "Get Users")))
             {
-                global::scrum_poker.Tests.Specs.Room.AddUserToRoomFeature.FeatureSetup(null);
+                global::scrum_poker.Tests.Specs.RoomHub.GetUsersFeature.FeatureSetup(null);
             }
         }
         
@@ -91,14 +91,23 @@ namespace scrum_poker.Tests.Specs.Room
             testRunner.CollectScenarioErrors();
         }
         
+        public virtual void FeatureBackground()
+        {
+#line 3
+#line hidden
+#line 4
+ testRunner.Given("I have added a new room to the hub with the card deck \"1,2,3,4,5,6\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+#line hidden
+        }
+        
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
-        [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("Add users to room")]
-        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("FeatureTitle", "AddUserToRoom")]
-        public virtual void AddUsersToRoom()
+        [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("Get users")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("FeatureTitle", "Get Users")]
+        public virtual void GetUsers()
         {
             string[] tagsOfScenario = ((string[])(null));
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Add users to room", null, ((string[])(null)));
-#line 3
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Get users", null, ((string[])(null)));
+#line 6
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             bool isScenarioIgnored = default(bool);
@@ -118,36 +127,33 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 this.ScenarioStart();
-#line 4
- testRunner.Given("I have created a room with the card deck \"1,2,3,4,5,6\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line hidden
-#line 5
- testRunner.When("I add a new user with username \"Jim Hopper\" and connection ID \"1\" to the room", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line hidden
-#line 6
- testRunner.And("I add a new user with username \"Jane Hopper\" and connection ID \"2\" to the room", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line 3
+this.FeatureBackground();
 #line hidden
 #line 7
- testRunner.Then("the room should contain \"2\" users", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.When("I let a user with username \"Jim Hopper\" join room \"1\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 8
- testRunner.And("the room should contain \"2\" connections", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And("I let a user with username \"Jane Hopper\" join room \"1\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 9
- testRunner.And("the first user in the room should be administrator", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And("I let a user with username \"Joyce Byers\" join room \"1\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+#line 10
+ testRunner.Then("\"3\" users should be returned by the hub for room \"1\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
             this.ScenarioCleanup();
         }
         
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
-        [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("Add users to all-admin room")]
-        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("FeatureTitle", "AddUserToRoom")]
-        public virtual void AddUsersToAll_AdminRoom()
+        [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("Get users from non-existing room")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("FeatureTitle", "Get Users")]
+        public virtual void GetUsersFromNon_ExistingRoom()
         {
             string[] tagsOfScenario = ((string[])(null));
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Add users to all-admin room", null, ((string[])(null)));
-#line 11
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Get users from non-existing room", null, ((string[])(null)));
+#line 12
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             bool isScenarioIgnored = default(bool);
@@ -167,37 +173,24 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 this.ScenarioStart();
-#line 12
- testRunner.Given("I have created a room with the card deck \"1,2,3,4,5,6\" in which all users should " +
-                        "be administrator", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+#line 3
+this.FeatureBackground();
 #line hidden
 #line 13
- testRunner.When("I add a new user with username \"Jim Hopper\" and connection ID \"1\" to the room", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line hidden
-#line 14
- testRunner.And("I add a new user with username \"Jane Hopper\" and connection ID \"2\" to the room", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line hidden
-#line 15
- testRunner.Then("the room should contain \"2\" users", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
-#line hidden
-#line 16
- testRunner.And("the room should contain \"2\" connections", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line hidden
-#line 17
- testRunner.Then("all users in the room should be administrator", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.Then("\"ROOM_DOES_NOT_EXIST\" users should be returned by the hub for room \"2\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
             this.ScenarioCleanup();
         }
         
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
-        [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("Add users with the same connection ID")]
-        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("FeatureTitle", "AddUserToRoom")]
-        public virtual void AddUsersWithTheSameConnectionID()
+        [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("Get users from room with missing-in-action users")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("FeatureTitle", "Get Users")]
+        public virtual void GetUsersFromRoomWithMissing_In_ActionUsers()
         {
             string[] tagsOfScenario = ((string[])(null));
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Add users with the same connection ID", null, ((string[])(null)));
-#line 19
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Get users from room with missing-in-action users", null, ((string[])(null)));
+#line 15
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             bool isScenarioIgnored = default(bool);
@@ -217,20 +210,23 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 this.ScenarioStart();
+#line 3
+this.FeatureBackground();
+#line hidden
+#line 16
+ testRunner.Given("I let a user with username \"Jim Hopper\" join room \"1\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+#line hidden
+#line 17
+ testRunner.And("I let a user with username \"Jane Hopper\" join room \"1\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+#line 18
+ testRunner.And("I let a user with username \"Joyce Byers\" join room \"1\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+#line 19
+ testRunner.When("user \"Jane Hopper\" leaves room \"1\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line hidden
 #line 20
- testRunner.Given("I have created a room with the card deck \"1,2,3,4,5,6\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line hidden
-#line 21
- testRunner.When("I add a new user with username \"Jim Hopper\" and connection ID \"1\" to the room", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line hidden
-#line 22
- testRunner.And("I add a new user with username \"Jane Hopper\" and connection ID \"1\" to the room", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line hidden
-#line 23
- testRunner.Then("the room should contain \"1\" users", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
-#line hidden
-#line 24
- testRunner.And("the room should contain \"1\" connections", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.Then("\"2\" users should be returned by the hub for room \"1\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
             this.ScenarioCleanup();

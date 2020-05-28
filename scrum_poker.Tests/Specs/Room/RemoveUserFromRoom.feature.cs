@@ -20,7 +20,7 @@ namespace scrum_poker.Tests.Specs.Room
     [System.CodeDom.Compiler.GeneratedCodeAttribute("TechTalk.SpecFlow", "3.1.0.0")]
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     [Microsoft.VisualStudio.TestTools.UnitTesting.TestClassAttribute()]
-    public partial class CreateRoomFeature
+    public partial class RemoveUserFromRoomFeature
     {
         
         private static TechTalk.SpecFlow.ITestRunner testRunner;
@@ -29,7 +29,7 @@ namespace scrum_poker.Tests.Specs.Room
         
         private string[] _featureTags = ((string[])(null));
         
-#line 1 "CreateRoom.feature"
+#line 1 "RemoveUserFromRoom.feature"
 #line hidden
         
         public virtual Microsoft.VisualStudio.TestTools.UnitTesting.TestContext TestContext
@@ -48,7 +48,7 @@ namespace scrum_poker.Tests.Specs.Room
         public static void FeatureSetup(Microsoft.VisualStudio.TestTools.UnitTesting.TestContext testContext)
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
-            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "CreateRoom", null, ProgrammingLanguage.CSharp, ((string[])(null)));
+            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Remove User from Room", null, ProgrammingLanguage.CSharp, ((string[])(null)));
             testRunner.OnFeatureStart(featureInfo);
         }
         
@@ -63,9 +63,9 @@ namespace scrum_poker.Tests.Specs.Room
         public virtual void TestInitialize()
         {
             if (((testRunner.FeatureContext != null) 
-                        && (testRunner.FeatureContext.FeatureInfo.Title != "CreateRoom")))
+                        && (testRunner.FeatureContext.FeatureInfo.Title != "Remove User from Room")))
             {
-                global::scrum_poker.Tests.Specs.Room.CreateRoomFeature.FeatureSetup(null);
+                global::scrum_poker.Tests.Specs.Room.RemoveUserFromRoomFeature.FeatureSetup(null);
             }
         }
         
@@ -92,12 +92,12 @@ namespace scrum_poker.Tests.Specs.Room
         }
         
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
-        [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("Create Room")]
-        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("FeatureTitle", "CreateRoom")]
-        public virtual void CreateRoom()
+        [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("Remove single user from room")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("FeatureTitle", "Remove User from Room")]
+        public virtual void RemoveSingleUserFromRoom()
         {
             string[] tagsOfScenario = ((string[])(null));
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Create Room", null, ((string[])(null)));
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Remove single user from room", null, ((string[])(null)));
 #line 3
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
@@ -119,13 +119,21 @@ this.ScenarioInitialize(scenarioInfo);
             {
                 this.ScenarioStart();
 #line 4
- testRunner.When("I create a new room with the card deck \"1,2,3,4,5,6\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+ testRunner.Given("I have created a room with the card deck \"1,2,3,4,5,6\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
 #line 5
- testRunner.Then("the \"Id\" attribute should be a GUID", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.And("I have added a new user with username \"Jim Hopper\" and connection ID \"1\" to the r" +
+                        "oom", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 6
- testRunner.And("the \"CardDeck\" attribute should be \"1,2,3,4,5,6\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And("I have added a new user with username \"Jane Hopper\" and connection ID \"2\" to the " +
+                        "room", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+#line 7
+ testRunner.When("I remove the user with username \"Jim Hopper\" from the room", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line hidden
+#line 8
+ testRunner.Then("the room should contain \"1\" users", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
             this.ScenarioCleanup();

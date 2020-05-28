@@ -9,8 +9,8 @@ namespace scrum_poker.Hubs
 {
     public class RoomHub : Hub
     {
-        private static List<Room> Rooms = new List<Room>();
-        
+        public static List<Room> Rooms { get; private set; } = new List<Room>();
+
         /// <summary>
         /// Creates a new room.
         /// </summary>
@@ -47,8 +47,12 @@ namespace scrum_poker.Hubs
                 return "CONNECTION_ALREADY_EXISTS";
 
             // Notify clients
-            Clients.Clients(room.Connections).SendAsync("UserJoined", user.Id, user.Name, user.IsAdmin);
-
+            var clients = Clients.Clients(room.Connections);
+            if(clients != null)
+            {
+                clients.SendAsync("UserJoined", user.Id, user.Name, user.IsAdmin);
+            }
+            
             // Serialize and return room data
             var obj = new { Id = user.Id, IsAdmin = user.IsAdmin, CardDeck = room.CardDeck, CardsRevealed = room.CardsRevealed, PlayedCards = room.PlayedCards };
             return JsonSerializer.Serialize(obj);
@@ -66,7 +70,7 @@ namespace scrum_poker.Hubs
         public void LeaveRoom(string roomId, string userId)
         {
             Room room = Rooms.Find(x => x.Id == roomId);
-            if (room == null) 
+            if (room == null)
                 return;
 
             // Remove connection, but keep user data around for potential reconnect
@@ -83,16 +87,19 @@ namespace scrum_poker.Hubs
             removeUserTimer.Enabled = true;
 
             // Remove room if it's empty after 30 seconds
-            if (room.GetUsers().Count == 0)
+            if (room.GetActiveUsers().Count == 0)
             {
                 Timer removeRoomTimer = new Timer(30000);
                 removeRoomTimer.Elapsed += (sender, e) => RemoveRoom(sender, e, room);
                 removeRoomTimer.AutoReset = false;
                 removeRoomTimer.Enabled = true;
             }
-    
+
             // Notify clients
-            Clients.Clients(room.Connections).SendAsync("UserLeft", userId);
+            var clients = Clients.Clients(room.Connections);
+            if (clients != null) { 
+                clients.SendAsync("UserLeft", userId);
+            }
         }
 
         /// <summary>
@@ -122,9 +129,13 @@ namespace scrum_poker.Hubs
             room.Connections.Add(Context.ConnectionId);
 
             // Notify clients
-            Clients.Clients(room.Connections).SendAsync("UserJoined", user.Id, user.Name, user.IsAdmin);           
-            if(user.SelectedCard > -1) 
-                Clients.Clients(room.Connections).SendAsync("CardSelected", user.Id, user.SelectedCard);
+            var clients = Clients.Clients(room.Connections);
+            if(clients != null)
+            {
+                clients.SendAsync("UserJoined", user.Id, user.Name, user.IsAdmin);
+                if (user.SelectedCard > -1)
+                    clients.SendAsync("CardSelected", user.Id, user.SelectedCard);
+            }        
 
             // Serialize and return room data
             var obj = new { Name = user.Name, SelectedCard = user.SelectedCard, CardsRevealed = room.CardsRevealed, IsAdmin = user.IsAdmin, CardDeck = room.CardDeck, PlayedCards = room.PlayedCards };
@@ -157,7 +168,11 @@ namespace scrum_poker.Hubs
             user.SelectedCard = selectedCard;
 
             // Notify clients
-            Clients.Clients(room.Connections).SendAsync("CardSelected", user.Id, user.SelectedCard, room.PlayedCards);
+            var clients = Clients.Clients(room.Connections);
+            if(clients != null)
+            {
+                clients.SendAsync("CardSelected", user.Id, user.SelectedCard, room.PlayedCards);
+            }           
         }
 
         /// <summary>
@@ -173,7 +188,11 @@ namespace scrum_poker.Hubs
             room.CardsRevealed = true;
 
             // Notify clients
-            Clients.Clients(room.Connections).SendAsync("CardsRevealed");
+            var clients = Clients.Clients(room.Connections);
+            if(clients != null)
+            {
+                clients.SendAsync("CardsRevealed");
+            }           
         }
 
         /// <summary>
@@ -186,13 +205,17 @@ namespace scrum_poker.Hubs
             if (room == null) 
                 return;
 
-            foreach (var user in room.GetUsers())
+            foreach (var user in room.GetAllUsers())
                 user.SelectedCard = -1;
 
             room.CardsRevealed = false;
 
             // Notify clients
-            Clients.Clients(room.Connections).SendAsync("CardsReset");
+            var clients = Clients.Clients(room.Connections);
+            if(clients != null)
+            {
+                clients.SendAsync("CardsReset");
+            }            
         }
 
         /// <summary>
@@ -210,7 +233,7 @@ namespace scrum_poker.Hubs
                 return "ROOM_DOES_NOT_EXIST";
 
             // Get and serialize users
-            List<User> users = room.GetUsers();
+            List<User> users = room.GetActiveUsers();
             return JsonSerializer.Serialize(users);
         }
 
@@ -235,7 +258,7 @@ namespace scrum_poker.Hubs
         private void RemoveRoom(Object source, ElapsedEventArgs e, Room room)
         {
             // Check if room is still empty
-            if (room.GetUsers().Count == 0)
+            if (room.GetActiveUsers().Count == 0)
                 Rooms.Remove(room);
         }
 
