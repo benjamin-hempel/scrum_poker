@@ -162,6 +162,22 @@ namespace scrum_poker.Tests.Bindings
             RoomHub.SelectCard(roomId, userId, -1);
         }
 
+        [When(@"the cards in room ""(.*)"" are revealed")]
+        public void WhenTheCardsInRoomAreRevealed(int roomIndex)
+        {
+            string roomId = GetRoomId(roomIndex);
+
+            RoomHub.RevealCards(roomId);
+        }
+
+        [Then(@"the cards in room ""(.*)"" should be revealed")]
+        public void ThenTheCardsInRoomShouldBeRevealed(int roomIndex)
+        {
+            Models.Room room = GetRoom(roomIndex);
+
+            Assert.IsTrue(room.CardsRevealed, $"The cards in room {roomIndex} should be revealed.");
+        }
+
         #region HelperMethods
 
         public Models.Room GetRoom(int roomIndex)
