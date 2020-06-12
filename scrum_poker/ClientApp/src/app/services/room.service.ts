@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
-import { Room } from '../models/room';
 import * as signalR from "@aspnet/signalr";
+
+import { Room } from '../models/room';
+import { User } from '../models/user';
 
 @Injectable({
   providedIn: 'root',
@@ -27,13 +29,12 @@ export class RoomService {
     });
 
     this._hubConnection.on("UserLeft", (userId) => {
-      let index = this.room.users.findIndex(user => user.userId == userId)
-      this.room.users.splice(index, 1);
+      this.room.removeUser(userId);
     });
 
     this._hubConnection.on("CardSelected", (userId, selectedCard, playedCards) => {
-      let index = this.room.users.findIndex(user => user.userId === userId);
-      this.room.users[index].selectedCard = selectedCard;
+      var user: User = this.room.getUserById(userId);
+      user.selectedCard = selectedCard;
       this.room.playedCards = playedCards;
     });
 
