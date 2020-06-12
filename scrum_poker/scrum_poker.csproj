@@ -41,8 +41,8 @@
   <ItemGroup>
     <TypeScriptCompile Include="ClientApp\src\app\models\room.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\models\user.ts" />
-    <TypeScriptCompile Include="ClientApp\src\app\services\backend.interface.ts" />
-    <TypeScriptCompile Include="ClientApp\src\app\services\signalr.service.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\services\backend\backend.interface.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\services\backend\signalr.service.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\services\room.service.spec.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\services\room.service.ts" />
   </ItemGroup>

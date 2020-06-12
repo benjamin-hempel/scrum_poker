@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
-import { Room } from '../models/room';
-import { RoomService } from '../services/room.service';
+import { Room } from '../../models/room';
+import { RoomService } from '../../services/room.service';
 
 @Component({
   selector: 'app-home',

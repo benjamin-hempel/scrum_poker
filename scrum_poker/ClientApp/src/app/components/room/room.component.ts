@@ -4,8 +4,8 @@ import { ActivatedRoute } from '@angular/router';
 // Icons
 import { faShieldAlt } from '@fortawesome/free-solid-svg-icons';
 
-import { Room } from '../models/room';
-import { RoomService } from '../services/room.service';
+import { Room } from '../../models/room';
+import { RoomService } from '../../services/room.service';
 
 @Component({
   selector: 'app-room-component',

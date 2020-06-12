@@ -12,9 +12,9 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
 // Components
 import { AppComponent } from './app.component';
-import { NavMenuComponent } from './nav-menu/nav-menu.component';
-import { HomeComponent } from './home/home.component';
-import { RoomComponent } from './room/room.component';
+import { NavMenuComponent } from './components/nav-menu/nav-menu.component';
+import { HomeComponent } from './components/home/home.component';
+import { RoomComponent } from './components/room/room.component';
 
 // Services and models
 import { RoomService } from './services/room.service';
