@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 // Icons
 import { faShieldAlt } from '@fortawesome/free-solid-svg-icons';
 
+import { Room } from '../models/room';
 import { RoomService } from '../services/room.service';
 
 @Component({
@@ -11,17 +12,17 @@ import { RoomService } from '../services/room.service';
   templateUrl: './room.component.html'
 })
 export class RoomComponent {
-  constructor(public roomService: RoomService, private route: ActivatedRoute) { }
+  constructor(public roomService: RoomService, public room: Room, private route: ActivatedRoute) { }
 
   joinUrl: string; 
 
   ngOnInit() {
     // Get room ID and user ID for potential rejoin
-    this.roomService.roomId = this.route.snapshot.paramMap.get("rid");
-    this.roomService.you.userId = this.route.snapshot.paramMap.get("uid");
+    this.room.roomId = this.route.snapshot.paramMap.get("rid");
+    this.room.you.userId = this.route.snapshot.paramMap.get("uid");
 
     // Build join URL
-    this.joinUrl = window.location.protocol + "//" + window.location.host + "/" + this.roomService.roomId;
+    this.joinUrl = window.location.protocol + "//" + window.location.host + "/" + this.room.roomId;
   }
 
   faShieldAlt = faShieldAlt;

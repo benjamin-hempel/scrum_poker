@@ -1,14 +1,15 @@
 import { Component } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
-import { RoomService } from '../services/room.service'
+import { Room } from '../models/room';
+import { RoomService } from '../services/room.service';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
 })
 export class HomeComponent {
-  constructor(private roomService: RoomService, private router: Router, private route: ActivatedRoute) {}
+  constructor(private roomService: RoomService, private room: Room, private router: Router, private route: ActivatedRoute) {}
 
   // Displayed warnings?
   roomExistsWarning: boolean = false;
@@ -94,7 +95,7 @@ export class HomeComponent {
     await this.roomService.joinRoom(username);
 
     // Navigate to room page
-    this.router.navigate(["/room", { rid: this.roomService.roomId, uid: this.roomService.you.userId }]);
+    this.router.navigate(["/room", { rid: this.room.roomId, uid: this.room.you.userId }]);
   }
 
   async joinRoom() {
@@ -113,7 +114,7 @@ export class HomeComponent {
         this.roomExistsWarning = false;
         this.connectionExistsWarning = false;
         await this.roomService.getUsers();
-        this.router.navigate(["/room", { rid: this.roomService.roomId, uid: this.roomService.you.userId }]);
+        this.router.navigate(["/room", { rid: this.room.roomId, uid: this.room.you.userId }]);
         break;
 
       // Room with specified ID does not exist

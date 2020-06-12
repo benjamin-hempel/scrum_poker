@@ -16,8 +16,9 @@ import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { HomeComponent } from './home/home.component';
 import { RoomComponent } from './room/room.component';
 
-// Services
+// Services and models
 import { RoomService } from './services/room.service';
+import { Room } from './models/room';
 
 
 @NgModule({
@@ -46,7 +47,7 @@ import { RoomService } from './services/room.service';
       { path: ':rid', component: HomeComponent }
     ])
   ],
-  providers: [RoomService],
+  providers: [RoomService, Room],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
