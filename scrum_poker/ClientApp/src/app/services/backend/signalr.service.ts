@@ -9,7 +9,7 @@ export class SignalRService implements BackendInterface {
   private hubConnection: signalR.HubConnection;
   private callbacks: RoomCallbacks;
 
-  constructor(private room: Room) {
+  constructor(room: Room) {
     this.createConnection();
 
     this.callbacks = new RoomCallbacks(room);
@@ -46,9 +46,57 @@ export class SignalRService implements BackendInterface {
     });
   }
 
-  private startConnection() {
-    this.hubConnection
+  private async startConnection(): Promise<void> {
+    await this.hubConnection
       .start()
       .catch(err => console.log("Unable to connect to SignalR hub. " + err));
+  }
+
+  public getConnectionStatus(): number {
+    return this.hubConnection.state;
+  }
+
+  public async createRoom(cardDeck: string, allUsersAreAdmins: boolean): Promise<string> {
+    var result: string = await this.hubConnection.invoke("CreateRoom", cardDeck, allUsersAreAdmins)
+      .then(roomId => { return roomId; });
+
+    return result;
+  }
+
+  public async joinRoom(username: string, roomId: string): Promise<string> {
+    var result: string = await this.hubConnection.invoke("JoinRoom", roomId, username)
+      .then(data => { return data; });
+
+    return result;
+  }
+
+  public async getUsers(roomId: string): Promise<string> {
+    var result: string = await this.hubConnection.invoke("GetUsers", roomId)
+      .then(data => { return data; });
+
+    return result;
+  }
+
+  public leaveRoom(roomId: string, userId: string): void {
+    this.hubConnection.invoke("LeaveRoom", roomId, userId);
+  }
+
+  public async rejoinRoom(roomId: string, userId: string): Promise<string> {
+    var result: string = await this.hubConnection.invoke("Rejoin", roomId, userId)
+      .then(data => { return data; })
+
+    return result;
+  }
+
+  public selectCard(roomId: string, userId: string, selectedCard: number): void {
+    this.hubConnection.invoke("SelectCard", roomId, userId, selectedCard);
+  }
+
+  public revealCards(roomId: string): void {
+    this.hubConnection.invoke("RevealCards", roomId);
+  }
+
+  public resetCards(roomId: string): void {
+    this.hubConnection.invoke("ResetCards", roomId);
   }
 }

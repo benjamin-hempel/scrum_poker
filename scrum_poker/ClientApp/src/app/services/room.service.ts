@@ -14,102 +14,91 @@ export class RoomService {
   private backend: BackendInterface;
 
   constructor(private room: Room) {
-    // Set up backend depending on environment
-    if (environment.production)
-      this.backend = new SignalRService(room);
-    else
-      /* MOCK SERVICE */;
+    // Fall back to mock service if connection failed and environment is non-production
+    var signalRService: SignalRService = new SignalRService(room);
+
+    if (signalRService.getConnectionStatus() != 1)
+      this.backend = signalRService;
+    else if (!environment.production)
+      this.backend = null /* MOCK SERVICE */;
 
     // Try rejoining if room and user ID were found in the URL
     if (this.room.roomId == null || this.room.you.userId == null) return;
     this.rejoinRoom().then(() => this.getUsers());  
   }
 
-  async createRoom(cardDeck: string, allUsersAreAdmins: boolean) {
+  public async createRoom(cardDeck: string, allUsersAreAdmins: boolean): Promise<void> {
     this.room.cards = cardDeck.split(',');
-    await this._hubConnection.invoke("CreateRoom", cardDeck, allUsersAreAdmins).then((newRoomId) => {
-      this.room.roomId = newRoomId;
-    });
+
+    var roomId: string = await this.backend.createRoom(cardDeck, allUsersAreAdmins);
+    this.room.roomId = roomId;
   }
 
-  async joinRoom(username: string, roomId: string = this.room.roomId): Promise<string> {
-    // Set data
+  public async joinRoom(username: string, roomId: string = this.room.roomId): Promise<string> {
     this.room.you.username = username;
     this.room.roomId = roomId;
 
-    // Invoke hub function
-    let result = await this._hubConnection.invoke("JoinRoom", roomId, username).then((jsonData) => {
-      // Abort on error
-      if (jsonData == "ROOM_DOES_NOT_EXIST" || jsonData == "CONNECTION_ALREADY_EXISTS")
-        return jsonData;
+    var json: string = await this.backend.joinRoom(username, roomId);
+    if (json == "ROOM_DOES_NOT_EXIST" || json == "CONNECTION_ALREADY_EXISTS")
+      return json;
 
-      // Get data from JSON
-      let data = JSON.parse(jsonData)
-      this.room.you.userId = data.Id;
-      this.room.you.isAdmin = data.IsAdmin;
-      this.room.cards = data.CardDeck.split(',');
-      this.room.cardsRevealed = data.CardsRevealed;
-      this.room.playedCards = data.PlayedCards;
+    var data = JSON.parse(json);
+    this.room.you.userId = data.Id;
+    this.room.you.isAdmin = data.IsAdmin;
+    this.room.cards = data.CardDeck.split(',');
+    this.room.cardsRevealed = data.CardsRevealed;
+    this.room.playedCards = data.PlayedCards;
 
-      return "JOIN_SUCCESSFUL";
-    });
-
-    return result;
+    return "JOIN_SUCCESSFUL";
   }
 
-  async getUsers() {
-    await this._hubConnection.invoke("GetUsers", this.room.roomId).then((jsonUsers) => {
-      // Check if room exists
-      if (jsonUsers == "ROOM_DOES_NOT_EXIST") return;
+  public async getUsers(): Promise<void> {
+    var json: string = await this.backend.getUsers(this.room.roomId);
+    if (json == "ROOM_DOES_NOT_EXIST") return;
 
-      // Get user data from JSON
-      var users = JSON.parse(jsonUsers);
-      for (let user of users) {
-        if(user.Id != this.room.you.userId)
-          this.room.addUser(user.Id, user.Name, user.IsAdmin, user.SelectedCard);
-      }
-    });
+    var users = JSON.parse(json);
+    for (let user of users) {
+      if (user.Id != this.room.you.userId)
+        this.room.addUser(user.Id, user.Name, user.IsAdmin, user.SelectedCard);
+    }
   }
 
-  leaveRoom() {
-    this._hubConnection.invoke("LeaveRoom", this.room.roomId, this.room.you.userId);
+  public leaveRoom(): void {
+    this.backend.leaveRoom(this.room.roomId, this.room.you.userId);
   }
 
-  async rejoinRoom() {
-    await this._hubConnection.invoke("Rejoin", this.room.roomId, this.room.you.userId).then((result) => {
-      // Abort if room or user do not exist
-      if (result == "ROOM_DOES_NOT_EXIST" || result == "USER_DOES_NOT_EXIST") {
-        this.room.roomId = null;
-        this.room.you.userId = null;
-        return;
-      }
+  public async rejoinRoom(): Promise<void> {
+    var json: string = await this.backend.rejoinRoom(this.room.roomId, this.room.you.userId);
+    if (json == "ROOM_DOES_NOT_EXIST" || json == "USER_DOES_NOT_EXIST") {
+      this.room.roomId = null;
+      this.room.you.userId = null;
+      return;
+    }
 
-      // Get data from JSON
-      var data = JSON.parse(result);
-      this.room.you.username = data.Name;
-      this.room.you.selectedCard = data.SelectedCard;
-      this.room.you.isAdmin = data.IsAdmin;
-      this.room.cardsRevealed = data.CardsRevealed;
-      this.room.cards = data.CardDeck.split(',');
-      this.room.playedCards = data.PlayedCards;
-    });
+    var data = JSON.parse(json);
+    this.room.you.username = data.Name;
+    this.room.you.selectedCard = data.SelectedCard;
+    this.room.you.isAdmin = data.IsAdmin;
+    this.room.cardsRevealed = data.CardsRevealed;
+    this.room.cards = data.CardDeck.split(',');
+    this.room.playedCards = data.PlayedCards;
   }
 
-  selectCard(selectedCard: number) {
+  public selectCard(selectedCard: number): void {
     // Deselect card if the user clicks the same card again
     if (selectedCard == this.room.you.selectedCard)
       this.room.you.selectedCard = -1;
     else
       this.room.you.selectedCard = selectedCard;
 
-    this._hubConnection.invoke("SelectCard", this.room.roomId, this.room.you.userId, this.room.you.selectedCard);
+    this.backend.selectCard(this.room.roomId, this.room.you.userId, this.room.you.selectedCard);
   }
 
-  revealCards() {
-    this._hubConnection.invoke("RevealCards", this.room.roomId);
+  public revealCards(): void {
+    this.backend.revealCards(this.room.roomId);
   }
 
-  resetCards() {
-    this._hubConnection.invoke("ResetCards", this.room.roomId);
+  public resetCards(): void {
+    this.backend.resetCards(this.room.roomId);
   }
 }
