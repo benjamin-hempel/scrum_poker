@@ -1,64 +1,28 @@
 import { Injectable } from '@angular/core';
+import { environment } from 'src/environments/environment';
 import * as signalR from "@aspnet/signalr";
 
+import { BackendInterface } from './backend/backend.interface';
 import { Room } from '../models/room';
 import { User } from '../models/user';
+import { SignalRService } from './backend/signalr.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class RoomService {
-  private _hubConnection: signalR.HubConnection;
+  private backend: BackendInterface;
 
   constructor(private room: Room) {
-    // Setup and start connection
-    this.createConnection();
-    this.registerCallbacks();
-    this.startConnection();
-  }
+    // Set up backend depending on environment
+    if (environment.production)
+      this.backend = new SignalRService(room);
+    else
+      /* MOCK SERVICE */;
 
-  private createConnection() {
-    this._hubConnection = new signalR.HubConnectionBuilder()
-      .withUrl(window.location.protocol + "//" + window.location.host + "/roomHub")
-      .build();
-  }
-
-  private registerCallbacks() {
-    this._hubConnection.on("UserJoined", (userId, username, isAdmin) => {
-      this.room.addUser(userId, username, isAdmin);
-    });
-
-    this._hubConnection.on("UserLeft", (userId) => {
-      this.room.removeUser(userId);
-    });
-
-    this._hubConnection.on("CardSelected", (userId, selectedCard, playedCards) => {
-      var user: User = this.room.getUserById(userId);
-      user.selectedCard = selectedCard;
-      this.room.playedCards = playedCards;
-    });
-
-    this._hubConnection.on("CardsRevealed", () => {
-      this.room.cardsRevealed = true;
-    });
-
-    this._hubConnection.on("CardsReset", () => {
-      this.room.you.selectedCard = -1;
-      this.room.cardsRevealed = false;
-      for (let user of this.room.users)
-        user.selectedCard = -1;
-    });
-  }
-
-  private startConnection() {
-    this._hubConnection
-      .start()
-      .then(() => {
-        // Try rejoining if room and user ID were found in the URL
-        if (this.room.roomId == null || this.room.you.userId == null) return;
-        this.rejoinRoom().then(() => this.getUsers());  
-      })
-      .catch(err => console.log("Could not establish connection to SignalR hub: " + err));
+    // Try rejoining if room and user ID were found in the URL
+    if (this.room.roomId == null || this.room.you.userId == null) return;
+    this.rejoinRoom().then(() => this.getUsers());  
   }
 
   async createRoom(cardDeck: string, allUsersAreAdmins: boolean) {

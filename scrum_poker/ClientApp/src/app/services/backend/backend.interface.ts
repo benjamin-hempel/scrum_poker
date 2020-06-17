@@ -1,4 +1,4 @@
-interface BackendInterface {
+export interface BackendInterface {
   createConnection(): void;
   registerCallbacks(): void;
   startConnection(): void;
