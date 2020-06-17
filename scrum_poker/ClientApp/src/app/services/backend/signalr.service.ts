@@ -1,4 +1,3 @@
-import { Injectable } from '@angular/core';
 import * as signalR from '@aspnet/signalr';
 
 import { BackendInterface } from './backend.interface';

@@ -1,10 +1,8 @@
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
-import * as signalR from "@aspnet/signalr";
 
 import { BackendInterface } from './backend/backend.interface';
 import { Room } from '../models/room';
-import { User } from '../models/user';
 import { SignalRService } from './backend/signalr.service';
 
 @Injectable({
