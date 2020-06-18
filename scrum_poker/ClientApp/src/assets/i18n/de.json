@@ -41,8 +41,17 @@
     "noRoom": {
       "title": "Du bist zurzeit in keinem Raum!",
       "explanationPrefix": "Kehre zur",
-      "homepageLinkLabel":  "Startseite",
+      "homepageLinkLabel": "Startseite",
       "explanationSuffix": "zurück, um einen Raum zu erstellen oder einem beizutreten."
+    }
+  },
+
+  "errorPage": {
+    "title": "Ein Fehler ist aufgetreten",
+    "backToHome": "Zurück zur Startseite",
+    "causes": {
+      "service-unavailable": "Der Server ist zur Zeit nicht erreichbar. Bitte versuche es später erneut.",
+      "default": "Bitte versuche es später erneut."
     }
   }
 }

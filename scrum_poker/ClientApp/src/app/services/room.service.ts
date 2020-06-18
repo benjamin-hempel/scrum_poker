@@ -1,9 +1,11 @@
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
 
 import { BackendInterface } from './backend/backend.interface';
 import { Room } from '../models/room';
 import { SignalRService } from './backend/signalr.service';
+import { MockBackendService } from './backend/mock-backend.service';
 
 @Injectable({
   providedIn: 'root',
@@ -11,16 +13,22 @@ import { SignalRService } from './backend/signalr.service';
 export class RoomService {
   private backend: BackendInterface;
 
-  constructor(private room: Room) {
+  constructor(private room: Room, private router: Router) {
     var signalRService: SignalRService = new SignalRService(room);
 
     signalRService.startConnection().then(() => {
       // Fall back to mock service if connection failed and environment is non-production
       if (signalRService.getConnectionStatus() == 1)
         this.backend = signalRService;
-      else if (!environment.production)
-        this.backend = null /* MOCK SERVICE */;
-
+      else if (!environment.production) {
+        console.log("Falling back to mock backend.");
+        //this.backend = new MockBackendService(room);
+      }
+      else {
+        this.backend = null;
+        router.navigate(["/error", { cause: "service-unavailable" }])
+      }
+        
       // Try rejoining if room and user ID were found in the URL
       if (this.room.roomId == null || this.room.you.userId == null) return;
       this.rejoinRoom().then(() => this.getUsers());  

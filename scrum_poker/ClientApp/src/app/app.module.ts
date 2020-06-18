@@ -15,10 +15,12 @@ import { AppComponent } from './app.component';
 import { NavMenuComponent } from './components/nav-menu/nav-menu.component';
 import { HomeComponent } from './components/home/home.component';
 import { RoomComponent } from './components/room/room.component';
+import { ErrorPageComponent } from './components/error-page/error-page.component';
 
 // Services and models
 import { RoomService } from './services/room.service';
 import { Room } from './models/room';
+
 
 
 @NgModule({
@@ -26,7 +28,8 @@ import { Room } from './models/room';
     AppComponent,
     NavMenuComponent,
     HomeComponent,
-    RoomComponent
+    RoomComponent,
+    ErrorPageComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -44,7 +47,8 @@ import { Room } from './models/room';
     RouterModule.forRoot([
       { path: '', component: HomeComponent, pathMatch: 'full' },
       { path: 'room', component: RoomComponent },
-      { path: ':rid', component: HomeComponent }
+      { path: 'error', component: ErrorPageComponent },
+      { path: ':rid', component: HomeComponent }     
     ])
   ],
   providers: [RoomService, Room],
