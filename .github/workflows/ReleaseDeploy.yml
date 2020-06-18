@@ -27,9 +27,9 @@ jobs:
     - name: Publish
       run: |
         dotnet publish -c Release -o scrum-poker1
-    - name: Deploy to Azure
-      uses: azure/webapps-deploy@v1
-      with:
-        app-name: scrum-poker1
-        publish-profile: ${{ secrets.PUBLISH_PROFILE }}
-        package: './scrum-poker1'
+    #- name: Deploy to Azure
+    #  uses: azure/webapps-deploy@v1
+    #  with:
+    #    app-name: scrum-poker1
+    #    publish-profile: ${{ secrets.PUBLISH_PROFILE }}
+    #    package: './scrum-poker1'
