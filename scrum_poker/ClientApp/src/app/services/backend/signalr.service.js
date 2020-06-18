@@ -43,7 +43,6 @@ var SignalRService = /** @class */ (function () {
         this.createConnection();
         this.callbacks = new room_callbacks_1.RoomCallbacks(room);
         this.registerCallbacks();
-        this.startConnection();
     }
     SignalRService.prototype.createConnection = function () {
         this.hubConnection = new signalR.HubConnectionBuilder()

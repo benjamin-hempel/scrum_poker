@@ -13,8 +13,6 @@ export class SignalRService implements BackendInterface {
 
     this.callbacks = new RoomCallbacks(room);
     this.registerCallbacks();
-
-    this.startConnection();
   }
 
   private createConnection(): void {
@@ -45,7 +43,7 @@ export class SignalRService implements BackendInterface {
     });
   }
 
-  private async startConnection(): Promise<void> {
+  public async startConnection(): Promise<void> {
     await this.hubConnection
       .start()
       .catch(err => console.log("Unable to connect to SignalR hub. " + err));
