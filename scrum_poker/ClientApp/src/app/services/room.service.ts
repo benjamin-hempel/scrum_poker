@@ -11,7 +11,7 @@ import { MockBackendService } from './backend/mock-backend.service';
   providedIn: 'root',
 })
 export class RoomService {
-  private backend: BackendInterface;
+  public backend: BackendInterface;
 
   constructor(private room: Room, private router: Router) {
     var signalRService: SignalRService = new SignalRService(room);

@@ -1,13 +1,20 @@
-import * as signalR from "@aspnet/signalr";
+import { } from 'jasmine';
+import { TestBed } from '@angular/core/testing';
 
 import { RoomService } from '../services/room.service';
 
 describe('RoomService', () => {
-  let service: RoomService;
-  beforeEach(() => { service = new RoomService(); });
+  var roomService: RoomService;
+
+  TestBed.configureTestingModule({
+    providers: [RoomService]
+  });
+
+  beforeEach(() => {
+    roomService = TestBed.get(RoomService);
+  });
 
   it('should be connected to the SignalR hub', () => {
-    let hubConnection = service.getHubConnection();
-    expect(hubConnection.state).toBe(1);
+    expect(roomService.backend).toBeDefined();
   });
 });
