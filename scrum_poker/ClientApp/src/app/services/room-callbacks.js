@@ -13,7 +13,8 @@ var RoomCallbacks = /** @class */ (function () {
     RoomCallbacks.prototype.CardSelectedCallback = function (userId, selectedCard, playedCards) {
         var user = this.room.getUserById(userId);
         user.selectedCard = selectedCard;
-        this.room.playedCards = playedCards;
+        if (playedCards != null)
+            this.room.playedCards = playedCards;
     };
     RoomCallbacks.prototype.CardsRevealedCallback = function () {
         this.room.cardsRevealed = true;

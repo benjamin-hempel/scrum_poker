@@ -12,10 +12,11 @@ export class RoomCallbacks {
     this.room.removeUser(userId);
   }
 
-  public CardSelectedCallback(userId: string, selectedCard: number, playedCards: number): void {
+  public CardSelectedCallback(userId: string, selectedCard: number, playedCards?: number): void {
     var user: User = this.room.getUserById(userId);
     user.selectedCard = selectedCard;
-    this.room.playedCards = playedCards;
+    if(playedCards != null)
+      this.room.playedCards = playedCards;
   }
 
   public CardsRevealedCallback(): void {
