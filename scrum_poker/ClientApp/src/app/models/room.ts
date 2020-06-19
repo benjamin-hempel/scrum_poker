@@ -1,5 +1,10 @@
+import { Injectable } from '@angular/core';
+
 import { User } from './user';
 
+@Injectable({
+  providedIn: 'root'
+})
 export class Room {
   roomId: string;
   cardsRevealed: boolean = false;
