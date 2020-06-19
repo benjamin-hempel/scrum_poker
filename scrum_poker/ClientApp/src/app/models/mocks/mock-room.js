@@ -12,7 +12,7 @@ var MockRoom = /** @class */ (function () {
         this.allUsersAreAdmins = allUsersAreAdmins;
         this.cardDeck = cardDeck;
     }
-    MockRoom.prototype.addUser = function (username, connectionId) {
+    MockRoom.prototype.addUser = function (username) {
         var newUser;
         if (this.users.length == 0 || this.allUsersAreAdmins == true)
             newUser = new mock_user_1.MockUser(username, true);
@@ -31,7 +31,7 @@ var MockRoom = /** @class */ (function () {
     MockRoom.prototype.getActiveUsers = function () {
         return this.users.filter(function (x) { return !x.missingInAction; });
     };
-    MockRoom.prototype.getAllUSers = function () {
+    MockRoom.prototype.getAllUsers = function () {
         return this.users;
     };
     return MockRoom;

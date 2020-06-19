@@ -19,7 +19,7 @@ export class MockRoom {
     this.cardDeck = cardDeck;
   }
 
-  public addUser(username: string, connectionId: string): MockUser {
+  public addUser(username: string): MockUser {
     var newUser: MockUser;
 
     if (this.users.length == 0 || this.allUsersAreAdmins == true)
@@ -44,7 +44,7 @@ export class MockRoom {
   public getActiveUsers(): Array<MockUser> {
     return this.users.filter(x => !x.missingInAction);
   }
-  public getAllUSers(): Array<MockUser> {
+  public getAllUsers(): Array<MockUser> {
     return this.users;
   }
 }
