@@ -21,8 +21,6 @@ import { ErrorPageComponent } from './components/error-page/error-page.component
 import { RoomService } from './services/room.service';
 import { Room } from './models/room';
 
-
-
 @NgModule({
   declarations: [
     AppComponent,
