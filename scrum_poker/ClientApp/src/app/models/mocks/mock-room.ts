@@ -15,6 +15,7 @@ export class MockRoom {
     this.id = uuidv4();
     this.users = new Array<MockUser>();
     this.cardsRevealed = false;
+    this.playedCards = 0;
     this.allUsersAreAdmins = allUsersAreAdmins;
     this.cardDeck = cardDeck;
   }

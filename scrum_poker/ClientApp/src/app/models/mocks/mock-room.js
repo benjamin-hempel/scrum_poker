@@ -9,6 +9,7 @@ var MockRoom = /** @class */ (function () {
         this.id = uuid_1.v4();
         this.users = new Array();
         this.cardsRevealed = false;
+        this.playedCards = 0;
         this.allUsersAreAdmins = allUsersAreAdmins;
         this.cardDeck = cardDeck;
     }
