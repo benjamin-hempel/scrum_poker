@@ -22,16 +22,16 @@ export class RoomService {
         this.backend = signalRService;
       else if (!environment.production) {
         console.log("Falling back to mock backend.");
-        //this.backend = new MockBackendService(room);
+        this.backend = new MockBackendService(room);
       }
       else {
         this.backend = null;
-        router.navigate(["/error", { cause: "service-unavailable" }])
+        router.navigate(["/error", { cause: "service-unavailable" }]);
       }
-        
+
       // Try rejoining if room and user ID were found in the URL
       if (this.room.roomId == null || this.room.you.userId == null) return;
-      this.rejoinRoom().then(() => this.getUsers());  
+      this.rejoinRoom().then(() => this.getUsers());
     });  
   }
 
