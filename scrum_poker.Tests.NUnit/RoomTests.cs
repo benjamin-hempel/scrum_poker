@@ -2,7 +2,7 @@ using NUnit.Framework;
 
 namespace scrum_poker.Tests.NUnit
 {
-    public class Tests
+    public class RoomTests
     {
         [SetUp]
         public void Setup()
