@@ -14,7 +14,7 @@ Scenario: Add users to all-admin room
 	And I add a new user with username "Jane Hopper" and connection ID "2" to the room
 	Then the room should contain "2" users
 	And the room should contain "2" connections
-	Then all users in the room should be administrator
+	And all users in the room should be administrator
 
 Scenario: Add users with the same connection ID
 	Given I have created a room with the card deck "1,2,3,4,5,6"
