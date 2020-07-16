@@ -21,9 +21,12 @@ jobs:
     - name: Build app
       run: dotnet build --configuration Release --no-restore
       working-directory: ./scrum_poker
-    - name: Run all tests
+    - name: Run SpecFlow tests
       run: dotnet test
       working-directory: ./scrum_poker.Tests
+    - name: Run NUnit tests
+      run: dotnet test
+      working-directory: ./scrum_poker.Tests.NUnit
     - name: Publish
       run: |
         dotnet publish -c Release -o scrum-poker1
