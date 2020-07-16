@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System;
+using NUnit.Framework;
 
 namespace scrum_poker.Tests.NUnit.RoomTests
 {
@@ -13,7 +14,10 @@ namespace scrum_poker.Tests.NUnit.RoomTests
         [Test]
         public void CreateNewRoom()
         {
-            Assert.Pass();
+            var room = new Models.Room("1,2,3,4,5,6");
+            string id = room.Id;
+
+            Assert.IsTrue(Guid.TryParse(id, out _), "The room ID should be a GUID");
         }
     }
 }
