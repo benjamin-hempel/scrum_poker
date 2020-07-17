@@ -10,7 +10,7 @@
 // ------------------------------------------------------------------------------
 #region Designer generated code
 #pragma warning disable
-namespace scrum_poker.Tests.Specs.Room
+namespace scrum_poker.Tests.SpecFlow.Specs.Room
 {
     using TechTalk.SpecFlow;
     using System;
@@ -65,7 +65,7 @@ namespace scrum_poker.Tests.Specs.Room
             if (((testRunner.FeatureContext != null) 
                         && (testRunner.FeatureContext.FeatureInfo.Title != "Remove User from Room")))
             {
-                global::scrum_poker.Tests.Specs.Room.RemoveUserFromRoomFeature.FeatureSetup(null);
+                global::scrum_poker.Tests.SpecFlow.Specs.Room.RemoveUserFromRoomFeature.FeatureSetup(null);
             }
         }
         

@@ -3,7 +3,7 @@ using TechTalk.SpecFlow;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
 
-namespace scrum_poker.Tests.Bindings
+namespace scrum_poker.Tests.SpecFlow.Bindings
 {
     [Binding]
     public class RoomSteps

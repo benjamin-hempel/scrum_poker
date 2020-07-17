@@ -5,7 +5,7 @@ using System.Threading;
 using TechTalk.SpecFlow;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace scrum_poker.Tests.Bindings
+namespace scrum_poker.Tests.SpecFlow.Bindings
 {
     [Binding]
     class GeneralSteps

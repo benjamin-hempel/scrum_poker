@@ -10,7 +10,7 @@
 // ------------------------------------------------------------------------------
 #region Designer generated code
 #pragma warning disable
-namespace scrum_poker.Tests.Specs.RoomHub
+namespace scrum_poker.Tests.SpecFlow.Specs.RoomHub
 {
     using TechTalk.SpecFlow;
     using System;
@@ -65,7 +65,7 @@ namespace scrum_poker.Tests.Specs.RoomHub
             if (((testRunner.FeatureContext != null) 
                         && (testRunner.FeatureContext.FeatureInfo.Title != "Join Room")))
             {
-                global::scrum_poker.Tests.Specs.RoomHub.JoinRoomFeature.FeatureSetup(null);
+                global::scrum_poker.Tests.SpecFlow.Specs.RoomHub.JoinRoomFeature.FeatureSetup(null);
             }
         }
         

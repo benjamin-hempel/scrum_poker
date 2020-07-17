@@ -7,7 +7,7 @@ using System.Text.Json;
 using Moq;
 using Microsoft.AspNetCore.SignalR;
 
-namespace scrum_poker.Tests.Bindings
+namespace scrum_poker.Tests.SpecFlow.Bindings
 {
     [Binding]
     class RoomHubSteps
