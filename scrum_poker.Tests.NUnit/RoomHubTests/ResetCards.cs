@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Text.Json;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.SignalR;
 using NUnit.Framework;
 using Moq;
-using System.Runtime.CompilerServices;
 
 namespace scrum_poker.Tests.NUnit.RoomHubTests
 {
