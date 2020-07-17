@@ -23,7 +23,7 @@ jobs:
       working-directory: ./scrum_poker
     - name: Run SpecFlow tests
       run: dotnet test
-      working-directory: ./scrum_poker.Tests
+      working-directory: ./scrum_poker.Tests.SpecFlow
     - name: Run NUnit tests
       run: dotnet test
       working-directory: ./scrum_poker.Tests.NUnit
