@@ -12,12 +12,6 @@ namespace scrum_poker.Tests.NUnit.RoomHubTests
         private Mock<HubCallerContext> hubCallerContext = new Mock<HubCallerContext>();
         private Mock<IHubCallerClients> hubCallerClients = new Mock<IHubCallerClients>();
 
-        private void UpdateConnectionId()
-        {
-            hubCallerContext.Setup(c => c.ConnectionId).Returns(Guid.NewGuid().ToString());
-            roomHub.Context = hubCallerContext.Object;
-        }
-
         [SetUp]
         public void SetUp()
         {
