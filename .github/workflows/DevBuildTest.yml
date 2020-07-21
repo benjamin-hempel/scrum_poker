@@ -27,6 +27,3 @@ jobs:
     - name: Run NUnit tests
       run: dotnet test
       working-directory: ./scrum_poker.Tests.NUnit
-    - name: Run Jasmine tests
-      run: ng test
-      working-directory: ./scrum_poker/ClientApp
