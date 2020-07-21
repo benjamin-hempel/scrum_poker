@@ -19,6 +19,8 @@ import { ErrorPageComponent } from './components/error-page/error-page.component
 
 // Services and models
 import { RoomService } from './services/room.service';
+import { SignalRService } from './services/backend/signalr.service';
+import { MockBackendService } from './services/backend/mock-backend.service';
 import { Room } from './models/room';
 
 @NgModule({
@@ -49,7 +51,7 @@ import { Room } from './models/room';
       { path: ':rid', component: HomeComponent }     
     ])
   ],
-  providers: [RoomService, Room],
+  providers: [RoomService, Room, SignalRService, MockBackendService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
