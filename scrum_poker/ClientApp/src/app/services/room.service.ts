@@ -13,26 +13,24 @@ import { MockBackendService } from './backend/mock-backend.service';
 export class RoomService {
   public backend: BackendInterface;
 
-  constructor(private room: Room, private router: Router) {
-    var signalRService: SignalRService = new SignalRService(room);
+  constructor(private room: Room, private router: Router, private signalRService: SignalRService, private mockBackendService: MockBackendService) {
+    this.backend = null;
+
+    if (!environment.production) {
+      this.backend = mockBackendService;
+    }
 
     signalRService.startConnection().then(() => {
       // Fall back to mock service if connection failed and environment is non-production
       if (signalRService.getConnectionStatus() == 1)
         this.backend = signalRService;
-      else if (!environment.production) {
-        console.log("Falling back to mock backend.");
-        this.backend = new MockBackendService(room);
-      }
-      else {
-        this.backend = null;
+      else
         router.navigate(["/error", { cause: "service-unavailable" }]);
-      }
 
       // Try rejoining if room and user ID were found in the URL
       if (this.room.roomId == null || this.room.you.userId == null) return;
       this.rejoinRoom().then(() => this.getUsers());
-    });  
+    });
   }
 
   public async createRoom(cardDeck: string, allUsersAreAdmins: boolean): Promise<void> {
