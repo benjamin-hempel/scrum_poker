@@ -1,3 +1,4 @@
+import { Injectable } from '@angular/core';
 import { BackendInterface } from './backend.interface';
 import { RoomCallbacks } from '../room-callbacks';
 import { Room } from '../../models/room';
@@ -5,11 +6,14 @@ import { MockRoom } from '../../models/mocks/mock-room';
 import { MockUser } from '../../models/mocks/mock-user';
 
 /* This allows frontend testing without the backend running. */
+@Injectable({
+  providedIn: 'root',
+})
 export class MockBackendService implements BackendInterface {
   private callbacks: RoomCallbacks;
   private rooms: Array<MockRoom>;
 
-  constructor(room: Room) {
+  constructor(private room: Room) {
     this.callbacks = new RoomCallbacks(room);
     this.rooms = new Array<MockRoom>();
   }

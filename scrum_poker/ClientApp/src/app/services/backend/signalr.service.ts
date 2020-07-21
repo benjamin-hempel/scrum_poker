@@ -1,9 +1,13 @@
 import * as signalR from '@aspnet/signalr';
 
+import { Injectable } from '@angular/core';
 import { BackendInterface } from './backend.interface';
 import { RoomCallbacks } from '../room-callbacks';
 import { Room } from '../../models/room';
 
+@Injectable({
+  providedIn: 'root',
+})
 export class SignalRService implements BackendInterface {
   private hubConnection: signalR.HubConnection;
   private callbacks: RoomCallbacks;
