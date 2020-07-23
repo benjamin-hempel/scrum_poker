@@ -24,7 +24,7 @@ export class RoomService {
       // Fall back to mock service if connection failed and environment is non-production
       if (signalRService.getConnectionStatus() == 1)
         this.backend = signalRService;
-      else
+      else if(this.backend == null)
         router.navigate(["/error", { cause: "service-unavailable" }]);
 
       // Try rejoining if room and user ID were found in the URL
