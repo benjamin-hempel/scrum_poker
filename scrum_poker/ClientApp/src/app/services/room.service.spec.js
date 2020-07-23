@@ -40,18 +40,37 @@ var validator_1 = require("validator");
 var testing_1 = require("@angular/core/testing");
 var room_service_1 = require("../services/room.service");
 var room_1 = require("../models/room");
+var user_1 = require("../models/user");
 var testing_2 = require("@angular/router/testing");
 var mock_backend_service_1 = require("./backend/mock-backend.service");
 describe('RoomService', function () {
     var roomService;
     var room;
     beforeEach(function () {
-        testing_1.TestBed.configureTestingModule({
-            providers: [room_service_1.RoomService, room_1.Room],
-            imports: [testing_2.RouterTestingModule]
+        return __awaiter(this, void 0, void 0, function () {
+            var _a, _b;
+            return __generator(this, function (_c) {
+                switch (_c.label) {
+                    case 0:
+                        testing_1.TestBed.configureTestingModule({
+                            providers: [room_service_1.RoomService, room_1.Room],
+                            imports: [testing_2.RouterTestingModule]
+                        });
+                        _a = this;
+                        return [4 /*yield*/, testing_1.TestBed.get(room_service_1.RoomService)];
+                    case 1:
+                        _a.roomService = _c.sent();
+                        _b = this;
+                        return [4 /*yield*/, testing_1.TestBed.get(room_1.Room)];
+                    case 2:
+                        _b.room = _c.sent();
+                        return [4 /*yield*/, this.roomService.createRoom("1,2,3,4,5,6", false)];
+                    case 3:
+                        _c.sent();
+                        return [2 /*return*/];
+                }
+            });
         });
-        this.roomService = testing_1.TestBed.get(room_service_1.RoomService);
-        this.room = testing_1.TestBed.get(room_1.Room);
     });
     it('should be defined and have a mock backend available', function () {
         expect(this.roomService).toBeInstanceOf(room_service_1.RoomService);
@@ -61,16 +80,11 @@ describe('RoomService', function () {
         return __awaiter(this, void 0, void 0, function () {
             var isUuid;
             return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.roomService.createRoom("1,2,3,4,5,6", false)];
-                    case 1:
-                        _a.sent();
-                        isUuid = validator_1.default.isUUID(this.room.roomId);
-                        expect(isUuid).toBeTrue();
-                        // Check if cards were set correctly
-                        expect(this.room.cards).toEqual(["1", "2", "3", "4", "5", "6"]);
-                        return [2 /*return*/];
-                }
+                isUuid = validator_1.default.isUUID(this.room.roomId);
+                expect(isUuid).toBeTrue();
+                // Check if cards were set correctly
+                expect(this.room.cards).toEqual(["1", "2", "3", "4", "5", "6"]);
+                return [2 /*return*/];
             });
         });
     });
@@ -79,11 +93,8 @@ describe('RoomService', function () {
             var result, isUuid;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.roomService.createRoom("1,2,3,4,5,6", false)];
+                    case 0: return [4 /*yield*/, this.roomService.joinRoom("Ronald McDonald", this.room.roomId)];
                     case 1:
-                        _a.sent();
-                        return [4 /*yield*/, this.roomService.joinRoom("Ronald McDonald", this.room.roomId)];
-                    case 2:
                         result = _a.sent();
                         // Check returned result
                         expect(result).toEqual("JOIN_SUCCESSFUL");
@@ -94,6 +105,117 @@ describe('RoomService', function () {
                         expect(this.room.you.isAdmin).toBeTrue();
                         expect(this.room.cardsRevealed).toBeFalse();
                         expect(this.room.playedCards).toEqual(0);
+                        return [2 /*return*/];
+                }
+            });
+        });
+    });
+    it('should have an up-to-date list of users after multiple joins and leaves', function () {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.roomService.joinRoom("Ronald McDonald", this.room.roomId)];
+                    case 1:
+                        _a.sent();
+                        return [4 /*yield*/, this.roomService.joinRoom("Colonel Sanders", this.room.roomId)];
+                    case 2:
+                        _a.sent();
+                        this.roomService.leaveRoom();
+                        return [4 /*yield*/, this.roomService.joinRoom("Chuck E. Cheese", this.room.roomId)];
+                    case 3:
+                        _a.sent();
+                        // Check if user list is correct
+                        expect(this.room.users.length).toBe(2);
+                        expect(this.room.users[0].username).toEqual("Ronald McDonald");
+                        expect(this.room.users[0].selectedCard).toEqual(-1);
+                        expect(this.room.users[0].isAdmin).toBeTrue();
+                        expect(this.room.users[1].username).toEqual("Chuck E. Cheese");
+                        expect(this.room.users[1].selectedCard).toEqual(-1);
+                        expect(this.room.users[1].isAdmin).toBeFalse();
+                        return [2 /*return*/];
+                }
+            });
+        });
+    });
+    it('should allow revealing and resetting the room\'s cards', function () {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.roomService.joinRoom("Ronald McDonald", this.room.roomId)];
+                    case 1:
+                        _a.sent();
+                        this.roomService.revealCards();
+                        expect(this.room.cardsRevealed).toBeTrue();
+                        this.roomService.resetCards();
+                        expect(this.room.cardsRevealed).toBeFalse();
+                        return [2 /*return*/];
+                }
+            });
+        });
+    });
+    it('should allow selecting and deselecting cards', function () {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.roomService.joinRoom("Ronald McDonald", this.room.roomId)];
+                    case 1:
+                        _a.sent();
+                        // Select card and change opinion before reveal
+                        this.roomService.selectCard(3);
+                        expect(this.room.you.selectedCard).toEqual(3);
+                        this.roomService.selectCard(5);
+                        expect(this.room.you.selectedCard).toEqual(5);
+                        expect(this.room.playedCards).toEqual(1);
+                        // Check correct reveal/reset behaviour
+                        this.roomService.revealCards();
+                        this.roomService.resetCards();
+                        expect(this.room.you.selectedCard).toEqual(-1);
+                        // Check correct deselect behaviour
+                        this.roomService.selectCard(2);
+                        expect(this.room.you.selectedCard).toEqual(2);
+                        expect(this.room.playedCards).toEqual(2);
+                        this.roomService.selectCard(2);
+                        expect(this.room.you.selectedCard).toEqual(-1);
+                        expect(this.room.playedCards).toEqual(1);
+                        return [2 /*return*/];
+                }
+            });
+        });
+    });
+    it('should allow rejoining a room given correct room and user IDs', function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var roomId, userId;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.roomService.joinRoom("Ronald McDonald", this.room.roomId)];
+                    case 1:
+                        _a.sent();
+                        roomId = this.room.roomId;
+                        userId = this.room.you.userId;
+                        this.roomService.selectCard(3);
+                        this.roomService.revealCards();
+                        this.roomService.leaveRoom();
+                        // Clear frontend-only data
+                        // Needs to be done like this because this.room is a singleton
+                        this.room.roomId = null;
+                        this.room.cardsRevealed = false;
+                        this.room.playedCards = 0;
+                        this.room.cards = null;
+                        this.room.you = new user_1.User();
+                        this.room.users = new Array();
+                        // Rejoin room
+                        this.room.roomId = roomId;
+                        this.room.you.userId = userId;
+                        return [4 /*yield*/, this.roomService.rejoinRoom()];
+                    case 2:
+                        _a.sent();
+                        // Check if data is set correctly
+                        expect(this.room.you.username).toEqual("Ronald McDonald");
+                        expect(this.room.you.selectedCard).toEqual(3);
+                        expect(this.room.you.isAdmin).toBeTrue();
+                        expect(this.room.cardsRevealed).toBeTrue();
+                        expect(this.room.cards).toEqual(["1", "2", "3", "4", "5", "6"]);
+                        expect(this.room.playedCards).toEqual(1);
                         return [2 /*return*/];
                 }
             });
