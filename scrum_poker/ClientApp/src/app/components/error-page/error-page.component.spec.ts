@@ -4,9 +4,8 @@ import { ErrorPageComponent } from './error-page.component';
 
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { TranslateTestingModule } from 'ngx-translate-testing';
-import { TranslateService } from '@ngx-translate/core';
 
-describe('BannerComponent', () => {
+describe('ErrorPageComponent', () => {
   let component: ErrorPageComponent;
   let fixture: ComponentFixture<ErrorPageComponent>;
 
@@ -26,7 +25,20 @@ describe('BannerComponent', () => {
     fixture.detectChanges();
   }));
 
-  it('should create', () => {
+  it('should be defined', () => {
     expect(component).toBeDefined();
+  });
+
+  it('should show the appropriate message if the server is unavailable', () => {
+    component.errorMessage = "service-unavailable";
+    fixture.detectChanges();
+
+    const errorMessage: HTMLElement = fixture.nativeElement.querySelector('p#errorMessage');
+    expect(errorMessage.textContent).toEqual("Der Server ist zur Zeit nicht erreichbar. Bitte versuche es später erneut.");
+  });
+
+  it('should show a generic error message if no cause was specified', () => {
+    const errorMessage: HTMLElement = fixture.nativeElement.querySelector('p#errorMessage');
+    expect(errorMessage.textContent).toEqual("Bitte versuche es später erneut.");
   });
 });
