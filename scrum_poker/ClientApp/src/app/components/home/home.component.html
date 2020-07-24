@@ -8,10 +8,8 @@
         <input type="text" class="form-control" id="username" placeholder="{{ 'home.usernamePlaceholder' | translate }}" />
       </div>
     </form>
-    <div *ngIf="noUsernameWarning">
-      <div class="alert alert-warning" role="alert">
-        {{ 'home.warnings.noUsername' | translate }}
-      </div>
+    <div *ngIf="noUsernameWarning" id="noUsernameWarning" class="alert alert-warning" role="alert">
+      {{ 'home.warnings.noUsername' | translate }}
     </div>
   </div>
 </div>
@@ -54,16 +52,16 @@
     <hr class="d-md-none" />
     <h2>{{ 'home.joinRoom' | translate }}</h2>
     <div class="pt-4"></div>
-    <form>
+    <form id="joinRoomForm">
       <div class="form-group">
         <label for="roomID">{{ 'general.roomID' | translate }}</label>
         <input class="form-control" id="roomID" placeholder="09285313-65b0-4283-b7ef-cb99a96dce25" />
       </div>
     </form>
-    <div *ngIf="noRoomIdWarning" class="alert alert-warning" role="alert">
+    <div *ngIf="noRoomIdWarning" id="noRoomIdWarning" class="alert alert-warning" role="alert">
       {{ 'home.warnings.noRoomID' | translate }}
     </div>
-    <div *ngIf="roomExistsWarning" class="alert alert-warning" role="alert">
+    <div *ngIf="roomExistsWarning" id="roomExistsWarning" class="alert alert-warning" role="alert">
       {{ 'home.warnings.roomDoesNotExist' | translate }}
     </div>
     <div *ngIf="connectionExistsWarning" class="alert alert-warning" role="alert">
