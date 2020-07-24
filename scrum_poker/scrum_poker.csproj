@@ -27,6 +27,7 @@
   <ItemGroup>
     <None Remove="ClientApp\src\app\cards.ts" />
     <None Remove="ClientApp\src\app\components\error-page\error-page.component.spec.ts" />
+    <None Remove="ClientApp\src\app\components\home\home.component.spec.ts" />
     <None Remove="ClientApp\src\app\models\mock-room.ts" />
     <None Remove="ClientApp\src\app\models\mocks\mock-user.ts" />
     <None Remove="ClientApp\src\app\models\room.ts" />
@@ -41,6 +42,7 @@
 
   <ItemGroup>
     <TypeScriptCompile Include="ClientApp\src\app\components\error-page\error-page.component.spec.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\components\home\home.component.spec.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\models\mocks\mock-room.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\models\mocks\mock-user.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\models\room.ts" />
