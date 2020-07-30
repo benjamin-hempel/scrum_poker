@@ -23,6 +23,9 @@ import { SignalRService } from './services/backend/signalr.service';
 import { MockBackendService } from './services/backend/mock-backend.service';
 import { Room } from './models/room';
 
+// Routes
+import { routes } from './routes';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -44,12 +47,7 @@ import { Room } from './models/room';
         deps: [HttpClient]
       }
     }),
-    RouterModule.forRoot([
-      { path: '', component: HomeComponent, pathMatch: 'full' },
-      { path: 'room', component: RoomComponent },
-      { path: 'error', component: ErrorPageComponent },
-      { path: ':rid', component: HomeComponent }     
-    ])
+    RouterModule.forRoot(routes)
   ],
   providers: [RoomService, Room, SignalRService, MockBackendService],
   bootstrap: [AppComponent]
