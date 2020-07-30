@@ -1,9 +1,17 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from "@angular/router/testing";
-import { HomeComponent } from './home.component';
+import { Location } from '@angular/common';
 
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { TranslateTestingModule } from 'ngx-translate-testing';
+import { QRCodeModule } from 'angularx-qrcode';
+
+import { HomeComponent } from './home.component';
+import { RoomComponent } from '../room/room.component';
+import { ErrorPageComponent } from '../error-page/error-page.component';
+
+import validator from 'validator';
+import { routes } from '../../routes';
 
 describe('HomeComponent', () => {
   let component: HomeComponent;
@@ -11,11 +19,12 @@ describe('HomeComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [HomeComponent],
+      declarations: [HomeComponent, RoomComponent, ErrorPageComponent],
       imports: [
-        RouterTestingModule,
+        RouterTestingModule.withRoutes(routes),
         FontAwesomeModule,
-        TranslateTestingModule.withTranslations({ en: require('src/assets/i18n/en.json'), de: require('src/assets/i18n/de.json') }).withDefaultLanguage('de')
+        QRCodeModule,
+        TranslateTestingModule.withTranslations({ en: require('src/assets/i18n/en.json'), de: require('src/assets/i18n/de.json') }).withDefaultLanguage('de')       
       ]
     })
       .compileComponents();
@@ -85,7 +94,17 @@ describe('HomeComponent', () => {
     const createRoomButton: HTMLButtonElement = fixture.nativeElement.querySelector('button#createRoom');
     createRoomButton.click();
     fixture.whenStable().then(() => {
-      /* TODO */
-    })
+      fixture.detectChanges();
+      let location: Location = TestBed.get(Location);
+      let path = location.path();
+      let tokens = path.replace(/=/g, ";").split(";");
+
+      let page = tokens[0];
+      expect(page).toEqual("/room");
+      let roomId = tokens[2];
+      expect(validator.isUUID(roomId)).toBeTrue();
+      let userId = tokens[4];
+      expect(validator.isUUID(userId)).toBeTrue();
+    });
   }));
 });
