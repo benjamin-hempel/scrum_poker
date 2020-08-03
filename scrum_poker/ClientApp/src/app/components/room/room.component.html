@@ -38,9 +38,9 @@
 
   <!-- Button controls -->
   <div class="pt-3"></div>
-  <button type="button" class="btn btn-dark mr-1" data-toggle="collapse" data-target="#selectableCardsContainer" aria-expanded="false" aria-controls="selectableCardsContainer">{{ 'room.playCardButton' | translate }}</button>
-  <button type="button" *ngIf="!room.cardsRevealed && room.you.isAdmin" class="btn btn-success" (click)="revealCards()">{{ 'room.revealCardsButton' | translate }}</button>
-  <button type="button" *ngIf="room.cardsRevealed && room.you.isAdmin" class="btn btn-danger" (click)="resetCards()">{{ 'room.resetCardsButton' | translate }}</button>
+  <button type="button" id="playCardButton" class="btn btn-dark mr-1" data-toggle="collapse" data-target="#selectableCardsContainer" aria-expanded="false" aria-controls="selectableCardsContainer">{{ 'room.playCardButton' | translate }}</button>
+  <button type="button" id="revealCardsButton" *ngIf="!room.cardsRevealed && room.you.isAdmin" class="btn btn-success" (click)="revealCards()">{{ 'room.revealCardsButton' | translate }}</button>
+  <button type="button" id="resetCardsButton" *ngIf="room.cardsRevealed && room.you.isAdmin" class="btn btn-danger" (click)="resetCards()">{{ 'room.resetCardsButton' | translate }}</button>
 
   <!-- Selectable cards collapsible-->
   <div class="collapse" id="selectableCardsContainer">
@@ -66,7 +66,7 @@
       <div class="col-sm-12 col-md-6 col-lg-4 mb-3" *ngFor="let user of room.users">
         <div class="card" [ngClass]="{'bg-success': user.selectedCard > -1 && !room.cardsRevealed}">
           <div class="card-body">
-            <h3 class="card-title"><fa-icon [icon]="faShieldAlt" *ngIf="user.isAdmin"></fa-icon> {{ user.username }}</h3>
+            <h3 class="card-title"><fa-icon [icon]="faShieldAlt" *ngIf="user.isAdmin"></fa-icon>{{ user.username }}</h3>
             <h4 class="card-text" *ngIf="room.cardsRevealed && user.selectedCard != -1">{{ room.cards[user.selectedCard] }}</h4>
           </div>
         </div>
