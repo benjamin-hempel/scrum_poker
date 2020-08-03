@@ -48,7 +48,7 @@
     <h4 class="mb-3">{{ 'room.yourEstimateTitle' | translate }}</h4>
     <div class="row">
       <div class="col-sm-6 col-md-3 mb-3" *ngFor="let card of room.cards; let i=index;">
-        <div class="card" id="card-{{ i }}" data-toggle="collapse" [attr.data-target]="!room.cardsRevealed ? '#selectableCardsContainer' : null" aria-controls="selectableCardsContainer"
+        <div class="card" data-toggle="collapse" [attr.data-target]="!room.cardsRevealed ? '#selectableCardsContainer' : null" aria-controls="selectableCardsContainer"
              [ngClass]="{'clickable': !room.cardsRevealed}" (click)="!room.cardsRevealed ? selectCard(i) : false">
           <div class="card-body">
             <h3 class="card-title" [ngClass]="{'selected': i == room.you.selectedCard}" style="user-select: none;">{{ card }}</h3>
@@ -60,10 +60,10 @@
 
   <!-- Other users -->
   <hr />
-  <div>
+  <div id="otherUsersContainer">
     <h4 class="mb-3">{{ 'room.roomUsersTitle' | translate }}</h4>
     <div class="row">
-      <div class="col-sm-12 col-md-6 col-lg-4 mb-3" id="otherUsersContainer" *ngFor="let user of room.users">
+      <div class="col-sm-12 col-md-6 col-lg-4 mb-3" *ngFor="let user of room.users">
         <div class="card" [ngClass]="{'bg-success': user.selectedCard > -1 && !room.cardsRevealed}">
           <div class="card-body">
             <h3 class="card-title"><fa-icon [icon]="faShieldAlt" *ngIf="user.isAdmin"></fa-icon>{{ user.username }}</h3>
