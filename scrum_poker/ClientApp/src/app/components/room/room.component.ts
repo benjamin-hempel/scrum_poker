@@ -1,4 +1,4 @@
-import { Component, HostListener } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 // Icons
@@ -11,7 +11,7 @@ import { RoomService } from '../../services/room.service';
   selector: 'app-room-component',
   templateUrl: './room.component.html'
 })
-export class RoomComponent {
+export class RoomComponent implements OnInit {
   constructor(public roomService: RoomService, public room: Room, private route: ActivatedRoute) { }
 
   joinUrl: string; 
