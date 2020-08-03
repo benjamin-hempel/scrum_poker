@@ -17,12 +17,14 @@ export class RoomComponent {
   joinUrl: string; 
 
   ngOnInit() {
-    // Get room ID and user ID for potential rejoin
-    this.room.roomId = this.route.snapshot.paramMap.get("rid");
-    this.room.you.userId = this.route.snapshot.paramMap.get("uid");
+    // Get room and user ID for potential rejoin
+    this.route.paramMap.subscribe(params => {
+      this.room.roomId = params.get('rid');
+      this.room.you.userId = params.get('uid');
 
-    // Build join URL
-    this.joinUrl = window.location.protocol + "//" + window.location.host + "/" + this.room.roomId;
+      // Build join URL
+      this.joinUrl = window.location.protocol + "//" + window.location.host + "/" + this.room.roomId;
+    });
   }
 
   faShieldAlt = faShieldAlt;
