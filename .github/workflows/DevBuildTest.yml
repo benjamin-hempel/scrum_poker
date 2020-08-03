@@ -35,7 +35,7 @@ jobs:
       run: dotnet test
       working-directory: ./scrum_poker.Tests.NUnit
     - name: Build frontend
-      run: ng build
+      run: npm install && ng build
       working-directory: ./scrum_poker/ClientApp
     - name: Run frontend tests
       run: ng test --watch=false --browsers=ChromeHeadlessCustom
