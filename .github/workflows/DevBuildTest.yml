@@ -8,22 +8,35 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [12.x]
 
     steps:
     - uses: actions/checkout@v2
+    - name: Node $
+      uses: actions/setup-node@v1
+      with:
+        node-version: $
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 3.1.101
-    - name: Install dependencies
+    - name: Install backend dependencies
       run: dotnet restore
       working-directory: ./scrum_poker
-    - name: Build app
+    - name: Build backend
       run: dotnet build --configuration Release --no-restore
       working-directory: ./scrum_poker
-    - name: Run SpecFlow tests
+    - name: Run backend SpecFlow tests
       run: dotnet test
       working-directory: ./scrum_poker.Tests.SpecFlow
-    - name: Run NUnit tests
+    - name: Run backend NUnit tests
       run: dotnet test
       working-directory: ./scrum_poker.Tests.NUnit
+    - name: Build frontend
+      run: ng build
+      working-directory: ./scrum_poker/ClientApp
+    - name: Run frontend tests
+      run: ng test --watch=false --browsers=ChromeHeadlessCustom
+      working-directory: ./scrum_poker/ClientApp
