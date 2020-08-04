@@ -114,7 +114,7 @@ describe('RoomComponent', function () {
             expect(joinLink.innerHTML).toEqual(window.location.protocol + "//" + window.location.host + "/" + room.roomId);
         });
     }));
-    it('should correctly indicate a selected card', testing_1.async(function () {
+    it('should indicate a selected card correctly', testing_1.async(function () {
         fixture.whenStable().then(function () {
             fixture.detectChanges();
             var playCardButton = fixture.nativeElement.querySelector('button#playCardButton');
@@ -123,8 +123,71 @@ describe('RoomComponent', function () {
             var card4 = fixture.nativeElement.querySelector('div#card-4');
             card4.click();
             fixture.detectChanges();
-            var userCard = fixture.nativeElement.querySelector('div#otherUsersContainer > div');
+            var card4Title = fixture.nativeElement.querySelector('div#card-4 > div > h3');
+            expect(card4Title.classList.contains('selected')).toBeTrue();
+            var userCard = fixture.nativeElement.querySelector('div#otherUsersContainer > .card');
             expect(userCard.classList.contains('bg-success')).toBeTrue();
+        });
+    }));
+    it('should show the selected card correctly when cards are revealed', testing_1.async(function () {
+        fixture.whenStable().then(function () {
+            fixture.detectChanges();
+            var playCardButton = fixture.nativeElement.querySelector('button#playCardButton');
+            playCardButton.click();
+            fixture.detectChanges();
+            var card4 = fixture.nativeElement.querySelector('div#card-4');
+            card4.click();
+            fixture.detectChanges();
+            var revealCardsButton = fixture.nativeElement.querySelector('button#revealCardsButton');
+            revealCardsButton.click();
+            fixture.detectChanges();
+            var userCard = fixture.nativeElement.querySelector('div#otherUsersContainer > .card > .card-body > .card-text');
+            expect(userCard.innerHTML).toEqual("5");
+        });
+    }));
+    it('should reset the cards properly after they were revealed', testing_1.async(function () {
+        fixture.whenStable().then(function () {
+            var playCardButton = fixture.nativeElement.querySelector('button#playCardButton');
+            playCardButton.click();
+            fixture.detectChanges();
+            var card4 = fixture.nativeElement.querySelector('div#card-4');
+            card4.click();
+            fixture.detectChanges();
+            var revealCardsButton = fixture.nativeElement.querySelector('button#revealCardsButton');
+            revealCardsButton.click();
+            fixture.detectChanges();
+            var resetCardsButton = fixture.nativeElement.querySelector('button#resetCardsButton');
+            resetCardsButton.click();
+            fixture.detectChanges();
+            var card4Title = fixture.nativeElement.querySelector('div#card-4 > div > h3');
+            expect(card4Title.classList.contains('selected')).toBeFalse();
+            var userCard = fixture.nativeElement.querySelector('div#otherUsersContainer > .card');
+            expect(userCard.classList.contains('bg-success')).toBeFalse();
+        });
+    }));
+    it('should show the correct card when the user changed their mind', testing_1.async(function () {
+        fixture.whenStable().then(function () {
+            var playCardButton = fixture.nativeElement.querySelector('button#playCardButton');
+            playCardButton.click();
+            fixture.detectChanges();
+            var card4 = fixture.nativeElement.querySelector('div#card-4');
+            card4.click();
+            fixture.detectChanges();
+            playCardButton.click();
+            var card1 = fixture.nativeElement.querySelector('div#card-1');
+            card1.click();
+            fixture.detectChanges();
+            var card4Title = fixture.nativeElement.querySelector('div#card-4 > div > h3');
+            expect(card4Title.classList.contains('selected')).toBeFalse();
+            var card1Title = fixture.nativeElement.querySelector('div#card-1 > div > h3');
+            expect(card1Title.classList.contains('selected')).toBeTrue();
+            var userCard = fixture.nativeElement.querySelector('div#otherUsersContainer > .card');
+            expect(userCard.classList.contains('bg-success')).toBeTrue();
+            var revealCardsButton = fixture.nativeElement.querySelector('button#revealCardsButton');
+            revealCardsButton.click();
+            fixture.detectChanges();
+            var selectedCard = fixture.nativeElement.querySelector('div#otherUsersContainer > .card > .card-body > .card-text');
+            expect(selectedCard.innerHTML).toEqual("2");
         });
     }));
 });
