@@ -15,10 +15,6 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.SignalR" Version="1.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="3.1.1" />
-    <PackageReference Include="Moq" Version="4.14.1" />
-    <PackageReference Include="SpecFlow" Version="3.1.97" />
-    <PackageReference Include="SpecFlow.MsTest" Version="3.1.97" />
-    <PackageReference Include="SpecFlow.Tools.MsBuild.Generation" Version="3.1.97" />
   </ItemGroup>
 
   <ItemGroup>
@@ -30,13 +26,39 @@
 
   <ItemGroup>
     <None Remove="ClientApp\src\app\cards.ts" />
+    <None Remove="ClientApp\src\app\components\error-page\error-page.component.spec.ts" />
+    <None Remove="ClientApp\src\app\components\home\home.component.spec.ts" />
+    <None Remove="ClientApp\src\app\components\room\room.component.spec.ts" />
+    <None Remove="ClientApp\src\app\models\mock-room.ts" />
+    <None Remove="ClientApp\src\app\models\mocks\mock-user.ts" />
+    <None Remove="ClientApp\src\app\models\room.ts" />
+    <None Remove="ClientApp\src\app\routes.ts" />
+    <None Remove="ClientApp\src\app\services\backend.interface.ts" />
+    <None Remove="ClientApp\src\app\services\backend\mock-backend.service.ts" />
+    <None Remove="ClientApp\src\app\services\room-callbacks.ts" />
+    <None Remove="ClientApp\src\app\services\room.service.spec.ts" />
     <None Remove="ClientApp\src\app\services\room.service.ts" />
+    <None Remove="ClientApp\src\app\services\signalr.service.ts" />
+    <None Remove="ClientApp\src\app\testing\activated-route-stub.ts" />
     <None Remove="ClientApp\src\app\user.ts" />
   </ItemGroup>
 
   <ItemGroup>
+    <TypeScriptCompile Include="ClientApp\src\app\components\error-page\error-page.component.spec.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\components\home\home.component.spec.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\components\room\room.component.spec.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\models\mocks\mock-room.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\models\mocks\mock-user.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\models\room.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\models\user.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\routes.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\services\backend\backend.interface.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\services\backend\mock-backend.service.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\services\backend\signalr.service.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\services\room-callbacks.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\services\room.service.spec.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\services\room.service.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\testing\activated-route-stub.ts" />
   </ItemGroup>
 
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">

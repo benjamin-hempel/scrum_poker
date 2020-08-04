@@ -1,0 +1,7 @@
+<h2>
+  <fa-icon [icon]="faExclamationCircle"></fa-icon>
+  {{ 'errorPage.title' | translate }}
+</h2>
+<div class="mb-3"></div>
+<p id="errorMessage">{{ 'errorPage.causes.' + errorMessage | translate }}</p>
+<a href="/">{{ 'errorPage.backToHome' | translate }}</a>

@@ -44,5 +44,14 @@
       "homepageLinkLabel": "homepage",
       "explanationSuffix": "to create or join a room."
     }
+  },
+
+  "errorPage": {
+    "title": "An error occured",
+    "backToHome": "Return to the homepage",
+    "causes": {
+      "service-unavailable": "The server is not available at the moment. Please try again later.",
+      "default": "Please try again later."
+    }
   }
 }

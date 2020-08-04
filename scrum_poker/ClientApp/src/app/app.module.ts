@@ -12,20 +12,27 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
 // Components
 import { AppComponent } from './app.component';
-import { NavMenuComponent } from './nav-menu/nav-menu.component';
-import { HomeComponent } from './home/home.component';
-import { RoomComponent } from './room/room.component';
+import { NavMenuComponent } from './components/nav-menu/nav-menu.component';
+import { HomeComponent } from './components/home/home.component';
+import { RoomComponent } from './components/room/room.component';
+import { ErrorPageComponent } from './components/error-page/error-page.component';
 
-// Services
+// Services and models
 import { RoomService } from './services/room.service';
+import { SignalRService } from './services/backend/signalr.service';
+import { MockBackendService } from './services/backend/mock-backend.service';
+import { Room } from './models/room';
 
+// Routes
+import { routes } from './routes';
 
 @NgModule({
   declarations: [
     AppComponent,
     NavMenuComponent,
     HomeComponent,
-    RoomComponent
+    RoomComponent,
+    ErrorPageComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -40,13 +47,9 @@ import { RoomService } from './services/room.service';
         deps: [HttpClient]
       }
     }),
-    RouterModule.forRoot([
-      { path: '', component: HomeComponent, pathMatch: 'full' },
-      { path: 'room', component: RoomComponent },
-      { path: ':rid', component: HomeComponent }
-    ])
+    RouterModule.forRoot(routes)
   ],
-  providers: [RoomService],
+  providers: [RoomService, Room, SignalRService, MockBackendService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -1,0 +1,22 @@
+<header>
+  <nav class="navbar navbar-expand navbar-dark bg-dark border-bottom box-shadow mb-3">
+    <div class="container">
+      <a class="navbar-brand">Scrum Poker</a>
+      
+      <div class="navbar-collapse collapse justify-content-end">
+        <ul class="navbar-nav">
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle clickable" id="languageDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <fa-icon [icon]="faGlobeEurope"></fa-icon> {{ 'general.selectLanguageButton' | translate }}
+            </a>
+            <div class="dropdown-menu" aria-labelledby="languageDropdown">
+              <a class="dropdown-item clickable" (click)="useLanguage('de')">Deutsch</a>
+              <a class="dropdown-item clickable" (click)="useLanguage('en')">English</a>
+            </div>
+          </li>
+          <span class="text-white-50" style="height: 40px; line-height: 40px; padding-left: 10px">v0.2.0</span>
+        </ul>
+      </div>
+    </div>
+  </nav>
+</header>

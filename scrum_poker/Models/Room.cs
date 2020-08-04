@@ -52,6 +52,7 @@ namespace scrum_poker.Models
             Users = new List<User>();
             Connections = new List<string>();
             CardsRevealed = false;
+            PlayedCards = 0;
             AllUsersAreAdmins = allUsersAreAdmins;
             CardDeck = cardDeck;
         }
